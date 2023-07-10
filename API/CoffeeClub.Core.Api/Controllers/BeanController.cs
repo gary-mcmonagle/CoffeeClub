@@ -1,4 +1,6 @@
+using AutoMapper;
 using CoffeeBeanClub.Domain.Models;
+using CoffeeClub.Domain.Dtos.Request;
 using CoffeeClub.Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +11,12 @@ namespace CoffeeClub.Core.Api.Controllers;
 public class BeanController
 {
     private ICoffeeBeanRepository _coffeeBeanRepository;
+    private IMapper _mapper;
 
-    public BeanController(ICoffeeBeanRepository coffeeBeanRepository)
+    public BeanController(ICoffeeBeanRepository coffeeBeanRepository, IMapper mapper)
     {
         _coffeeBeanRepository = coffeeBeanRepository;
+        _mapper = mapper;
     }
 
     [HttpGet(Name = "Blah")]
@@ -20,11 +24,4 @@ public class BeanController
     {
         return await _coffeeBeanRepository.GetAllAsync();
     }
-
-    [HttpPost(Name = "Create")]
-    public async Task<CoffeeBean> Post(CoffeeBean coffeeBean)
-    {
-        return await _coffeeBeanRepository.CreateAsync(coffeeBean);
-    }
-
 }
