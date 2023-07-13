@@ -5,7 +5,7 @@ namespace CoffeeClub.Infrastructure.Repositories;
 
 public abstract class BaseRepository<T> : Domain.Repositories.IBaseRepository<T> where T : Domain.Models.BaseModel
 {
-    private readonly CoffeeClubContext _context;
+    protected readonly CoffeeClubContext _context;
 
     public BaseRepository(CoffeeClubContext context)
     {

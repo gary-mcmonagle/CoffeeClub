@@ -8,7 +8,7 @@ namespace CoffeeClub.Core.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UserController
+public class UserController : ControllerBase
 {
     private IUserRepository _userRepository;
     private IMapper _mapper;

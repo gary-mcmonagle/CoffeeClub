@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Google.Apis;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using CoffeeClub.Domain.Enumerations;
 
 namespace CoffeeClub.Core.Api.CustomConfiguration;
 
@@ -44,6 +45,8 @@ public class GoogleTokenValidator : ISecurityTokenValidator
                     // new Claim("iat", payload.IssuedAtTimeSeconds.ToString()),
                     // new Claim("exp", payload.ExpirationTimeSeconds.ToString()),
                     // new Claim("iss", payload.Issuer),
+                    new Claim("sub", payload.Subject),
+                    new Claim("authProvider", ((int)AuthProvider.Google).ToString()),
                     new Claim(ClaimTypes.Role, _workerEmails.Contains(payload.Email) ? "CoffeeClubWorker" : "CoffeeClubCustomer")
                 };
         try
