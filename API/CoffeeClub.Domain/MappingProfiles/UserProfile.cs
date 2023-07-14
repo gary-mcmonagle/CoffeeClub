@@ -1,6 +1,6 @@
 using AutoMapper;
 using CoffeeBeanClub.Domain.Models;
-using CoffeeClub.Domain.Dtos.Reponse;
+using CoffeeClub.Domain.Dtos.Response;
 using CoffeeClub.Domain.Dtos.Request;
 using CoffeeClub.Domain.Enumerations;
 using CoffeeClub.Domain.Models;

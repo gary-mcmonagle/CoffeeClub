@@ -38,6 +38,6 @@ public class BeanController : ControllerBase
     {
         var user = await _userRepository.GetOrInsert(User);
         var newBean = await _coffeeBeanRepository.CreateAsync(_mapper.Map<CoffeeBean>((createCoffeeBeanDto, user)));
-        return new CreatedAtRouteResult("GetBean", new { id = newBean.Id }, newBean);
+        return Ok();
     }
 }
