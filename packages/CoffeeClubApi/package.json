@@ -1,0 +1,29 @@
+{
+  "name": "@gary-mcmonagle/coffeeclubapi",
+  "version": "1.0.2",
+  "description": "",
+  "main": "lib/index.js",
+  "files": [
+    "lib/**/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "generate": "openapi-generator generate -i swagger.json --generator-name typescript-fetch -o src/generated"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/gary-mcmonagle"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gary-mcmonagle/CoffeeClub"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "axios": "^1.4.0"
+  }
+}

@@ -1,0 +1,14 @@
+.openapi-generator-ignore
+apis/BeanApi.ts
+apis/DevTestApi.ts
+apis/UserApi.ts
+apis/index.ts
+index.ts
+models/AuthProvider.ts
+models/CoffeeBean.ts
+models/CreateCoffeeBeanDto.ts
+models/DevTestDto.ts
+models/Roast.ts
+models/User.ts
+models/index.ts
+runtime.ts
