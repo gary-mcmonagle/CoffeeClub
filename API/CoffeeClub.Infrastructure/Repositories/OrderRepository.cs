@@ -1,4 +1,6 @@
 using CoffeClub.Infrastructure;
+using CoffeeClub.Domain.Dtos.Request;
+using CoffeeClub.Domain.Enumerations;
 using CoffeeClub.Domain.Models;
 using CoffeeClub.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +17,8 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
     {
         var all = _context.Set<Order>()
             .Include(x => x.User)
+            .Include(x => x.DrinkOrders)
+            .ThenInclude(x => x.CoffeeBean)
             .Where(x => x.User.Id == userId).AsEnumerable();
         return Task.FromResult(all);
     }

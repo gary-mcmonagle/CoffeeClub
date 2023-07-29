@@ -1,3 +1,4 @@
+using CoffeeClub.Domain.Dtos.Request;
 using CoffeeClub.Domain.Models;
 
 namespace CoffeeClub.Domain.Repositories;

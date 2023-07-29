@@ -10,5 +10,9 @@ public class OrderProfile : Profile
     {
         CreateMap<Order, OrderDto>()
         .ForMember(x => x.Drinks, x => x.MapFrom(y => y.DrinkOrders));
+
+        CreateMap<DrinkOrderDto, DrinkOrder>();
+        CreateMap<DrinkOrder, DrinkOrderDto>();
+
     }
 }
