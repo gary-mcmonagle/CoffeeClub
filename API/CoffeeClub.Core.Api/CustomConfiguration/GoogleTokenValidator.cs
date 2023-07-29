@@ -5,6 +5,7 @@ using Google.Apis;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using CoffeeClub.Domain.Enumerations;
+using CoffeeClub.Domain.Repositories;
 
 namespace CoffeeClub.Core.Api.CustomConfiguration;
 
@@ -13,10 +14,13 @@ public class GoogleTokenValidator : ISecurityTokenValidator
     private readonly IEnumerable<string> _workerEmails;
     private readonly JwtSecurityTokenHandler _tokenHandler;
 
-    public GoogleTokenValidator(IEnumerable<string> workerEmails)
+    private readonly IUserRepository _userRepository;
+
+    public GoogleTokenValidator(IEnumerable<string> workerEmails, IUserRepository userRepository)
     {
         _workerEmails = workerEmails;
         _tokenHandler = new JwtSecurityTokenHandler();
+        _userRepository = userRepository;
     }
 
     public bool CanValidateToken => true;
@@ -32,7 +36,7 @@ public class GoogleTokenValidator : ISecurityTokenValidator
     {
         validatedToken = null;
         var payload = GoogleJsonWebSignature.ValidateAsync(securityToken, new GoogleJsonWebSignature.ValidationSettings()).Result; // here is where I delegate to Google to validate
-
+        var user = _userRepository.GetOrCreateAsync(payload.Subject, AuthProvider.Google).Result;
         var claims = new List<Claim>
                 {
                     // new Claim(ClaimTypes.NameIdentifier, payload.Name),
@@ -45,6 +49,7 @@ public class GoogleTokenValidator : ISecurityTokenValidator
                     // new Claim("iat", payload.IssuedAtTimeSeconds.ToString()),
                     // new Claim("exp", payload.ExpirationTimeSeconds.ToString()),
                     // new Claim("iss", payload.Issuer),
+                    new Claim("id", user.Id.ToString()),
                     new Claim("sub", payload.Subject),
                     new Claim("authProvider", ((int)AuthProvider.Google).ToString()),
                     new Claim(ClaimTypes.Role, _workerEmails.Contains(payload.Email) ? "CoffeeClubWorker" : "CoffeeClubCustomer")

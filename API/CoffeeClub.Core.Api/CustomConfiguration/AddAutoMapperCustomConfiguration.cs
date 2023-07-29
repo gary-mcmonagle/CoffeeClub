@@ -12,7 +12,7 @@ public static class AddAutoMapperCustomConfiguration
         {
             mc.AddProfile(new CoffeeBeanProfile());
             mc.AddProfile(new UserProfile());
-
+            mc.AddProfile(new OrderProfile());
         });
 
         IMapper mapper = mapperConfig.CreateMapper();

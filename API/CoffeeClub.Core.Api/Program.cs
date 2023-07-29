@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using CoffeClub.Infrastructure;
 using CoffeeClub.Core.Api.CustomConfiguration;
 using CoffeeClub.Core.Api.CustomConfiguration.AppSettingsConfig;
+using CoffeeClub.Domain.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,8 @@ builder.Services.Configure<JsonOptions>(options =>
     options.SerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
 });
 
+var userRepository = builder.Services.BuildServiceProvider().GetRequiredService<IUserRepository>();
+
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -50,7 +53,7 @@ builder.Services.AddAuthentication(options =>
     .AddJwtBearer(o =>
         {
             o.SecurityTokenValidators.Clear();
-            o.SecurityTokenValidators.Add(new GoogleTokenValidator(authConfig.WorkerEmails!));
+            o.SecurityTokenValidators.Add(new GoogleTokenValidator(authConfig.WorkerEmails!, userRepository));
         });
 builder.Services.AddAuthorization(options =>
 {

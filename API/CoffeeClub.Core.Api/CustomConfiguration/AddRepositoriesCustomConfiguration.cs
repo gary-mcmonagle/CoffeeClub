@@ -10,6 +10,6 @@ public static class AddRepositoriesCustomConfiguration
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ICoffeeBeanRepository, CoffeeBeanRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
-
+        services.AddScoped<IOrderRepository, OrderRepository>();
     }
 }
