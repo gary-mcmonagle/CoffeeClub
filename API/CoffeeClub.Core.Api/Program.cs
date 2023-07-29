@@ -10,7 +10,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+        .AddNewtonsoftJson(options =>
+        options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter()));
 builder.Logging.AddFile(o => o.RootPath = o.RootPath = builder.Environment.ContentRootPath);
 builder.Services.AddDbContext<CoffeeClubContext>(
     options => options.UseSqlServer("Server=localhost;User Id=SA;Password=your_password1234;Database=CoffeeClub;TrustServerCertificate=true"));
@@ -18,7 +20,7 @@ builder.Services.AddRepositories();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper();
-       // Add Cors
+// Add Cors
 builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
 {
     builder.AllowAnyOrigin()
@@ -29,6 +31,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "CoffeeClub.Core.Api", Version = "v1" });
 });
+
 var authConfig = builder.Configuration.GetSection("Authorization").Get<AuthorizationConfig>();
 builder.Services.Configure<JsonOptions>(options =>
 {
@@ -51,7 +54,7 @@ builder.Services.AddAuthentication(options =>
         });
 builder.Services.AddAuthorization(options =>
 {
-   options.AddPolicy("CoffeeClubWorker", policy => policy.RequireClaim(ClaimTypes.Role, "CoffeeClubWorker"));
+    options.AddPolicy("CoffeeClubWorker", policy => policy.RequireClaim(ClaimTypes.Role, "CoffeeClubWorker"));
 });
 var app = builder.Build();
 
@@ -70,8 +73,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-        // Enable Cors
-        app.UseCors("MyPolicy");
+// Enable Cors
+app.UseCors("MyPolicy");
 
 app.Run();
 
