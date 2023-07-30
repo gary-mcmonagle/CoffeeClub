@@ -6,6 +6,6 @@ public enum Drink
     Espresso,
     Cappuccino,
     Latte,
-    IcedLattee,
+    IcedLatte,
     IcedCappuccino,
 }

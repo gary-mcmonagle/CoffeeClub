@@ -2,11 +2,22 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./ErrorPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { Login } from "../login/Login";
+import { useAuth } from "../auth/useAuth";
+
+const Index = () => {
+  const { accessToken } = useAuth();
+  console.log({ accessToken });
+  return <div>Hello world!</div>;
+};
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Hello world!</div>,
+    element: (
+      <ProtectedRoute>
+        <Index />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
   },
   {
