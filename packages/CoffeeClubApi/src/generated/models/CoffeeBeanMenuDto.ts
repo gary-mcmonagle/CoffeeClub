@@ -24,13 +24,13 @@ export interface CoffeeBeanMenuDto {
      * @type {string}
      * @memberof CoffeeBeanMenuDto
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof CoffeeBeanMenuDto
      */
-    id?: string;
+    id: string;
 }
 
 /**
@@ -38,6 +38,8 @@ export interface CoffeeBeanMenuDto {
  */
 export function instanceOfCoffeeBeanMenuDto(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "id" in value;
 
     return isInstance;
 }
@@ -52,8 +54,8 @@ export function CoffeeBeanMenuDtoFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'name': json['name'],
+        'id': json['id'],
     };
 }
 

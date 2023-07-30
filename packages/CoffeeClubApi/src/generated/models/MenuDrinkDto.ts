@@ -31,19 +31,19 @@ export interface MenuDrinkDto {
      * @type {Drink}
      * @memberof MenuDrinkDto
      */
-    name?: Drink;
+    name: Drink;
     /**
      * 
      * @type {boolean}
      * @memberof MenuDrinkDto
      */
-    canBeIced?: boolean;
+    canBeIced: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof MenuDrinkDto
      */
-    requiresMilk?: boolean;
+    requiresMilk: boolean;
 }
 
 /**
@@ -51,6 +51,9 @@ export interface MenuDrinkDto {
  */
 export function instanceOfMenuDrinkDto(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "canBeIced" in value;
+    isInstance = isInstance && "requiresMilk" in value;
 
     return isInstance;
 }
@@ -65,9 +68,9 @@ export function MenuDrinkDtoFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : DrinkFromJSON(json['name']),
-        'canBeIced': !exists(json, 'canBeIced') ? undefined : json['canBeIced'],
-        'requiresMilk': !exists(json, 'requiresMilk') ? undefined : json['requiresMilk'],
+        'name': DrinkFromJSON(json['name']),
+        'canBeIced': json['canBeIced'],
+        'requiresMilk': json['requiresMilk'],
     };
 }
 

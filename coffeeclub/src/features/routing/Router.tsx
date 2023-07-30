@@ -3,6 +3,7 @@ import ErrorPage from "./ErrorPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { Login } from "../login/Login";
 import { useAuth } from "../auth/useAuth";
+import { Home } from "../home/Home";
 
 const Index = () => {
   const { accessToken } = useAuth();
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <ProtectedRoute>
-        <Index />
+        <Home />
       </ProtectedRoute>
     ),
     errorElement: <ErrorPage />,

@@ -59,6 +59,8 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("CoffeeClubWorker", policy => policy.RequireClaim(ClaimTypes.Role, "CoffeeClubWorker"));
 });
+
+builder.Services.AddSwaggerGenNewtonsoftSupport();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
