@@ -18,8 +18,8 @@
  * @export
  */
 export const AuthProvider = {
-    NUMBER_0: 0,
-    NUMBER_1: 1
+    AzureActiveDirectory: 'AzureActiveDirectory',
+    Google: 'Google'
 } as const;
 export type AuthProvider = typeof AuthProvider[keyof typeof AuthProvider];
 

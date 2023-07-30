@@ -37,12 +37,6 @@ export interface CoffeeBean {
      * @type {string}
      * @memberof CoffeeBean
      */
-    id?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CoffeeBean
-     */
     name?: string | null;
     /**
      * 
@@ -68,6 +62,12 @@ export interface CoffeeBean {
      * @memberof CoffeeBean
      */
     createdBy?: User;
+    /**
+     * 
+     * @type {string}
+     * @memberof CoffeeBean
+     */
+    id?: string;
 }
 
 /**
@@ -89,12 +89,12 @@ export function CoffeeBeanFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
         'roast': !exists(json, 'roast') ? undefined : RoastFromJSON(json['roast']),
         'description': !exists(json, 'description') ? undefined : json['description'],
         'inStock': !exists(json, 'inStock') ? undefined : json['inStock'],
         'createdBy': !exists(json, 'createdBy') ? undefined : UserFromJSON(json['createdBy']),
+        'id': !exists(json, 'id') ? undefined : json['id'],
     };
 }
 
@@ -107,12 +107,12 @@ export function CoffeeBeanToJSON(value?: CoffeeBean | null): any {
     }
     return {
         
-        'id': value.id,
         'name': value.name,
         'roast': RoastToJSON(value.roast),
         'description': value.description,
         'inStock': value.inStock,
         'createdBy': UserToJSON(value.createdBy),
+        'id': value.id,
     };
 }
 

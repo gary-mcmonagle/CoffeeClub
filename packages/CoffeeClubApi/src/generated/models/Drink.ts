@@ -18,12 +18,12 @@
  * @export
  */
 export const Drink = {
-    NUMBER_0: 0,
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_3: 3,
-    NUMBER_4: 4,
-    NUMBER_5: 5
+    Filter: 'Filter',
+    Espresso: 'Espresso',
+    Cappuccino: 'Cappuccino',
+    Latte: 'Latte',
+    IcedLatte: 'IcedLatte',
+    IcedCappuccino: 'IcedCappuccino'
 } as const;
 export type Drink = typeof Drink[keyof typeof Drink];
 

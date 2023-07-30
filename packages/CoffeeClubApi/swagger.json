@@ -235,19 +235,14 @@
     "schemas": {
       "AuthProvider": {
         "enum": [
-          0,
-          1
+          "AzureActiveDirectory",
+          "Google"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "CoffeeBean": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
           "name": {
             "type": "string",
             "nullable": true
@@ -264,6 +259,10 @@
           },
           "createdBy": {
             "$ref": "#/components/schemas/User"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
           }
         },
         "additionalProperties": false
@@ -343,15 +342,14 @@
       },
       "Drink": {
         "enum": [
-          0,
-          1,
-          2,
-          3,
-          4,
-          5
+          "Filter",
+          "Espresso",
+          "Cappuccino",
+          "Latte",
+          "IcedLatte",
+          "IcedCappuccino"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "DrinkOrderDto": {
         "type": "object",
@@ -412,11 +410,10 @@
       },
       "MilkType": {
         "enum": [
-          0,
-          1
+          "Dairy",
+          "Oat"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "OrderDto": {
         "type": "object",
@@ -440,36 +437,34 @@
       },
       "OrderStatus": {
         "enum": [
-          0,
-          1,
-          2,
-          3
+          "Pending",
+          "Recieved",
+          "InProgress",
+          "Ready"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "Roast": {
         "enum": [
-          0,
-          1,
-          2
+          "Light",
+          "Medium",
+          "Dark"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "User": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
           "authProvider": {
             "$ref": "#/components/schemas/AuthProvider"
           },
           "authId": {
             "type": "string",
             "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
           }
         },
         "additionalProperties": false

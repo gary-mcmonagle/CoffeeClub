@@ -18,9 +18,9 @@
  * @export
  */
 export const Roast = {
-    NUMBER_0: 0,
-    NUMBER_1: 1,
-    NUMBER_2: 2
+    Light: 'Light',
+    Medium: 'Medium',
+    Dark: 'Dark'
 } as const;
 export type Roast = typeof Roast[keyof typeof Roast];
 

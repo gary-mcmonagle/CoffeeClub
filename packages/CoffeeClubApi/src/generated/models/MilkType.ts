@@ -18,8 +18,8 @@
  * @export
  */
 export const MilkType = {
-    NUMBER_0: 0,
-    NUMBER_1: 1
+    Dairy: 'Dairy',
+    Oat: 'Oat'
 } as const;
 export type MilkType = typeof MilkType[keyof typeof MilkType];
 

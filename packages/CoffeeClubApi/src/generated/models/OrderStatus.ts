@@ -18,10 +18,10 @@
  * @export
  */
 export const OrderStatus = {
-    NUMBER_0: 0,
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_3: 3
+    Pending: 'Pending',
+    Recieved: 'Recieved',
+    InProgress: 'InProgress',
+    Ready: 'Ready'
 } as const;
 export type OrderStatus = typeof OrderStatus[keyof typeof OrderStatus];
 

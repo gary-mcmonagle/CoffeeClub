@@ -28,12 +28,6 @@ import {
 export interface User {
     /**
      * 
-     * @type {string}
-     * @memberof User
-     */
-    id?: string;
-    /**
-     * 
      * @type {AuthProvider}
      * @memberof User
      */
@@ -44,6 +38,12 @@ export interface User {
      * @memberof User
      */
     authId?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    id?: string;
 }
 
 /**
@@ -65,9 +65,9 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
         'authProvider': !exists(json, 'authProvider') ? undefined : AuthProviderFromJSON(json['authProvider']),
         'authId': !exists(json, 'authId') ? undefined : json['authId'],
+        'id': !exists(json, 'id') ? undefined : json['id'],
     };
 }
 
@@ -80,9 +80,9 @@ export function UserToJSON(value?: User | null): any {
     }
     return {
         
-        'id': value.id,
         'authProvider': AuthProviderToJSON(value.authProvider),
         'authId': value.authId,
+        'id': value.id,
     };
 }
 
