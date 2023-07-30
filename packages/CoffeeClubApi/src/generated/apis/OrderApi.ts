@@ -15,52 +15,52 @@
 
 import * as runtime from '../runtime';
 import type {
-  CoffeeBean,
-  CreateCoffeeBeanDto,
+  CreateOrderDto,
+  OrderDto,
 } from '../models';
 import {
-    CoffeeBeanFromJSON,
-    CoffeeBeanToJSON,
-    CreateCoffeeBeanDtoFromJSON,
-    CreateCoffeeBeanDtoToJSON,
+    CreateOrderDtoFromJSON,
+    CreateOrderDtoToJSON,
+    OrderDtoFromJSON,
+    OrderDtoToJSON,
 } from '../models';
 
-export interface BeanPostRequest {
-    createCoffeeBeanDto?: CreateCoffeeBeanDto;
+export interface OrderPostRequest {
+    createOrderDto?: CreateOrderDto;
 }
 
 /**
  * 
  */
-export class BeanApi extends runtime.BaseAPI {
+export class OrderApi extends runtime.BaseAPI {
 
     /**
      */
-    async beanGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<CoffeeBean>>> {
+    async orderGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<OrderDto>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/Bean`,
+            path: `/Order`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(CoffeeBeanFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(OrderDtoFromJSON));
     }
 
     /**
      */
-    async beanGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CoffeeBean>> {
-        const response = await this.beanGetRaw(initOverrides);
+    async orderGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<OrderDto>> {
+        const response = await this.orderGetRaw(initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async beanPostRaw(requestParameters: BeanPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async orderPostRaw(requestParameters: OrderPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -68,11 +68,11 @@ export class BeanApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json-patch+json';
 
         const response = await this.request({
-            path: `/Bean`,
+            path: `/Order`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateCoffeeBeanDtoToJSON(requestParameters.createCoffeeBeanDto),
+            body: CreateOrderDtoToJSON(requestParameters.createOrderDto),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -80,8 +80,8 @@ export class BeanApi extends runtime.BaseAPI {
 
     /**
      */
-    async beanPost(requestParameters: BeanPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.beanPostRaw(requestParameters, initOverrides);
+    async orderPost(requestParameters: OrderPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.orderPostRaw(requestParameters, initOverrides);
     }
 
 }

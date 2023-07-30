@@ -48,6 +48,11 @@
         ],
         "requestBody": {
           "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCoffeeBeanDto"
+              }
+            },
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CreateCoffeeBeanDto"
@@ -97,6 +102,107 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/Menu": {
+      "get": {
+        "tags": [
+          "Menu"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/MenuDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MenuDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MenuDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Order": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderDto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
           }
         }
       }
@@ -162,6 +268,20 @@
         },
         "additionalProperties": false
       },
+      "CoffeeBeanMenuDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
       "CreateCoffeeBeanDto": {
         "type": "object",
         "properties": {
@@ -182,6 +302,35 @@
         },
         "additionalProperties": false
       },
+      "CreateDrinkOrderDto": {
+        "type": "object",
+        "properties": {
+          "coffeeBeanId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "drink": {
+            "$ref": "#/components/schemas/Drink"
+          },
+          "milkType": {
+            "$ref": "#/components/schemas/MilkType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateOrderDto": {
+        "type": "object",
+        "properties": {
+          "drinks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateDrinkOrderDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "DevTestDto": {
         "type": "object",
         "properties": {
@@ -191,6 +340,113 @@
           }
         },
         "additionalProperties": false
+      },
+      "Drink": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "DrinkOrderDto": {
+        "type": "object",
+        "properties": {
+          "coffeeBean": {
+            "$ref": "#/components/schemas/CoffeeBean"
+          },
+          "drink": {
+            "$ref": "#/components/schemas/Drink"
+          },
+          "milkType": {
+            "$ref": "#/components/schemas/MilkType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MenuDrinkDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/Drink"
+          },
+          "canBeIced": {
+            "type": "boolean"
+          },
+          "requiresMilk": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MenuDto": {
+        "type": "object",
+        "properties": {
+          "drinks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MenuDrinkDto"
+            },
+            "nullable": true
+          },
+          "coffeeBeans": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CoffeeBeanMenuDto"
+            },
+            "nullable": true
+          },
+          "milks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MilkType"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MilkType": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "OrderDto": {
+        "type": "object",
+        "properties": {
+          "drinks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DrinkOrderDto"
+            },
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OrderStatus"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderStatus": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
       },
       "Roast": {
         "enum": [
