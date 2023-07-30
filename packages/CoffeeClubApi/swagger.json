@@ -271,8 +271,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "id": {
             "type": "string",
@@ -388,22 +387,19 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/MenuDrinkDto"
-            },
-            "nullable": true
+            }
           },
           "coffeeBeans": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CoffeeBeanMenuDto"
-            },
-            "nullable": true
+            }
           },
           "milks": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/MilkType"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false

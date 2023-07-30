@@ -43,19 +43,19 @@ export interface MenuDto {
      * @type {Array<MenuDrinkDto>}
      * @memberof MenuDto
      */
-    drinks?: Array<MenuDrinkDto> | null;
+    drinks?: Array<MenuDrinkDto>;
     /**
      * 
      * @type {Array<CoffeeBeanMenuDto>}
      * @memberof MenuDto
      */
-    coffeeBeans?: Array<CoffeeBeanMenuDto> | null;
+    coffeeBeans?: Array<CoffeeBeanMenuDto>;
     /**
      * 
      * @type {Array<MilkType>}
      * @memberof MenuDto
      */
-    milks?: Array<MilkType> | null;
+    milks?: Array<MilkType>;
 }
 
 /**
@@ -77,9 +77,9 @@ export function MenuDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): M
     }
     return {
         
-        'drinks': !exists(json, 'drinks') ? undefined : (json['drinks'] === null ? null : (json['drinks'] as Array<any>).map(MenuDrinkDtoFromJSON)),
-        'coffeeBeans': !exists(json, 'coffeeBeans') ? undefined : (json['coffeeBeans'] === null ? null : (json['coffeeBeans'] as Array<any>).map(CoffeeBeanMenuDtoFromJSON)),
-        'milks': !exists(json, 'milks') ? undefined : (json['milks'] === null ? null : (json['milks'] as Array<any>).map(MilkTypeFromJSON)),
+        'drinks': !exists(json, 'drinks') ? undefined : ((json['drinks'] as Array<any>).map(MenuDrinkDtoFromJSON)),
+        'coffeeBeans': !exists(json, 'coffeeBeans') ? undefined : ((json['coffeeBeans'] as Array<any>).map(CoffeeBeanMenuDtoFromJSON)),
+        'milks': !exists(json, 'milks') ? undefined : ((json['milks'] as Array<any>).map(MilkTypeFromJSON)),
     };
 }
 
@@ -92,9 +92,9 @@ export function MenuDtoToJSON(value?: MenuDto | null): any {
     }
     return {
         
-        'drinks': value.drinks === undefined ? undefined : (value.drinks === null ? null : (value.drinks as Array<any>).map(MenuDrinkDtoToJSON)),
-        'coffeeBeans': value.coffeeBeans === undefined ? undefined : (value.coffeeBeans === null ? null : (value.coffeeBeans as Array<any>).map(CoffeeBeanMenuDtoToJSON)),
-        'milks': value.milks === undefined ? undefined : (value.milks === null ? null : (value.milks as Array<any>).map(MilkTypeToJSON)),
+        'drinks': value.drinks === undefined ? undefined : ((value.drinks as Array<any>).map(MenuDrinkDtoToJSON)),
+        'coffeeBeans': value.coffeeBeans === undefined ? undefined : ((value.coffeeBeans as Array<any>).map(CoffeeBeanMenuDtoToJSON)),
+        'milks': value.milks === undefined ? undefined : ((value.milks as Array<any>).map(MilkTypeToJSON)),
     };
 }
 

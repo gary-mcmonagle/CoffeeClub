@@ -24,7 +24,7 @@ export interface CoffeeBeanMenuDto {
      * @type {string}
      * @memberof CoffeeBeanMenuDto
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {string}
