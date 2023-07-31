@@ -1,4 +1,5 @@
 using AutoMapper;
+using CoffeeBeanClub.Domain.Models;
 using CoffeeClub.Core.Api.Extensions;
 using CoffeeClub.Domain.Dtos.Request;
 using CoffeeClub.Domain.Dtos.Response;
@@ -41,15 +42,26 @@ public class OrderController : ControllerBase
     {
         var userId = User.GetUserId();
         var user = await _userRepository.GetAsync(userId);
-        var drinks = await Task.WhenAll(createOrderDto.Drinks.Select(GetDrinkOrder));
+        var allBeans = await _coffeeBeanRepository.GetAllAsync();
+        var drinks = createOrderDto.Drinks.Select(d => GetDrinkOrder(d, allBeans)).ToList();
         var order = new Order { User = user!, DrinkOrders = drinks, Status = OrderStatus.Pending };
         var orderCreated = await _orderRepository.CreateAsync(order);
         return new OrderCreatedDto { Id = orderCreated.Id };
     }
 
-    private async Task<DrinkOrder> GetDrinkOrder(CreateDrinkOrderDto drinkOrder)
+    private DrinkOrder GetDrinkOrder(CreateDrinkOrderDto drinkOrder, IEnumerable<CoffeeBean> beans)
     {
-        var bean = await _coffeeBeanRepository.GetAsync(drinkOrder.CoffeeBeanId);
-        return new DrinkOrder { CoffeeBean = bean!, Drink = drinkOrder.Drink, MilkType = drinkOrder.MilkType };
+        var bean = beans.FirstOrDefault(b => b.Id == drinkOrder.CoffeeBeanId);
+        var drink = drinkOrder.Drink;
+        if (drinkOrder.IsIced)
+        {
+            var gotIce = IcedCoffeeHelper.IcedCoffeeMap.TryGetValue(drinkOrder.Drink, out var icedDrink);
+            if (!gotIce)
+            {
+                throw new Exception("Iced coffee not found");
+            }
+            drink = icedDrink;
+        }
+        return new DrinkOrder { CoffeeBean = bean!, Drink = drink, MilkType = drinkOrder.MilkType };
     }
 }

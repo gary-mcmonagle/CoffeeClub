@@ -50,6 +50,12 @@ export interface CreateDrinkOrderDto {
      * @memberof CreateDrinkOrderDto
      */
     milkType?: MilkType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateDrinkOrderDto
+     */
+    isIced?: boolean;
 }
 
 /**
@@ -74,6 +80,7 @@ export function CreateDrinkOrderDtoFromJSONTyped(json: any, ignoreDiscriminator:
         'coffeeBeanId': !exists(json, 'coffeeBeanId') ? undefined : json['coffeeBeanId'],
         'drink': !exists(json, 'drink') ? undefined : DrinkFromJSON(json['drink']),
         'milkType': !exists(json, 'milkType') ? undefined : MilkTypeFromJSON(json['milkType']),
+        'isIced': !exists(json, 'isIced') ? undefined : json['isIced'],
     };
 }
 
@@ -89,6 +96,7 @@ export function CreateDrinkOrderDtoToJSON(value?: CreateDrinkOrderDto | null): a
         'coffeeBeanId': value.coffeeBeanId,
         'drink': DrinkToJSON(value.drink),
         'milkType': MilkTypeToJSON(value.milkType),
+        'isIced': value.isIced,
     };
 }
 

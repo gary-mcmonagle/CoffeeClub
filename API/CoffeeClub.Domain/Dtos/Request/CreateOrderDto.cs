@@ -17,4 +17,6 @@ public record CreateDrinkOrderDto
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public MilkType? MilkType { get; init; }
+
+    public required bool IsIced { get; init; }
 }

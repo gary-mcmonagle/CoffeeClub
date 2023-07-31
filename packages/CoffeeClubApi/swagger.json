@@ -333,6 +333,9 @@
           },
           "milkType": {
             "$ref": "#/components/schemas/MilkType"
+          },
+          "isIced": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

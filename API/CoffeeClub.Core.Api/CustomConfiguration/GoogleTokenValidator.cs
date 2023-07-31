@@ -34,6 +34,7 @@ public class GoogleTokenValidator : ISecurityTokenValidator
 
     public ClaimsPrincipal ValidateToken(string securityToken, TokenValidationParameters validationParameters, out SecurityToken validatedToken)
     {
+
         // TODO cache
         validatedToken = null;
         var payload = GoogleJsonWebSignature.ValidateAsync(securityToken, new GoogleJsonWebSignature.ValidationSettings()).Result; // here is where I delegate to Google to validate
