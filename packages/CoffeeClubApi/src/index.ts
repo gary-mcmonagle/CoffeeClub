@@ -1,6 +1,6 @@
 export const Greeter = (name: string) => `Hello ${name}`; 
 export const sayHello = ({firstName, surname} : {firstName: string, surname: string}) => `Hello ${firstName} ${surname}`;
-import {Configuration, DevTestApi, BeanApi as Bapi, MenuApi as mapi} from './generated';
+import {Configuration, DevTestApi, BeanApi as Bapi, MenuApi as mapi, OrderApi as oapi, CreateOrderDto} from './generated';
 
 export const DevTest = (basePath: string) => {
     const api = new DevTestApi(new Configuration({basePath}));
@@ -20,5 +20,12 @@ export const MenuApi = (basePath: string, accessToken: string) => {
     const api = new mapi(new Configuration({basePath, headers: {Authorization: `Bearer ${accessToken}`}}));
     return {
         getMenu: async () => api.menuGet()
+    }
+};
+
+export const OrderApi = (basePath: string, accessToken: string) => {
+    const api = new oapi(new Configuration({basePath, headers: {Authorization: `Bearer ${accessToken}`}}));
+    return {
+        createOrder: async (createOrderDto: CreateOrderDto) => api.orderPost({createOrderDto})
     }
 };

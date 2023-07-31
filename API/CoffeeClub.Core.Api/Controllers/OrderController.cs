@@ -37,14 +37,14 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create(CreateOrderDto createOrderDto)
+    public async Task<OrderCreatedDto> Create(CreateOrderDto createOrderDto)
     {
         var userId = User.GetUserId();
         var user = await _userRepository.GetAsync(userId);
         var drinks = await Task.WhenAll(createOrderDto.Drinks.Select(GetDrinkOrder));
         var order = new Order { User = user!, DrinkOrders = drinks, Status = OrderStatus.Pending };
-        await _orderRepository.CreateAsync(order);
-        return Ok();
+        var orderCreated = await _orderRepository.CreateAsync(order);
+        return new OrderCreatedDto { Id = orderCreated.Id };
     }
 
     private async Task<DrinkOrder> GetDrinkOrder(CreateDrinkOrderDto drinkOrder)

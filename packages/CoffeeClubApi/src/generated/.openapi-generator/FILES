@@ -17,6 +17,7 @@ models/DrinkOrderDto.ts
 models/MenuDrinkDto.ts
 models/MenuDto.ts
 models/MilkType.ts
+models/OrderCreatedDto.ts
 models/OrderDto.ts
 models/OrderStatus.ts
 models/Roast.ts

@@ -202,7 +202,24 @@
         },
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderCreatedDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderCreatedDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderCreatedDto"
+                }
+              }
+            }
           }
         }
       }
@@ -424,6 +441,16 @@
           "Oat"
         ],
         "type": "string"
+      },
+      "OrderCreatedDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
       },
       "OrderDto": {
         "type": "object",

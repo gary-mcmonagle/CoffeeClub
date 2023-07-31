@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../auth/useAuth";
-import { MenuApi } from "@gary-mcmonagle/coffeeclubapi";
+import { MenuApi, OrderApi } from "@gary-mcmonagle/coffeeclubapi";
 import {
   CoffeeBeanMenuDto,
   Drink,
@@ -22,6 +22,7 @@ import {
   Typography,
 } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useFormik } from "formik";
 
 interface IFormInput {
   firstName: string;
@@ -29,16 +30,28 @@ interface IFormInput {
   age: number;
 }
 
-const CoffeeBeanCard = (bean: CoffeeBeanMenuDto) => {
-  return <p>{bean.name}</p>;
+const CoffeeBeanCard = ({ bean }: { bean: CoffeeBeanMenuDto }) => {
+  return (
+    <Card>
+      <CardContent>
+        <Typography>{bean.name}</Typography>
+      </CardContent>
+    </Card>
+  );
 };
 
 const CoffeeTypeCard = (drink: MenuDrinkDto) => {
   return <p>{drink.name}</p>;
 };
 
-const MilkTypeCard = (milk: MilkType) => {
-  return <p>{milk}</p>;
+const MilkTypeCard = ({ milk }: { milk: MilkType }) => {
+  return (
+    <Card>
+      <CardContent>
+        <Typography>{milk}</Typography>
+      </CardContent>
+    </Card>
+  );
 };
 
 const DrinkOrderCard = ({ drink }: { drink: MenuDrinkDto }) => (
@@ -52,23 +65,38 @@ const DrinkOrderCard = ({ drink }: { drink: MenuDrinkDto }) => (
 export const Menu = () => {
   const { accessToken } = useAuth();
   const { getMenu } = MenuApi("https://localhost:7231", accessToken!);
-  const [selectedDrink, setSelectedDrink] = useState<string>("");
+  const { createOrder } = OrderApi("https://localhost:7231", accessToken!);
+
   const [menu, setMenu] = useState<MenuDto | null>();
-  const { register, handleSubmit } = useForm<IFormInput>();
-  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
+
+  const formik = useFormik({
+    initialValues: { drink: "", milk: "", coffeeBean: "" },
+    onSubmit: (values) => {
+      console.log({ values });
+      const { milk, coffeeBean, drink } = values;
+      const milkType = milk as MilkType;
+      const drinkType = drink as Drink;
+      createOrder({
+        drinks: [{ coffeeBeanId: coffeeBean, milkType, drink: drinkType }],
+      });
+    },
+  });
 
   useEffect(() => {
     getMenu().then((menu) => setMenu(menu));
-  }, [getMenu]);
+  }, []);
 
   if (!menu) return <CircularProgress />;
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={formik.handleSubmit}>
       <ToggleButtonGroup
+        id="drink"
         color="primary"
-        value={selectedDrink}
+        value={formik.values.drink}
         exclusive
-        onChange={(e, s) => setSelectedDrink(s)}
+        onChange={(_, role) => {
+          formik.setFieldValue("drink", role);
+        }}
       >
         {menu.drinks.map((drink) => (
           <ToggleButton value={drink.name}>
@@ -76,6 +104,39 @@ export const Menu = () => {
           </ToggleButton>
         ))}
       </ToggleButtonGroup>
+      ¬
+      <ToggleButtonGroup
+        id="milk"
+        color="primary"
+        value={formik.values.milk}
+        exclusive
+        onChange={(_, role) => {
+          formik.setFieldValue("milk", role);
+        }}
+      >
+        {menu.milks.map((milk) => (
+          <ToggleButton value={milk}>
+            <MilkTypeCard milk={milk} />
+          </ToggleButton>
+        ))}
+      </ToggleButtonGroup>
+      ¬
+      <ToggleButtonGroup
+        id="coffeeBean"
+        color="primary"
+        value={formik.values.coffeeBean}
+        exclusive
+        onChange={(_, role) => {
+          formik.setFieldValue("coffeeBean", role);
+        }}
+      >
+        {menu.coffeeBeans.map((bean) => (
+          <ToggleButton value={bean.id}>
+            <CoffeeBeanCard bean={bean} />
+          </ToggleButton>
+        ))}
+      </ToggleButtonGroup>
+      ¬<button type="submit">Submit</button>
     </form>
   );
 };
