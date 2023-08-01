@@ -17,3 +17,4 @@ export * from './OrderDto';
 export * from './OrderStatus';
 export * from './Roast';
 export * from './User';
+export * from './UserProfileDto';

@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using CoffeeBeanClub.Domain.Models;
 using CoffeeClub.Core.Api.Extensions;
@@ -48,6 +49,36 @@ public class OrderController : ControllerBase
         var orderCreated = await _orderRepository.CreateAsync(order);
         return new OrderCreatedDto { Id = orderCreated.Id };
     }
+
+    [HttpGet]
+    [Authorize(Policy = "CoffeeClubWorker")]
+    [Route("available")]
+
+    public async Task<IEnumerable<OrderDto>> GetAll()
+    {
+        var orders = await _orderRepository.GetAllAsync();
+        return _mapper.Map<IEnumerable<OrderDto>>(orders);
+    }
+
+
+    [HttpPost]
+    [Authorize(Policy = "CoffeeClubWorker")]
+    [Route("{orderId}/assign")]
+    public async Task<ActionResult> Assign(Guid orderId)
+    {
+        var userId = User.GetUserId();
+        var user = await _userRepository.GetAsync(userId);
+        var order = await _orderRepository.GetAsync(orderId);
+        if (order is null)
+        {
+            return NotFound();
+        }
+        order.AssignedTo = user;
+        order.Status = OrderStatus.Assigned;
+        await _orderRepository.UpdateAsync(order);
+        return Ok();
+    }
+
 
     private DrinkOrder GetDrinkOrder(CreateDrinkOrderDto drinkOrder, IEnumerable<CoffeeBean> beans)
     {

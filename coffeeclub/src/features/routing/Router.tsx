@@ -4,6 +4,7 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import { Login } from "../login/Login";
 import { useAuth } from "../auth/useAuth";
 import { Home } from "../home/Home";
+import { EmployeeLanding } from "../landing/EmployeeLanding";
 
 const Index = () => {
   const { accessToken } = useAuth();
@@ -27,10 +28,10 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/secure",
+    path: "/employee",
     element: (
       <ProtectedRoute>
-        <div>secure</div>
+        <EmployeeLanding />
       </ProtectedRoute>
     ),
     errorElement: <ErrorPage />,

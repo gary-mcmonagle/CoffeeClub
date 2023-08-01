@@ -19,7 +19,8 @@
  */
 export const OrderStatus = {
     Pending: 'Pending',
-    Recieved: 'Recieved',
+    Received: 'Received',
+    Assigned: 'Assigned',
     InProgress: 'InProgress',
     Ready: 'Ready'
 } as const;

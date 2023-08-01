@@ -16,10 +16,13 @@
 import * as runtime from '../runtime';
 import type {
   AuthProvider,
+  UserProfileDto,
 } from '../models';
 import {
     AuthProviderFromJSON,
     AuthProviderToJSON,
+    UserProfileDtoFromJSON,
+    UserProfileDtoToJSON,
 } from '../models';
 
 export interface CreateRequest {
@@ -56,6 +59,30 @@ export class UserApi extends runtime.BaseAPI {
      */
     async create(requestParameters: CreateRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.createRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async userGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserProfileDto>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/User`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserProfileDtoFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async userGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserProfileDto> {
+        const response = await this.userGetRaw(initOverrides);
+        return await response.value();
     }
 
 }

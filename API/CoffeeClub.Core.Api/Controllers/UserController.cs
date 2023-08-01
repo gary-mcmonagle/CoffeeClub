@@ -1,4 +1,5 @@
 using AutoMapper;
+using CoffeeClub.Domain.Dtos.Response;
 using CoffeeClub.Domain.Enumerations;
 using CoffeeClub.Domain.Models;
 using CoffeeClub.Domain.Repositories;
@@ -24,4 +25,7 @@ public class UserController : ControllerBase
     {
         await _userRepository.CreateAsync(_mapper.Map<User>(authProvider));
     }
+
+    [HttpGet]
+    public UserProfileDto GetUser() => new UserProfileDto { IsWorker = User.IsInRole("CoffeeClubWorker") };
 }

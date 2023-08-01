@@ -28,6 +28,10 @@ import {
     OrderDtoToJSON,
 } from '../models';
 
+export interface OrderOrderIdAssignPostRequest {
+    orderId: string;
+}
+
 export interface OrderPostRequest {
     createOrderDto?: CreateOrderDto;
 }
@@ -36,6 +40,30 @@ export interface OrderPostRequest {
  * 
  */
 export class OrderApi extends runtime.BaseAPI {
+
+    /**
+     */
+    async orderAvailableGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<OrderDto>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/Order/available`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(OrderDtoFromJSON));
+    }
+
+    /**
+     */
+    async orderAvailableGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<OrderDto>> {
+        const response = await this.orderAvailableGetRaw(initOverrides);
+        return await response.value();
+    }
 
     /**
      */
@@ -59,6 +87,33 @@ export class OrderApi extends runtime.BaseAPI {
     async orderGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<OrderDto>> {
         const response = await this.orderGetRaw(initOverrides);
         return await response.value();
+    }
+
+    /**
+     */
+    async orderOrderIdAssignPostRaw(requestParameters: OrderOrderIdAssignPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.orderId === null || requestParameters.orderId === undefined) {
+            throw new runtime.RequiredError('orderId','Required parameter requestParameters.orderId was null or undefined when calling orderOrderIdAssignPost.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/Order/{orderId}/assign`.replace(`{${"orderId"}}`, encodeURIComponent(String(requestParameters.orderId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async orderOrderIdAssignPost(requestParameters: OrderOrderIdAssignPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.orderOrderIdAssignPostRaw(requestParameters, initOverrides);
     }
 
     /**

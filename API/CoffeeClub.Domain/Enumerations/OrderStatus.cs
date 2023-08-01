@@ -3,7 +3,8 @@ namespace CoffeeClub.Domain.Enumerations;
 public enum OrderStatus
 {
     Pending,
-    Recieved,
+    Received,
+    Assigned,
 
     InProgress,
     Ready
