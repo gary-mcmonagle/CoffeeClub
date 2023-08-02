@@ -52,12 +52,12 @@ public class OrderController : ControllerBase
 
     [HttpGet]
     [Authorize(Policy = "CoffeeClubWorker")]
-    [Route("available")]
+    [Route("assignable")]
 
     public async Task<IEnumerable<OrderDto>> GetAll()
     {
         var orders = await _orderRepository.GetAllAsync();
-        return _mapper.Map<IEnumerable<OrderDto>>(orders);
+        return _mapper.Map<IEnumerable<OrderDto>>(orders.Where(o => o.Status == OrderStatus.Pending));
     }
 
 

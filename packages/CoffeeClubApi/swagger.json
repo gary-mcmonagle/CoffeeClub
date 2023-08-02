@@ -224,7 +224,7 @@
         }
       }
     },
-    "/Order/available": {
+    "/Order/assignable": {
       "get": {
         "tags": [
           "Order"

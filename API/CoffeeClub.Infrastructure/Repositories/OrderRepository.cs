@@ -13,6 +13,15 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
     {
     }
 
+    new public Task<IEnumerable<Order>> GetAllAsync()
+    {
+        var all = _context.Set<Order>()
+            .Include(x => x.User)
+            .Include(x => x.DrinkOrders)
+            .ThenInclude(x => x.CoffeeBean).AsEnumerable();
+        return Task.FromResult(all);
+    }
+
     public Task<IEnumerable<Order>> GetForUser(Guid userId)
     {
         var all = _context.Set<Order>()

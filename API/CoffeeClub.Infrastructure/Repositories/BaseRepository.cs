@@ -26,7 +26,8 @@ public abstract class BaseRepository<T> : Domain.Repositories.IBaseRepository<T>
 
     public Task<IEnumerable<T>> GetAllAsync()
     {
-        var all = _context.Set<T>().AsEnumerable();
+        var all = _context.Set<T>()
+        .AsEnumerable();
         return Task.FromResult(all);
     }
 

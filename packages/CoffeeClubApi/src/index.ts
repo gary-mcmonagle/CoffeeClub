@@ -25,7 +25,9 @@ export const MenuApi = (basePath: string, accessToken: string) => {
 export const OrderApi = (basePath: string, accessToken: string) => {
     const api = new oapi(new Configuration({basePath, headers: {Authorization: `Bearer ${accessToken}`}}));
     return {
-        createOrder: async (createOrderDto: CreateOrderDto) => api.orderPost({createOrderDto})
+        createOrder: async (createOrderDto: CreateOrderDto) => api.orderPost({createOrderDto}),
+        getAssignable: async () => api.orderAssignableGet(),
+        assign: async (orderId: string) => api.orderOrderIdAssignPost({orderId}),
     }
 };
 

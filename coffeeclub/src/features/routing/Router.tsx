@@ -16,7 +16,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute redirect="">
         <Home />
       </ProtectedRoute>
     ),
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
   {
     path: "/employee",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute redirect="employee">
         <EmployeeLanding />
       </ProtectedRoute>
     ),

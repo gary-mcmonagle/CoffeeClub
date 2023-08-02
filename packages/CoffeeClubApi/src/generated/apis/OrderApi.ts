@@ -43,13 +43,13 @@ export class OrderApi extends runtime.BaseAPI {
 
     /**
      */
-    async orderAvailableGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<OrderDto>>> {
+    async orderAssignableGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<OrderDto>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/Order/available`,
+            path: `/Order/assignable`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -60,8 +60,8 @@ export class OrderApi extends runtime.BaseAPI {
 
     /**
      */
-    async orderAvailableGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<OrderDto>> {
-        const response = await this.orderAvailableGetRaw(initOverrides);
+    async orderAssignableGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<OrderDto>> {
+        const response = await this.orderAssignableGetRaw(initOverrides);
         return await response.value();
     }
 
