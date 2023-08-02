@@ -1,28 +1,53 @@
 import {
+  CoffeeBeanMenuDto,
   CreateDrinkOrderDto,
-  DrinkOrderDto,
 } from "@gary-mcmonagle/coffeeclubapi/lib/generated";
 import {
+  Button,
   Card,
+  CardActions,
   CardContent,
-  Checkbox,
-  FormControlLabel,
-  ToggleButton,
-  ToggleButtonGroup,
+  Chip,
+  Grid,
+  IconButton,
+  Stack,
   Typography,
 } from "@mui/material";
+import CoffeeIcon from "@mui/icons-material/Coffee";
+import { ReactComponent as MilkIcon } from "./milk.svg";
+import { ReactComponent as CoffeeBeanIcon } from "./coffee-bean.svg";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 const DrinkOrderCard = ({
-  drink: { drink, milkType },
+  drink: { drink, milkType, coffeeBeanId },
+  coffeeBeans,
+  removeDrink,
 }: {
   drink: CreateDrinkOrderDto;
-  removeDrink: (drink: CreateDrinkOrderDto) => void;
+  coffeeBeans: CoffeeBeanMenuDto[];
+  removeDrink: () => void;
 }) => {
   return (
     <Card>
+      <CardActions onClick={removeDrink}>
+        <IconButton>
+          <DeleteIcon />
+        </IconButton>{" "}
+      </CardActions>
       <CardContent>
-        <Typography>
-          {drink} {milkType}
-        </Typography>
+        <Stack spacing={1}>
+          <Chip icon={<CoffeeIcon style={{ height: 24 }} />} label={drink} />
+          <Chip
+            icon={<MilkIcon style={{ height: 24, width: 24 }} />}
+            label={milkType}
+          />
+          <Chip
+            icon={<CoffeeBeanIcon style={{ height: 24, width: 24 }} />}
+            label={coffeeBeans
+              .find((x) => x.id == coffeeBeanId)
+              ?.name.toString()}
+          />
+        </Stack>
       </CardContent>
     </Card>
   );
@@ -31,15 +56,25 @@ const DrinkOrderCard = ({
 export const OrderedDrinks = ({
   drinks,
   removeDrink,
+  coffeeBeans,
 }: {
   drinks: CreateDrinkOrderDto[];
-  removeDrink: (drink: CreateDrinkOrderDto) => void;
+  removeDrink: (idx: number) => void;
+  coffeeBeans: CoffeeBeanMenuDto[];
 }) => {
   return (
     <>
-      {drinks.map((drink) => (
-        <DrinkOrderCard drink={drink} removeDrink={removeDrink} />
-      ))}
+      <Grid container spacing={2}>
+        {drinks.map((drink, idx) => (
+          <Grid item xs={12} md={3}>
+            <DrinkOrderCard
+              drink={drink}
+              removeDrink={() => removeDrink(idx)}
+              coffeeBeans={coffeeBeans}
+            />
+          </Grid>
+        ))}
+      </Grid>
     </>
   );
 };

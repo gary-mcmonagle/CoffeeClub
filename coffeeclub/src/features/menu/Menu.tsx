@@ -28,9 +28,14 @@ export const Menu = () => {
     <>
       <OrderedDrinks
         drinks={drinkOrders}
-        removeDrink={(drink: CreateDrinkOrderDto) => {
-          setDrinkOrders(drinkOrders.filter((d) => d !== drink));
+        removeDrink={(idx: number) => {
+          var updated = [
+            ...drinkOrders.slice(0, idx),
+            ...drinkOrders.slice(idx + 1),
+          ];
+          setDrinkOrders(updated);
         }}
+        coffeeBeans={menu.coffeeBeans}
       ></OrderedDrinks>
       <CoffeeSelection
         coffeeBeans={menu.coffeeBeans}
