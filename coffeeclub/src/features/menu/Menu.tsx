@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../auth/useAuth";
-import { MenuApi, OrderApi } from "@gary-mcmonagle/coffeeclubapi";
 import {
   CoffeeBeanMenuDto,
   CreateDrinkOrderDto,
@@ -10,12 +9,13 @@ import {
 import { Button, CircularProgress, Typography } from "@mui/material";
 import { CoffeeSelection } from "./CoffeeSelection";
 import { OrderedDrinks } from "./OrderedDrinks";
+import { useApi } from "../api/useApi";
 
 export const Menu = () => {
-  const { accessToken } = useAuth();
-  const { getMenu } = MenuApi("https://localhost:7231", accessToken!);
-  const { createOrder } = OrderApi("https://localhost:7231", accessToken!);
-
+  const {
+    menuApi: { getMenu },
+    orderApi: { createOrder },
+  } = useApi();
   const [menu, setMenu] = useState<MenuDto | null>();
   const [drinkOrders, setDrinkOrders] = useState<CreateDrinkOrderDto[]>([]);
 

@@ -1,13 +1,14 @@
 import { UserProfileDto } from "@gary-mcmonagle/coffeeclubapi/lib/generated";
 import { useAuth } from "../auth/useAuth";
 import { OrderDispatch } from "../orderDispatch/OrderDispatch";
-import { UserApi } from "@gary-mcmonagle/coffeeclubapi";
 import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useApi } from "../api/useApi";
 export const EmployeeLanding = () => {
-  const { accessToken } = useAuth();
-  const { getUser } = UserApi("https://localhost:7231", accessToken!);
+  const {
+    userApi: { getUser },
+  } = useApi();
   const [user, setUser] = useState<UserProfileDto | null>(null);
   const navigate = useNavigate();
 

@@ -1,4 +1,3 @@
-import { OrderApi } from "@gary-mcmonagle/coffeeclubapi";
 import { useAuth } from "../auth/useAuth";
 import {
   DrinkOrderDto,
@@ -6,6 +5,7 @@ import {
 } from "@gary-mcmonagle/coffeeclubapi/lib/generated";
 import { Button, Card, CardContent } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useApi } from "../api/useApi";
 
 const DrinkCard = ({ drink }: { drink: DrinkOrderDto }) => {
   return (
@@ -37,12 +37,9 @@ const OrderCard = ({
 );
 
 export const OrderDispatch = () => {
-  const { accessToken } = useAuth();
-  const { getAssignable, assign } = OrderApi(
-    "https://localhost:7231",
-    accessToken!
-  );
-  getAssignable().then((orders) => {});
+  const {
+    orderApi: { getAssignable, assign },
+  } = useApi();
   const [orders, setOrders] = useState<OrderDto[] | null>();
   useEffect(() => {
     getAssignable().then(setOrders);
