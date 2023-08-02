@@ -1,8 +1,19 @@
 import { OrderApi } from "@gary-mcmonagle/coffeeclubapi";
 import { useAuth } from "../auth/useAuth";
-import { OrderDto } from "@gary-mcmonagle/coffeeclubapi/lib/generated";
+import {
+  DrinkOrderDto,
+  OrderDto,
+} from "@gary-mcmonagle/coffeeclubapi/lib/generated";
 import { Button, Card, CardContent } from "@mui/material";
 import { useEffect, useState } from "react";
+
+const DrinkCard = ({ drink }: { drink: DrinkOrderDto }) => {
+  return (
+    <Card>
+      <CardContent>{drink.drink}</CardContent>
+    </Card>
+  );
+};
 
 const OrderCard = ({
   order,
@@ -13,6 +24,7 @@ const OrderCard = ({
 }) => (
   <Card>
     <CardContent>
+      {(order.drinks || []).map((drink) => DrinkCard({ drink }))}
       <Button
         onClick={() => {
           assign(order.id!);
