@@ -14,8 +14,8 @@ import {
   Typography,
 } from "@mui/material";
 import CoffeeIcon from "@mui/icons-material/Coffee";
-import { ReactComponent as MilkIcon } from "./milk.svg";
-import { ReactComponent as CoffeeBeanIcon } from "./coffee-bean.svg";
+import { ReactComponent as MilkIcon } from "../../icons/milk.svg";
+import { ReactComponent as CoffeeBeanIcon } from "../../icons/coffee-bean.svg";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const DrinkOrderCard = ({
@@ -44,7 +44,7 @@ const DrinkOrderCard = ({
           <Chip
             icon={<CoffeeBeanIcon style={{ height: 24, width: 24 }} />}
             label={coffeeBeans
-              .find((x) => x.id == coffeeBeanId)
+              .find((x) => x.id === coffeeBeanId)
               ?.name.toString()}
           />
         </Stack>

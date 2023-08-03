@@ -39,7 +39,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<OrderCreatedDto> Create(CreateOrderDto createOrderDto)
+    public async Task<OrderCreatedDto> Create([FromBody] CreateOrderDto createOrderDto)
     {
         var userId = User.GetUserId();
         var user = await _userRepository.GetAsync(userId);

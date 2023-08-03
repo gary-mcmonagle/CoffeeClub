@@ -7,7 +7,7 @@ import {
   MilkType,
 } from "@gary-mcmonagle/coffeeclubapi/lib/generated";
 import { Button, CircularProgress, Typography } from "@mui/material";
-import { CoffeeSelection } from "./CoffeeSelection";
+import { CoffeeSelectionNew } from "./CoffeeSelection";
 import { OrderedDrinks } from "./OrderedDrinks";
 import { useApi } from "../api/useApi";
 
@@ -37,7 +37,7 @@ export const Menu = () => {
         }}
         coffeeBeans={menu.coffeeBeans}
       ></OrderedDrinks>
-      <CoffeeSelection
+      <CoffeeSelectionNew
         coffeeBeans={menu.coffeeBeans}
         drinks={menu.drinks}
         milks={menu.milks}
@@ -45,7 +45,9 @@ export const Menu = () => {
       />
       <Button
         onClick={() => {
-          createOrder({ drinks: drinkOrders });
+          createOrder({ drinks: drinkOrders }).then(() => {
+            setDrinkOrders([]);
+          });
         }}
         disabled={drinkOrders.length === 0}
       >

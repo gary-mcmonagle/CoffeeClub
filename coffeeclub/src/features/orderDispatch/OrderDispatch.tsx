@@ -3,14 +3,32 @@ import {
   DrinkOrderDto,
   OrderDto,
 } from "@gary-mcmonagle/coffeeclubapi/lib/generated";
-import { Button, Card, CardContent } from "@mui/material";
+import { Button, Card, CardContent, Chip, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useApi } from "../api/useApi";
+import { ReactComponent as MilkIcon } from "../../icons/milk.svg";
+import { ReactComponent as CoffeeBeanIcon } from "../../icons/coffee-bean.svg";
+import CoffeeIcon from "@mui/icons-material/Coffee";
 
-const DrinkCard = ({ drink }: { drink: DrinkOrderDto }) => {
+const DrinkOrderCard = ({ drink }: { drink: DrinkOrderDto }) => {
   return (
     <Card>
-      <CardContent>{drink.drink}</CardContent>
+      <CardContent>
+        <Stack spacing={1}>
+          <Chip
+            icon={<CoffeeIcon style={{ height: 24 }} />}
+            label={drink.drink}
+          />
+          <Chip
+            icon={<MilkIcon style={{ height: 24, width: 24 }} />}
+            label={drink.milkType}
+          />
+          <Chip
+            icon={<CoffeeBeanIcon style={{ height: 24, width: 24 }} />}
+            label={drink.coffeeBean?.name}
+          />
+        </Stack>
+      </CardContent>{" "}
     </Card>
   );
 };
@@ -24,10 +42,13 @@ const OrderCard = ({
 }) => (
   <Card>
     <CardContent>
-      {(order.drinks || []).map((drink) => DrinkCard({ drink }))}
+      {order.drinks?.map((drink) => (
+        <DrinkOrderCard drink={drink} />
+      ))}
+      {/* {(order.drinks || []).map((drink) => DrinkCard({ drink }))} */}
       <Button
         onClick={() => {
-          assign(order.id!);
+          return assign(order.id!);
         }}
       >
         Start
@@ -40,6 +61,7 @@ export const OrderDispatch = () => {
   const {
     orderApi: { getAssignable, assign },
   } = useApi();
+  getAssignable().then((orders) => {});
   const [orders, setOrders] = useState<OrderDto[] | null>();
   useEffect(() => {
     getAssignable().then(setOrders);
@@ -51,7 +73,13 @@ export const OrderDispatch = () => {
   return (
     <>
       {orders.map((order) => (
-        <OrderCard order={order} assign={assign} />
+        <OrderCard
+          order={order}
+          assign={async () => {
+            await assign(order.id!);
+            setOrders(orders.filter((x) => x.id !== order.id));
+          }}
+        />
       ))}
     </>
   );

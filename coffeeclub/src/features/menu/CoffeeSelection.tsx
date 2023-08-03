@@ -6,50 +6,30 @@ import {
   MilkType,
 } from "@gary-mcmonagle/coffeeclubapi/lib/generated";
 import {
-  Card,
-  CardContent,
+  Box,
+  Button,
   Checkbox,
   FormControlLabel,
+  Grid,
+  Stack,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
+  styled,
 } from "@mui/material";
 import { useFormik } from "formik";
-import { useState } from "react";
 
-const CoffeeBeanCard = ({ bean }: { bean: CoffeeBeanMenuDto }) => {
-  return (
-    <Card>
-      <CardContent>
-        <Typography>{bean.name}</Typography>
-      </CardContent>
-    </Card>
-  );
-};
+const StyledToggleButtonGroup = styled(ToggleButtonGroup)({
+  height: "100%",
+  width: "100%",
+});
 
-const CoffeeTypeCard = (drink: MenuDrinkDto) => {
-  return <p>{drink.name}</p>;
-};
+const StyledToggleButton = styled(ToggleButton)({
+  height: "80%",
+  width: "80%",
+});
 
-const MilkTypeCard = ({ milk }: { milk: MilkType }) => {
-  return (
-    <Card>
-      <CardContent>
-        <Typography>{milk}</Typography>
-      </CardContent>
-    </Card>
-  );
-};
-
-const DrinkOrderCard = ({ drink }: { drink: MenuDrinkDto }) => (
-  <Card>
-    <CardContent>
-      <Typography>{drink.name}</Typography>
-    </CardContent>
-  </Card>
-);
-
-export const CoffeeSelection = ({
+export const CoffeeSelectionNew = ({
   drinks,
   coffeeBeans,
   milks,
@@ -66,6 +46,7 @@ export const CoffeeSelection = ({
       const { milk, coffeeBean, drink } = values;
       const milkType = milk as MilkType;
       const drinkType = drink as Drink;
+      console.log({ milk, coffeeBean, drinkType });
       addDrink({
         coffeeBeanId: coffeeBean,
         milkType,
@@ -77,55 +58,68 @@ export const CoffeeSelection = ({
   });
   return (
     <form onSubmit={formik.handleSubmit}>
-      <ToggleButtonGroup
-        id="drink"
-        color="primary"
-        value={formik.values.drink}
-        exclusive
-        onChange={(_, role) => {
-          formik.setFieldValue("drink", role);
-        }}
-      >
-        {drinks.map((drink) => (
-          <ToggleButton value={drink.name}>
-            <DrinkOrderCard drink={drink} />
-          </ToggleButton>
-        ))}
-      </ToggleButtonGroup>
-      ¬
-      <ToggleButtonGroup
-        id="milk"
-        color="primary"
-        value={formik.values.milk}
-        exclusive
-        onChange={(_, role) => {
-          formik.setFieldValue("milk", role);
-        }}
-      >
-        {milks.map((milk) => (
-          <ToggleButton value={milk}>
-            <MilkTypeCard milk={milk} />
-          </ToggleButton>
-        ))}
-      </ToggleButtonGroup>
-      ¬
-      <ToggleButtonGroup
-        id="coffeeBean"
-        color="primary"
-        value={formik.values.coffeeBean}
-        exclusive
-        onChange={(_, role) => {
-          formik.setFieldValue("coffeeBean", role);
-        }}
-      >
-        {coffeeBeans.map((bean) => (
-          <ToggleButton value={bean.id}>
-            <CoffeeBeanCard bean={bean} />
-          </ToggleButton>
-        ))}
-      </ToggleButtonGroup>
-      <FormControlLabel id="isIced" control={<Checkbox />} label="Label" />¬
-      <button type="submit">Add Drink</button>
+      <Stack spacing={1}>
+        <Box>
+          <Typography>Select a drink</Typography>
+          <StyledToggleButtonGroup
+            id="drink"
+            color="primary"
+            value={formik.values.drink}
+            exclusive
+            onChange={(_, role) => {
+              console.log({ _, role });
+              formik.setFieldValue("drink", role);
+            }}
+          >
+            {drinks.map((drink) => (
+              <StyledToggleButton value={drink.name}>
+                <Typography>{drink.name}</Typography>
+              </StyledToggleButton>
+            ))}
+          </StyledToggleButtonGroup>
+        </Box>
+        <Box>
+          <Typography>Select a Milk</Typography>
+          <StyledToggleButtonGroup
+            id="milk"
+            color="primary"
+            value={formik.values.milk}
+            exclusive
+            onChange={(_, role) => {
+              console.log({ _, role });
+
+              formik.setFieldValue("milk", role);
+            }}
+          >
+            {milks.map((milk) => (
+              <StyledToggleButton value={milk}>
+                <Typography>{milk}</Typography>
+              </StyledToggleButton>
+            ))}
+          </StyledToggleButtonGroup>
+        </Box>
+        <Box>
+          <Typography>Select a Bean</Typography>
+          <StyledToggleButtonGroup
+            id="coffeeBean"
+            color="primary"
+            value={formik.values.coffeeBean}
+            exclusive
+            onChange={(_, role) => {
+              console.log({ _, role });
+              formik.setFieldValue("coffeeBean", role);
+            }}
+          >
+            {coffeeBeans.map((bean) => (
+              <StyledToggleButton value={bean.id}>
+                <Typography>{bean.name}</Typography>
+              </StyledToggleButton>
+            ))}
+          </StyledToggleButtonGroup>
+        </Box>
+      </Stack>
+      <FormControlLabel id="isIced" control={<Checkbox />} label="Iced?" />¬
+      <Button type="submit">Add Drink</Button>
     </form>
   );
 };
