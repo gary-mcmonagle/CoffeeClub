@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { OrderStatus } from './OrderStatus';
+import {
+    OrderStatusFromJSON,
+    OrderStatusFromJSONTyped,
+    OrderStatusToJSON,
+} from './OrderStatus';
+
 /**
  * 
  * @export
@@ -25,6 +32,12 @@ export interface OrderCreatedDto {
      * @memberof OrderCreatedDto
      */
     id?: string;
+    /**
+     * 
+     * @type {OrderStatus}
+     * @memberof OrderCreatedDto
+     */
+    status?: OrderStatus;
 }
 
 /**
@@ -47,6 +60,7 @@ export function OrderCreatedDtoFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'status': !exists(json, 'status') ? undefined : OrderStatusFromJSON(json['status']),
     };
 }
 
@@ -60,6 +74,7 @@ export function OrderCreatedDtoToJSON(value?: OrderCreatedDto | null): any {
     return {
         
         'id': value.id,
+        'status': OrderStatusToJSON(value.status),
     };
 }
 

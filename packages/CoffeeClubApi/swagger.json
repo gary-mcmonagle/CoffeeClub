@@ -540,6 +540,9 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OrderStatus"
           }
         },
         "additionalProperties": false

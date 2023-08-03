@@ -47,7 +47,7 @@ public class OrderController : ControllerBase
         var drinks = createOrderDto.Drinks.Select(d => GetDrinkOrder(d, allBeans)).ToList();
         var order = new Order { User = user!, DrinkOrders = drinks, Status = OrderStatus.Pending };
         var orderCreated = await _orderRepository.CreateAsync(order);
-        return new OrderCreatedDto { Id = orderCreated.Id };
+        return new OrderCreatedDto { Id = orderCreated.Id, Status = orderCreated.Status };
     }
 
     [HttpGet]
