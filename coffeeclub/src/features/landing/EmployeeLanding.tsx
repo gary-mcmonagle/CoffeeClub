@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../api/useApi";
+import { BaseLanding } from "./BaseLanding";
+import { Orders } from "../orders/Orders";
 export const EmployeeLanding = () => {
   const {
     userApi: { getUser },
@@ -21,6 +23,16 @@ export const EmployeeLanding = () => {
       return setUser(user);
     });
   }, []);
-  if (!user) return <CircularProgress />;
-  return <OrderDispatch />;
+  if (!user)
+    return (
+      <BaseLanding>
+        <CircularProgress />
+      </BaseLanding>
+    );
+  return (
+    <BaseLanding>
+      <OrderDispatch></OrderDispatch>
+      <Orders />
+    </BaseLanding>
+  );
 };

@@ -26,6 +26,7 @@ const OrderApi = (basePath: string, accessToken: string) => {
     return {
         createOrder: async (createOrderDto: CreateOrderDto) => api.orderPost({createOrderDto}),
         getAssignable: async () => api.orderAssignableGet(),
+        getAll: async () => api.orderGet(),
         assign: async (orderId: string) => api.orderOrderIdAssignPost({orderId}),
     }
 };

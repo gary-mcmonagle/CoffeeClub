@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CoffeeClub.Core.Api.Controllers;
 
-[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class OrderController : ControllerBase

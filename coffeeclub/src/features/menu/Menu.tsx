@@ -6,7 +6,7 @@ import {
   MenuDto,
   MilkType,
 } from "@gary-mcmonagle/coffeeclubapi/lib/generated";
-import { Button, CircularProgress, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { CoffeeSelectionNew } from "./CoffeeSelection";
 import { OrderedDrinks } from "./OrderedDrinks";
 import { useApi } from "../api/useApi";
@@ -25,7 +25,7 @@ export const Menu = () => {
 
   if (!menu) return <CircularProgress />;
   return (
-    <>
+    <Box margin={3}>
       <OrderedDrinks
         drinks={drinkOrders}
         removeDrink={(idx: number) => {
@@ -53,6 +53,6 @@ export const Menu = () => {
       >
         <Typography>Order</Typography>
       </Button>
-    </>
+    </Box>
   );
 };

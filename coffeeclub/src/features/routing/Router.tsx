@@ -5,6 +5,7 @@ import { Login } from "../login/Login";
 import { useAuth } from "../auth/useAuth";
 import { Home } from "../home/Home";
 import { EmployeeLanding } from "../landing/EmployeeLanding";
+import { OrderLanding } from "../landing/OrderLanding";
 
 const Index = () => {
   const { accessToken } = useAuth();
@@ -17,7 +18,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <ProtectedRoute redirect="">
-        <Home />
+        <OrderLanding />
       </ProtectedRoute>
     ),
     errorElement: <ErrorPage />,
