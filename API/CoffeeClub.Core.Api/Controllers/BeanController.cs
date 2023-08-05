@@ -36,8 +36,17 @@ public class BeanController : ControllerBase
     [Authorize(Policy = "CoffeeClubWorker")]
     public async Task<ActionResult> Create(CreateCoffeeBeanDto createCoffeeBeanDto)
     {
-        var user = await _userRepository.GetOrInsert(User);
-        var newBean = await _coffeeBeanRepository.CreateAsync(_mapper.Map<CoffeeBean>((createCoffeeBeanDto, user)));
+        var userId = User.GetUserId();
+        var user = await _userRepository.GetAsync(userId);
+        var coffeeBean = new CoffeeBean
+        {
+            Name = createCoffeeBeanDto.Name,
+            CreatedBy = user!,
+            Roast = createCoffeeBeanDto.Roast,
+            Description = createCoffeeBeanDto.Description,
+            InStock = createCoffeeBeanDto.InStock
+        };
+        await _coffeeBeanRepository.CreateAsync(coffeeBean);
         return Ok();
     }
 }

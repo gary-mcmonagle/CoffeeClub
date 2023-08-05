@@ -35,13 +35,12 @@ public class GoogleTokenValidator : ISecurityTokenValidator
     public ClaimsPrincipal ValidateToken(string securityToken, TokenValidationParameters validationParameters, out SecurityToken validatedToken)
     {
 
-        // TODO cache
         validatedToken = null;
-        var payload = GoogleJsonWebSignature.ValidateAsync(securityToken, new GoogleJsonWebSignature.ValidationSettings()).Result; // here is where I delegate to Google to validate
-        var user = _userRepository.GetOrCreateAsync(payload.Subject, AuthProvider.Google).Result;
+        var payload = GoogleJsonWebSignature.ValidateAsync(securityToken, new GoogleJsonWebSignature.ValidationSettings()).GetAwaiter().GetResult(); // here is where I delegate to Google to validate
+        // var user = _userRepository.GetOrCreateAsync(payload.Subject, AuthProvider.Google).Result;
         var claims = new List<Claim>
                 {
-                    new Claim("id", user.Id.ToString()),
+                    // new Claim("id", user.Id.ToString()),
                     new Claim("sub", payload.Subject),
                     new Claim("authProvider", ((int)AuthProvider.Google).ToString()),
                     new Claim(ClaimTypes.Role, _workerEmails.Contains(payload.Email) ? "CoffeeClubWorker" : "CoffeeClubCustomer")

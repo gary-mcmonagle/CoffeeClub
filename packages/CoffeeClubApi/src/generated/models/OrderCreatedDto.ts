@@ -31,13 +31,13 @@ export interface OrderCreatedDto {
      * @type {string}
      * @memberof OrderCreatedDto
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {OrderStatus}
      * @memberof OrderCreatedDto
      */
-    status?: OrderStatus;
+    status: OrderStatus;
 }
 
 /**
@@ -45,6 +45,8 @@ export interface OrderCreatedDto {
  */
 export function instanceOfOrderCreatedDto(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "status" in value;
 
     return isInstance;
 }
@@ -59,8 +61,8 @@ export function OrderCreatedDtoFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'status': !exists(json, 'status') ? undefined : OrderStatusFromJSON(json['status']),
+        'id': json['id'],
+        'status': OrderStatusFromJSON(json['status']),
     };
 }
 

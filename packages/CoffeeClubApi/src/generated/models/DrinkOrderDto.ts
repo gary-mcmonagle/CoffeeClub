@@ -43,13 +43,13 @@ export interface DrinkOrderDto {
      * @type {CoffeeBean}
      * @memberof DrinkOrderDto
      */
-    coffeeBean?: CoffeeBean;
+    coffeeBean: CoffeeBean;
     /**
      * 
      * @type {Drink}
      * @memberof DrinkOrderDto
      */
-    drink?: Drink;
+    drink: Drink;
     /**
      * 
      * @type {MilkType}
@@ -63,6 +63,8 @@ export interface DrinkOrderDto {
  */
 export function instanceOfDrinkOrderDto(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "coffeeBean" in value;
+    isInstance = isInstance && "drink" in value;
 
     return isInstance;
 }
@@ -77,8 +79,8 @@ export function DrinkOrderDtoFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
-        'coffeeBean': !exists(json, 'coffeeBean') ? undefined : CoffeeBeanFromJSON(json['coffeeBean']),
-        'drink': !exists(json, 'drink') ? undefined : DrinkFromJSON(json['drink']),
+        'coffeeBean': CoffeeBeanFromJSON(json['coffeeBean']),
+        'drink': DrinkFromJSON(json['drink']),
         'milkType': !exists(json, 'milkType') ? undefined : MilkTypeFromJSON(json['milkType']),
     };
 }

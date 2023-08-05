@@ -5,6 +5,7 @@ using CoffeClub.Infrastructure;
 using CoffeeClub.Core.Api.CustomConfiguration;
 using CoffeeClub.Core.Api.CustomConfiguration.AppSettingsConfig;
 using CoffeeClub.Domain.Repositories;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,7 @@ builder.Services.Configure<JsonOptions>(options =>
     options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     options.SerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
 });
+builder.Services.AddScoped<IClaimsTransformation, ClaimsTransformer>();
 
 var userRepository = builder.Services.BuildServiceProvider().GetRequiredService<IUserRepository>();
 

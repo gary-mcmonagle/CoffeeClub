@@ -37,19 +37,19 @@ export interface OrderDto {
      * @type {Array<DrinkOrderDto>}
      * @memberof OrderDto
      */
-    drinks?: Array<DrinkOrderDto> | null;
+    drinks: Array<DrinkOrderDto>;
     /**
      * 
      * @type {string}
      * @memberof OrderDto
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {OrderStatus}
      * @memberof OrderDto
      */
-    status?: OrderStatus;
+    status: OrderStatus;
 }
 
 /**
@@ -57,6 +57,9 @@ export interface OrderDto {
  */
 export function instanceOfOrderDto(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "drinks" in value;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "status" in value;
 
     return isInstance;
 }
@@ -71,9 +74,9 @@ export function OrderDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'drinks': !exists(json, 'drinks') ? undefined : (json['drinks'] === null ? null : (json['drinks'] as Array<any>).map(DrinkOrderDtoFromJSON)),
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'status': !exists(json, 'status') ? undefined : OrderStatusFromJSON(json['status']),
+        'drinks': ((json['drinks'] as Array<any>).map(DrinkOrderDtoFromJSON)),
+        'id': json['id'],
+        'status': OrderStatusFromJSON(json['status']),
     };
 }
 
@@ -86,7 +89,7 @@ export function OrderDtoToJSON(value?: OrderDto | null): any {
     }
     return {
         
-        'drinks': value.drinks === undefined ? undefined : (value.drinks === null ? null : (value.drinks as Array<any>).map(DrinkOrderDtoToJSON)),
+        'drinks': ((value.drinks as Array<any>).map(DrinkOrderDtoToJSON)),
         'id': value.id,
         'status': OrderStatusToJSON(value.status),
     };

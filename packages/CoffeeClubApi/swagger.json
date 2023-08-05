@@ -464,6 +464,10 @@
         "type": "string"
       },
       "DrinkOrderDto": {
+        "required": [
+          "coffeeBean",
+          "drink"
+        ],
         "type": "object",
         "properties": {
           "coffeeBean": {
@@ -535,6 +539,10 @@
         "type": "string"
       },
       "OrderCreatedDto": {
+        "required": [
+          "id",
+          "status"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -548,14 +556,18 @@
         "additionalProperties": false
       },
       "OrderDto": {
+        "required": [
+          "drinks",
+          "id",
+          "status"
+        ],
         "type": "object",
         "properties": {
           "drinks": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/DrinkOrderDto"
-            },
-            "nullable": true
+            }
           },
           "id": {
             "type": "string",

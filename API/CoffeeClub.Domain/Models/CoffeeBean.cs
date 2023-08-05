@@ -9,7 +9,7 @@ public record CoffeeBean : BaseModel
     public required Roast Roast { get; init; }
     public required string Description { get; init; } = string.Empty;
 
-    public required bool InStock { get; init; }
+    public required bool InStock { get; init; } = true;
 
     public required User CreatedBy { get; init; }
 }
