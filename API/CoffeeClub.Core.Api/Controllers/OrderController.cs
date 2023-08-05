@@ -2,6 +2,7 @@ using System;
 using AutoMapper;
 using CoffeeBeanClub.Domain.Models;
 using CoffeeClub.Core.Api.Extensions;
+using CoffeeClub.Core.Api.Hubs;
 using CoffeeClub.Domain.Dtos.Request;
 using CoffeeClub.Domain.Dtos.Response;
 using CoffeeClub.Domain.Enumerations;
@@ -9,6 +10,7 @@ using CoffeeClub.Domain.Models;
 using CoffeeClub.Domain.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CoffeeClub.Core.Api.Controllers;
 
@@ -20,13 +22,15 @@ public class OrderController : ControllerBase
     private IUserRepository _userRepository;
     private ICoffeeBeanRepository _coffeeBeanRepository;
     private IMapper _mapper;
+    private IHubContext<SignalrHub> _hubContext;
 
-    public OrderController(IOrderRepository orderRepository, IMapper mapper, IUserRepository userRepository, ICoffeeBeanRepository coffeeBeanRepository)
+    public OrderController(IOrderRepository orderRepository, IMapper mapper, IUserRepository userRepository, ICoffeeBeanRepository coffeeBeanRepository, IHubContext<SignalrHub> hubContext)
     {
         _orderRepository = orderRepository;
         _mapper = mapper;
         _userRepository = userRepository;
         _coffeeBeanRepository = coffeeBeanRepository;
+        _hubContext = hubContext;
     }
 
     [HttpGet]
@@ -75,6 +79,8 @@ public class OrderController : ControllerBase
         order.AssignedTo = user;
         order.Status = OrderStatus.Assigned;
         await _orderRepository.UpdateAsync(order);
+        _hubContext.Clients.All.SendAsync("ReceiveMessage", order.Id);
+
         return Ok();
     }
 

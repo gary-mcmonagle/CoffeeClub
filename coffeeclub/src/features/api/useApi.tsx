@@ -6,5 +6,6 @@ export const useApi = () => {
   return {
     ...api("https://localhost:7231", accessToken!),
     ready: !!accessToken,
+    accessToken,
   };
 };

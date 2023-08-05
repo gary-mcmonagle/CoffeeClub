@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   CircularProgress,
   List,
   ListItem,
@@ -15,8 +16,15 @@ import {
   OrderDto,
   OrderStatus,
 } from "@gary-mcmonagle/coffeeclubapi/lib/generated";
+import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 
-const OrderStatusCard = ({ order: { status } }: { order: OrderDto }) => {
+const OrderStatusCard = ({
+  order: { status },
+  sendMessage,
+}: {
+  order: OrderDto;
+  sendMessage: () => void;
+}) => {
   const orderStatuses = [
     OrderStatus.Pending,
     OrderStatus.Received,
@@ -49,6 +57,7 @@ const OrderStatusCard = ({ order: { status } }: { order: OrderDto }) => {
               }}
               primary={s}
             />
+            <Button onClick={sendMessage}>GARY</Button>
           </ListItem>
         );
       })}
@@ -60,13 +69,46 @@ export const Orders = () => {
   const {
     orderApi: { getAll },
     ready,
+    accessToken,
   } = useApi();
   const [orders, setOrders] = useState<OrderDto[] | null>();
+  const [connection, setConnection] = useState<null | HubConnection>(null);
 
   console.log({ ready });
   useEffect(() => {
     ready && getAll().then((orders) => setOrders(orders));
   }, []);
+
+  useEffect(() => {
+    const connect = new HubConnectionBuilder()
+      .withUrl("https://localhost:7231/hub", {
+        accessTokenFactory: () => accessToken!,
+        // skipNegotiation: true,
+      })
+      .withAutomaticReconnect()
+      .build();
+
+    setConnection(connect);
+    console.log({ connect });
+  }, []);
+
+  useEffect(() => {
+    if (connection) {
+      connection
+        .start()
+        .then(() => {
+          connection.on("ReceiveMessage", (message) => {
+            console.log({ message });
+            // notification.open({
+            //   message: "New Notification",
+            //   description: message,
+            // });
+          });
+          console.log("Connection started");
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [connection]);
   return (
     <Box margin={2}>
       {!orders ? (
@@ -74,7 +116,13 @@ export const Orders = () => {
       ) : (
         <Stack>
           {orders!.map((o) => (
-            <OrderStatusCard order={o}></OrderStatusCard>
+            <OrderStatusCard
+              order={o}
+              sendMessage={() => {
+                console.log("sending");
+                connection!.send("NewMessage", { Message: "TM" });
+              }}
+            ></OrderStatusCard>
           ))}
         </Stack>
       )}

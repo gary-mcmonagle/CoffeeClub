@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using CoffeClub.Infrastructure;
 using CoffeeClub.Core.Api.CustomConfiguration;
 using CoffeeClub.Core.Api.CustomConfiguration.AppSettingsConfig;
+using CoffeeClub.Core.Api.Hubs;
 using CoffeeClub.Domain.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -43,6 +44,16 @@ builder.Services.Configure<JsonOptions>(options =>
 });
 builder.Services.AddScoped<IClaimsTransformation, ClaimsTransformer>();
 
+builder.Services.AddCors(c =>
+        {
+            c.AddPolicy("AllowCCORSOrigin", options => options
+                .WithOrigins("http://localhost:3000")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+                );
+        });
+
 var userRepository = builder.Services.BuildServiceProvider().GetRequiredService<IUserRepository>();
 
 builder.Services.AddAuthentication(options =>
@@ -56,11 +67,30 @@ builder.Services.AddAuthentication(options =>
         {
             o.SecurityTokenValidators.Clear();
             o.SecurityTokenValidators.Add(new GoogleTokenValidator(authConfig.WorkerEmails!, userRepository));
+            o.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var accessToken = context.Request.Query["access_token"];
+
+                    // If the request is for our hub...
+                    var path = context.HttpContext.Request.Path;
+                    if (!string.IsNullOrEmpty(accessToken) &&
+                        (path.StartsWithSegments("/hub")))
+                    {
+                        // Read the token out of the query string
+                        context.Token = accessToken;
+                    }
+                    return Task.CompletedTask;
+                }
+            };
         });
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("CoffeeClubWorker", policy => policy.RequireClaim(ClaimTypes.Role, "CoffeeClubWorker"));
 });
+builder.Services.AddSignalR();
+
 
 builder.Services.AddSwaggerGenNewtonsoftSupport();
 var app = builder.Build();
@@ -79,9 +109,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<SignalrHub>("/hub");
+
 
 // Enable Cors
-app.UseCors("MyPolicy");
+app.UseCors(builder => builder
+.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
 
 app.Run();
 
