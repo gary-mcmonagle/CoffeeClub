@@ -16,7 +16,7 @@ import {
   OrderDto,
   OrderStatus,
 } from "@gary-mcmonagle/coffeeclubapi/lib/generated";
-import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
+import { useMessaging } from "../messaging/useMessaging";
 
 const OrderStatusCard = ({
   order: { status },
@@ -69,46 +69,15 @@ export const Orders = () => {
   const {
     orderApi: { getAll },
     ready,
-    accessToken,
   } = useApi();
   const [orders, setOrders] = useState<OrderDto[] | null>();
-  const [connection, setConnection] = useState<null | HubConnection>(null);
+  const { connection } = useMessaging();
 
   console.log({ ready });
   useEffect(() => {
-    ready && getAll().then((orders) => setOrders(orders));
+    getAll().then((orders) => setOrders(orders));
   }, []);
 
-  useEffect(() => {
-    const connect = new HubConnectionBuilder()
-      .withUrl("https://localhost:7231/hub", {
-        accessTokenFactory: () => accessToken!,
-        // skipNegotiation: true,
-      })
-      .withAutomaticReconnect()
-      .build();
-
-    setConnection(connect);
-    console.log({ connect });
-  }, []);
-
-  useEffect(() => {
-    if (connection) {
-      connection
-        .start()
-        .then(() => {
-          connection.on("ReceiveMessage", (message) => {
-            console.log({ message });
-            // notification.open({
-            //   message: "New Notification",
-            //   description: message,
-            // });
-          });
-          console.log("Connection started");
-        })
-        .catch((error) => console.log(error));
-    }
-  }, [connection]);
   return (
     <Box margin={2}>
       {!orders ? (
