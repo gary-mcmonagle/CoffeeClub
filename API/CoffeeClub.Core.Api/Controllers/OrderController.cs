@@ -22,9 +22,9 @@ public class OrderController : ControllerBase
     private IUserRepository _userRepository;
     private ICoffeeBeanRepository _coffeeBeanRepository;
     private IMapper _mapper;
-    private IHubContext<SignalrHub> _hubContext;
+    private IHubContext<OrderHub> _hubContext;
 
-    public OrderController(IOrderRepository orderRepository, IMapper mapper, IUserRepository userRepository, ICoffeeBeanRepository coffeeBeanRepository, IHubContext<SignalrHub> hubContext)
+    public OrderController(IOrderRepository orderRepository, IMapper mapper, IUserRepository userRepository, ICoffeeBeanRepository coffeeBeanRepository, IHubContext<OrderHub> hubContext)
     {
         _orderRepository = orderRepository;
         _mapper = mapper;

@@ -5,13 +5,19 @@ using CoffeClub.Infrastructure;
 using CoffeeClub.Core.Api.CustomConfiguration;
 using CoffeeClub.Core.Api.CustomConfiguration.AppSettingsConfig;
 using CoffeeClub.Core.Api.Hubs;
+using CoffeeClub.Core.Api.Services;
 using CoffeeClub.Domain.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddSingleton<IHubUserConnectionProviderService<OrderHub>, HubUserConnectionProviderService<OrderHub>>();
+builder.Services.AddScoped<IOrderDispatchService, OrderDispatchService>();
 
 builder.Services.AddControllers()
         .AddNewtonsoftJson(options =>
@@ -89,7 +95,10 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("CoffeeClubWorker", policy => policy.RequireClaim(ClaimTypes.Role, "CoffeeClubWorker"));
 });
-builder.Services.AddSignalR();
+builder.Services.AddSignalR().AddJsonProtocol(options =>
+    {
+        options.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    }); ;
 
 
 builder.Services.AddSwaggerGenNewtonsoftSupport();
@@ -109,7 +118,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<SignalrHub>("/hub");
+app.MapHub<OrderHub>("/hub");
 
 
 // Enable Cors

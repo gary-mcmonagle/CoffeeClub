@@ -31,4 +31,9 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
             .Where(x => x.User.Id == userId).AsEnumerable();
         return Task.FromResult(all);
     }
+
+    public async override Task<Order?> GetAsync(Guid id)
+    {
+        return await _context.Set<Order>().Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
+    }
 }

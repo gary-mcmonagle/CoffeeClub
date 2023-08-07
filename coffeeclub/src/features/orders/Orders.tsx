@@ -16,7 +16,7 @@ import {
   OrderDto,
   OrderStatus,
 } from "@gary-mcmonagle/coffeeclubapi/lib/generated";
-import { useMessaging } from "../messaging/useMessaging";
+import { OrderUpdateDto, useMessaging } from "../messaging/useMessaging";
 
 const OrderStatusCard = ({
   order: { status },
@@ -75,6 +75,16 @@ export const Orders = () => {
 
   console.log({ ready });
   useEffect(() => {
+    if (!connection) return;
+    connection?.on("OrderUpdated", (message: OrderUpdateDto) => {
+      console.log({ message });
+      // const currentIndex = orders!.findIndex((x) => x.id === message.OrderId);
+      // const newOrders = [...orders!];
+      // newOrders[currentIndex].status = message.OrderStatus;
+      // setOrders(newOrders);
+    });
+  }, [connection]);
+  useEffect(() => {
     getAll().then((orders) => setOrders(orders));
   }, []);
 
@@ -88,8 +98,12 @@ export const Orders = () => {
             <OrderStatusCard
               order={o}
               sendMessage={() => {
-                console.log("sending");
-                connection!.send("NewMessage", { Message: "TM" });
+                var currentIndex = orders!.findIndex((x) => x.id === o.id);
+                const message: OrderUpdateDto = {
+                  OrderId: o.id,
+                  OrderStatus: OrderStatus.Ready,
+                };
+                connection!.invoke("UpdateOrder", message);
               }}
             ></OrderStatusCard>
           ))}

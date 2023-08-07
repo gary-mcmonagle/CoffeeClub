@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
@@ -8,7 +9,7 @@ public class SignalrHub : Hub
 {
     public async Task NewMessage(NotifyMessage message)
     {
-        var identity = (ClaimsIdentity)Context.User.Identity;
+        var user = Context.User;
         await Clients.All.SendAsync("ReceiveMessage", message);
     }
 }
