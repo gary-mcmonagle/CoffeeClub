@@ -24,6 +24,7 @@ export const Login = () => {
       onError={() => {
         console.log("err");
       }}
+      useOneTap
     />
   );
 };
