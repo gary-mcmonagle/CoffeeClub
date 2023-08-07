@@ -5,7 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@gary-mcmonagle/coffeeclubapi": "^1.0.0",
+    "@gary-mcmonagle/coffeeclubapi": "1.0.5",
     "@microsoft/signalr": "^7.0.9",
     "@mui/material": "^5.14.2",
     "@react-oauth/google": "^0.11.0",
