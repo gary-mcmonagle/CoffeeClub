@@ -5,17 +5,14 @@ import { useEffect, useState } from "react";
 import { useApi } from "../api/useApi";
 import { ReactComponent as MilkIcon } from "../../icons/milk.svg";
 import { ReactComponent as CoffeeBeanIcon } from "../../icons/coffee-bean.svg";
-import CoffeeIcon from "@mui/icons-material/Coffee";
+import { Coffee } from "@mui/icons-material";
 
 const DrinkOrderCard = ({ drink }: { drink: DrinkOrderDto }) => {
   return (
     <Card>
       <CardContent>
         <Stack spacing={1}>
-          <Chip
-            icon={<CoffeeIcon style={{ height: 24 }} />}
-            label={drink.drink}
-          />
+          <Chip icon={<Coffee style={{ height: 24 }} />} label={drink.drink} />
           <Chip
             icon={<MilkIcon style={{ height: 24, width: 24 }} />}
             label={drink.milkType}
