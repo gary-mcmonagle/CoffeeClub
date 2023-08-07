@@ -3,8 +3,8 @@ import { MessagingContext } from "./MessagingContext";
 import { OrderStatus } from "@gary-mcmonagle/coffeeclubapi/lib/generated";
 
 export type OrderUpdateDto = {
-  OrderId: string;
-  OrderStatus: OrderStatus;
+  orderId: string;
+  orderStatus: OrderStatus;
 };
 
 export const useMessaging = () => {

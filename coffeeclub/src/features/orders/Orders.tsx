@@ -17,7 +17,13 @@ import {
   OrderStatus,
 } from "@gary-mcmonagle/coffeeclubapi/lib/generated";
 import { OrderUpdateDto, useMessaging } from "../messaging/useMessaging";
-
+const orderStatuses = [
+  OrderStatus.Pending,
+  OrderStatus.Received,
+  OrderStatus.Assigned,
+  OrderStatus.InProgress,
+  OrderStatus.Ready,
+];
 const OrderStatusCard = ({
   order: { status },
   sendMessage,
@@ -25,13 +31,6 @@ const OrderStatusCard = ({
   order: OrderDto;
   sendMessage: () => void;
 }) => {
-  const orderStatuses = [
-    OrderStatus.Pending,
-    OrderStatus.Received,
-    OrderStatus.Assigned,
-    OrderStatus.InProgress,
-    OrderStatus.Ready,
-  ];
   const statusIndex = orderStatuses.indexOf(status);
   type Color = "disabled" | "action" | "success";
   const colors: Color[] = ["disabled", "action", "success"];
@@ -75,15 +74,16 @@ export const Orders = () => {
 
   console.log({ ready });
   useEffect(() => {
-    if (!connection) return;
+    if (!connection || !orders) return;
     connection?.on("OrderUpdated", (message: OrderUpdateDto) => {
       console.log({ message });
-      // const currentIndex = orders!.findIndex((x) => x.id === message.OrderId);
-      // const newOrders = [...orders!];
-      // newOrders[currentIndex].status = message.OrderStatus;
-      // setOrders(newOrders);
+      console.log({ orders });
+      const currentIndex = orders!.findIndex((x) => x.id === message.orderId);
+      const newOrders = [...orders!];
+      newOrders[currentIndex].status = message.orderStatus;
+      setOrders(newOrders);
     });
-  }, [connection]);
+  }, [connection, orders]);
   useEffect(() => {
     getAll().then((orders) => setOrders(orders));
   }, []);
@@ -98,11 +98,12 @@ export const Orders = () => {
             <OrderStatusCard
               order={o}
               sendMessage={() => {
-                var currentIndex = orders!.findIndex((x) => x.id === o.id);
+                var currentIndex = orderStatuses.indexOf(o.status);
                 const message: OrderUpdateDto = {
-                  OrderId: o.id,
-                  OrderStatus: OrderStatus.Ready,
+                  orderId: o.id,
+                  orderStatus: orderStatuses[currentIndex + 1],
                 };
+                console.log({ messageSent: message });
                 connection!.invoke("UpdateOrder", message);
               }}
             ></OrderStatusCard>
