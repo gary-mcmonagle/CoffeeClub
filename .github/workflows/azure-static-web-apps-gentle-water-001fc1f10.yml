@@ -15,6 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
+      - name: Create .npmrc file
+        run: |
+          registry=https://registry.npmjs.org/
+          @gary-mcmonagle:registry=https://npm.pkg.github.com/
+          //npm.pkg.github.com/:_authToken=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
       - uses: actions/checkout@v3
         with:
           submodules: true
