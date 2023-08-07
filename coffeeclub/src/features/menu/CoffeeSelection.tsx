@@ -4,7 +4,7 @@ import {
   Drink,
   MenuDrinkDto,
   MilkType,
-} from "@gary-mcmonagle/coffeeclubapi/lib/generated";
+} from "../api/api/generated";
 import {
   Box,
   Button,

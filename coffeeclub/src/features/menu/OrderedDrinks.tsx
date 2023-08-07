@@ -1,7 +1,4 @@
-import {
-  CoffeeBeanMenuDto,
-  CreateDrinkOrderDto,
-} from "@gary-mcmonagle/coffeeclubapi/lib/generated";
+import { CoffeeBeanMenuDto, CreateDrinkOrderDto } from "../api/api/generated";
 import {
   Button,
   Card,

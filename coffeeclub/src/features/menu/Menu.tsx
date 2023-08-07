@@ -5,7 +5,7 @@ import {
   CreateDrinkOrderDto,
   MenuDto,
   MilkType,
-} from "@gary-mcmonagle/coffeeclubapi/lib/generated";
+} from "../api/api/generated";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { CoffeeSelectionNew } from "./CoffeeSelection";
 import { OrderedDrinks } from "./OrderedDrinks";

@@ -1,4 +1,3 @@
-import { UserProfileDto } from "@gary-mcmonagle/coffeeclubapi/lib/generated";
 import { useAuth } from "../auth/useAuth";
 import { OrderDispatch } from "../orderDispatch/OrderDispatch";
 import { useEffect, useState } from "react";
@@ -7,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useApi } from "../api/useApi";
 import { BaseLanding } from "./BaseLanding";
 import { Orders } from "../orders/Orders";
+import { UserProfileDto } from "../api/api/generated";
 export const EmployeeLanding = () => {
   const {
     userApi: { getUser },

@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { MessagingContext } from "./MessagingContext";
-import { OrderStatus } from "@gary-mcmonagle/coffeeclubapi/lib/generated";
-
+import { OrderStatus } from "../api/api/generated";
 export type OrderUpdateDto = {
   orderId: string;
   orderStatus: OrderStatus;

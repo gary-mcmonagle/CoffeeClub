@@ -12,10 +12,7 @@ import {
 import CircleIcon from "@mui/icons-material/Circle";
 import { useApi } from "../api/useApi";
 import { useEffect, useState } from "react";
-import {
-  OrderDto,
-  OrderStatus,
-} from "@gary-mcmonagle/coffeeclubapi/lib/generated";
+import { OrderDto, OrderStatus } from "../api/api/generated";
 import { OrderUpdateDto, useMessaging } from "../messaging/useMessaging";
 const orderStatuses = [
   OrderStatus.Pending,

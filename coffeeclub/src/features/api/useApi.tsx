@@ -1,5 +1,5 @@
 import { useAuth } from "../auth/useAuth";
-import api from "@gary-mcmonagle/coffeeclubapi";
+import api from "./api";
 
 export const useApi = () => {
   const { accessToken } = useAuth();

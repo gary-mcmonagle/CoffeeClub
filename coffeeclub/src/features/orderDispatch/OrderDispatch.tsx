@@ -1,8 +1,5 @@
 import { useAuth } from "../auth/useAuth";
-import {
-  DrinkOrderDto,
-  OrderDto,
-} from "@gary-mcmonagle/coffeeclubapi/lib/generated";
+import { DrinkOrderDto, OrderDto } from "../api/api/generated";
 import { Button, Card, CardContent, Chip, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useApi } from "../api/useApi";
