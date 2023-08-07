@@ -1,8 +1,5 @@
-import React, { useEffect } from "react";
-import logo from "./logo.svg";
-// import { DevTest, sayHello, BeanApi } from "@gary-mcmonagle/coffeeclubapi";
 import "./App.css";
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Router } from "./features/routing/Router";
 import { AuthProvider } from "./features/auth/AuthProvider";
 import { MessagingProvider } from "./features/messaging/MessagingProvider";

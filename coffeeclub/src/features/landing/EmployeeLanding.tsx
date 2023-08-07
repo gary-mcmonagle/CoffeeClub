@@ -1,4 +1,3 @@
-import { useAuth } from "../auth/useAuth";
 import { OrderDispatch } from "../orderDispatch/OrderDispatch";
 import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
@@ -22,7 +21,7 @@ export const EmployeeLanding = () => {
       }
       return setUser(user);
     });
-  }, []);
+  }, [getUser, navigate]);
   if (!user)
     return (
       <BaseLanding>

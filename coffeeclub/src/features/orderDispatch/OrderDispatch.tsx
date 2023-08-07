@@ -1,4 +1,3 @@
-import { useAuth } from "../auth/useAuth";
 import { DrinkOrderDto, OrderDto } from "../api/api/generated";
 import { Button, Card, CardContent, Chip, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -59,7 +58,7 @@ export const OrderDispatch = () => {
   const [orders, setOrders] = useState<OrderDto[] | null>();
   useEffect(() => {
     getAssignable().then(setOrders);
-  }, []);
+  }, [getAssignable]);
 
   if (!orders) {
     return <div>Loading...</div>;

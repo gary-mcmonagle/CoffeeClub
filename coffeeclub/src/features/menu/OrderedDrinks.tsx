@@ -1,6 +1,5 @@
 import { CoffeeBeanMenuDto, CreateDrinkOrderDto } from "../api/api/generated";
 import {
-  Button,
   Card,
   CardActions,
   CardContent,
@@ -8,7 +7,6 @@ import {
   Grid,
   IconButton,
   Stack,
-  Typography,
 } from "@mui/material";
 import CoffeeIcon from "@mui/icons-material/Coffee";
 import { ReactComponent as MilkIcon } from "../../icons/milk.svg";

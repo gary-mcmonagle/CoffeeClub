@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../auth/useAuth";
-import {
-  CoffeeBeanMenuDto,
-  CreateDrinkOrderDto,
-  MenuDto,
-  MilkType,
-} from "../api/api/generated";
+import { CreateDrinkOrderDto, MenuDto } from "../api/api/generated";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { CoffeeSelectionNew } from "./CoffeeSelection";
 import { OrderedDrinks } from "./OrderedDrinks";
@@ -21,7 +15,7 @@ export const Menu = () => {
 
   useEffect(() => {
     getMenu().then((menu) => setMenu(menu));
-  }, []);
+  }, [getMenu]);
 
   if (!menu) return <CircularProgress />;
   return (

@@ -7,7 +7,6 @@ import {
   ListItemIcon,
   ListItemText,
   Stack,
-  Typography,
 } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import { useApi } from "../api/useApi";
@@ -30,7 +29,6 @@ const OrderStatusCard = ({
 }) => {
   const statusIndex = orderStatuses.indexOf(status);
   type Color = "disabled" | "action" | "success";
-  const colors: Color[] = ["disabled", "action", "success"];
   return (
     <List>
       {orderStatuses.map((s, idx) => {
@@ -83,7 +81,7 @@ export const Orders = () => {
   }, [connection, orders]);
   useEffect(() => {
     getAll().then((orders) => setOrders(orders));
-  }, []);
+  }, [getAll]);
 
   return (
     <Box margin={2}>
