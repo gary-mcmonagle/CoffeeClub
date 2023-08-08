@@ -24,7 +24,7 @@ jobs:
         with:
           name: "env.json"
           dir: 'coffeeclub/src/'
-          json: '{"apiBasePath":"https://goggle.com"}'
+          json: '{"apiBasePath":"https://coffeeclubapi.azurewebsites.net"}'
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
