@@ -81,7 +81,8 @@ export const Orders = () => {
   }, [connection, orders]);
   useEffect(() => {
     getAll().then((orders) => setOrders(orders));
-  }, [getAll]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box margin={2}>

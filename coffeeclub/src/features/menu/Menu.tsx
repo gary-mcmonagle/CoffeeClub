@@ -15,7 +15,8 @@ export const Menu = () => {
 
   useEffect(() => {
     getMenu().then((menu) => setMenu(menu));
-  }, [getMenu]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!menu) return <CircularProgress />;
   return (

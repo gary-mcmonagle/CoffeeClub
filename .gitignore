@@ -42,3 +42,4 @@ msbuild.log
 msbuild.err
 msbuild.wrn
 .npmrc.write
+coffeeclub/src/env.json

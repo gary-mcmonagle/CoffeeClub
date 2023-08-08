@@ -1,10 +1,11 @@
 import { useAuth } from "../auth/useAuth";
 import api from "./api";
+import env from "../../env.json";
 
 export const useApi = () => {
   const { accessToken } = useAuth();
   return {
-    ...api("https://localhost:7231", accessToken!),
+    ...api(env.apiBasePath, accessToken!),
     ready: !!accessToken,
     accessToken,
   };

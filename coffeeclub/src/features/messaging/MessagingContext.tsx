@@ -3,7 +3,6 @@ import React from "react";
 
 interface IMessagingContext {
   connection?: HubConnection;
-  // setConnection: (val: HubConnection) => void; // TODO: fix this
 }
 
 export const defaultState = {
@@ -12,5 +11,4 @@ export const defaultState = {
 
 export const MessagingContext = React.createContext<IMessagingContext>({
   ...defaultState,
-  // setConnection: () => {},
 });

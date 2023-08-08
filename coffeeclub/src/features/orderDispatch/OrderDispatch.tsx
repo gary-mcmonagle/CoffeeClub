@@ -58,7 +58,8 @@ export const OrderDispatch = () => {
   const [orders, setOrders] = useState<OrderDto[] | null>();
   useEffect(() => {
     getAssignable().then(setOrders);
-  }, [getAssignable]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!orders) {
     return <div>Loading...</div>;
