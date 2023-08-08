@@ -11,11 +11,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+var authConfig = builder.Configuration.GetSection("Authorization").Get<AuthorizationConfig>();
+var connectionStringConfig = builder.Configuration.GetSection("ConnectionStrings").Get<ConnectionStringConfig>();
 builder.Services.AddSingleton<IHubUserConnectionProviderService<OrderHub>, HubUserConnectionProviderService<OrderHub>>();
 builder.Services.AddScoped<IOrderDispatchService, OrderDispatchService>();
 
@@ -24,9 +24,8 @@ builder.Services.AddControllers()
         options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter()));
 builder.Logging.AddFile(o => o.RootPath = o.RootPath = builder.Environment.ContentRootPath);
 builder.Services.AddDbContext<CoffeeClubContext>(
-    options => options.UseSqlServer("Server=localhost;User Id=SA;Password=your_password1234;Database=CoffeeClub;TrustServerCertificate=true"));
+    options => options.UseSqlServer(connectionStringConfig.DefaultConnection));
 builder.Services.AddRepositories();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper();
 // Add Cors
@@ -41,7 +40,6 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new() { Title = "CoffeeClub.Core.Api", Version = "v1" });
 });
 
-var authConfig = builder.Configuration.GetSection("Authorization").Get<AuthorizationConfig>();
 builder.Services.Configure<JsonOptions>(options =>
 {
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -72,7 +70,7 @@ builder.Services.AddAuthentication(options =>
     .AddJwtBearer(o =>
         {
             o.SecurityTokenValidators.Clear();
-            o.SecurityTokenValidators.Add(new GoogleTokenValidator(authConfig.WorkerEmails!, userRepository));
+            o.SecurityTokenValidators.Add(new GoogleTokenValidator(authConfig?.WorkerEmails!, userRepository));
             o.Events = new JwtBearerEvents
             {
                 OnMessageReceived = context =>
@@ -100,18 +98,11 @@ builder.Services.AddSignalR().AddJsonProtocol(options =>
         options.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     }); ;
 
-
 builder.Services.AddSwaggerGenNewtonsoftSupport();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-// app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 
 app.UseAuthentication();

@@ -21,7 +21,8 @@ export const EmployeeLanding = () => {
       }
       return setUser(user);
     });
-  }, [getUser, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   if (!user)
     return (
       <BaseLanding>
