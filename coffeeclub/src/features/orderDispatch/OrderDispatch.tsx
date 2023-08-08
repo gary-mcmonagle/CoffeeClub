@@ -54,7 +54,6 @@ export const OrderDispatch = () => {
   const {
     orderApi: { getAssignable, assign },
   } = useApi();
-  getAssignable().then((orders) => {});
   const [orders, setOrders] = useState<OrderDto[] | null>();
   useEffect(() => {
     getAssignable().then(setOrders);
