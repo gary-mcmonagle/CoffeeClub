@@ -2,6 +2,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
 import React from "react";
+import env from "../../env.json";
 
 function useQuery() {
   const { search } = useLocation();
@@ -14,6 +15,7 @@ export const Login = () => {
   let query = useQuery();
 
   const { setAccessToken } = useAuth();
+  console.log({ env });
   return (
     <GoogleLogin
       onSuccess={(suc) => {
