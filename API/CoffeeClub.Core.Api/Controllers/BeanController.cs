@@ -32,6 +32,21 @@ public class BeanController : ControllerBase
         return await _coffeeBeanRepository.GetAllAsync();
     }
 
+    [HttpPut]
+    [Route("out-of-stock/{coffeeBeanId:guid}")]
+    [Authorize(Policy = "CoffeeClubWorker")]
+    public async Task<ActionResult<IEnumerable<CoffeeBean>>> OutOfStock(Guid coffeeBeanId)
+    {
+        var coffeeBean = await _coffeeBeanRepository.GetAsync(coffeeBeanId);
+        if (coffeeBean is null)
+        {
+            return NotFound();
+        }
+        coffeeBean.InStock = false;
+        await _coffeeBeanRepository.UpdateAsync(coffeeBean);
+        return Ok();
+    }
+
     [HttpPost]
     [Authorize(Policy = "CoffeeClubWorker")]
     public async Task<ActionResult> Create(CreateCoffeeBeanDto createCoffeeBeanDto)

@@ -8,7 +8,7 @@ public class CoffeeClubContextFactory : IDesignTimeDbContextFactory<CoffeeClubCo
     public CoffeeClubContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<CoffeeClubContext>();
-        optionsBuilder.UseSqlServer("Server=localhost;User Id=SA;Password=Str#ng_Passw#rd;Database=CoffeeClub;TrustServerCertificate=true");
+        optionsBuilder.UseSqlServer("Server=tcp:coffeeclubprod.database.windows.net,1433;Initial Catalog=coffeeclub;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication=\"Active Directory Default\";");
 
         return new CoffeeClubContext(optionsBuilder.Options);
     }

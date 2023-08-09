@@ -15,12 +15,13 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 var authConfig = builder.Configuration.GetSection("Authorization").Get<AuthorizationConfig>();
+var coffeeClubSiteDomain = builder.Configuration.GetSection("CoffeeClubSiteDomain").Get<string>();
+
 var connectionStringConfig = builder.Configuration.GetSection("ConnectionStrings").Get<ConnectionStringConfig>();
 builder.Services.AddSingleton<IHubUserConnectionProviderService<OrderHub>, HubUserConnectionProviderService<OrderHub>>();
 builder.Services.AddScoped<IOrderDispatchService, OrderDispatchService>();
 
 
-Console.WriteLine($"GAAAARY");
 builder.Services.AddControllers()
         .AddNewtonsoftJson(options =>
         options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter()));
@@ -53,7 +54,7 @@ builder.Services.AddScoped<IClaimsTransformation, ClaimsTransformer>();
 builder.Services.AddCors(c =>
         {
             c.AddPolicy("AllowCCORSOrigin", options => options
-                .WithOrigins("https://gentle-water-001fc1f10.3.azurestaticapps.net")
+                .WithOrigins(coffeeClubSiteDomain!)
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials()
@@ -117,7 +118,7 @@ app.MapHub<OrderHub>("/hub");
 
 // Enable Cors
 app.UseCors(builder => builder
-.WithOrigins("https://gentle-water-001fc1f10.3.azurestaticapps.net").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+.WithOrigins(coffeeClubSiteDomain!).AllowAnyMethod().AllowAnyHeader().AllowCredentials());
 
 app.Run();
 
