@@ -23,17 +23,15 @@ public class OrderController : ControllerBase
     private readonly IUserRepository _userRepository;
     private readonly ICoffeeBeanRepository _coffeeBeanRepository;
     private readonly IMapper _mapper;
-    private readonly IHubContext<OrderHub> _hubContext;
     private readonly IOrderDispatchService _orderDispatchService;
 
 
-    public OrderController(IOrderRepository orderRepository, IMapper mapper, IUserRepository userRepository, ICoffeeBeanRepository coffeeBeanRepository, IHubContext<OrderHub> hubContext, IOrderDispatchService orderDispatchService)
+    public OrderController(IOrderRepository orderRepository, IMapper mapper, IUserRepository userRepository, ICoffeeBeanRepository coffeeBeanRepository, IOrderDispatchService orderDispatchService)
     {
         _orderRepository = orderRepository;
         _mapper = mapper;
         _userRepository = userRepository;
         _coffeeBeanRepository = coffeeBeanRepository;
-        _hubContext = hubContext;
         _orderDispatchService = orderDispatchService;
     }
 
@@ -55,7 +53,6 @@ public class OrderController : ControllerBase
         var order = new Order { User = user!, DrinkOrders = drinks, Status = OrderStatus.Pending };
         var orderCreated = await _orderRepository.CreateAsync(order);
         var dto = _mapper.Map<OrderDto>(orderCreated);
-        await _hubContext.Clients.All.SendAsync("ReceiveMessage", orderCreated.Id);
         await _orderDispatchService.OrderCreated(dto, userId);
         return dto;
     }

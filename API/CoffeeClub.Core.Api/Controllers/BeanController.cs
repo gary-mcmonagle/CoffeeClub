@@ -37,18 +37,23 @@ public class BeanController : ControllerBase
     [HttpPatch]
     [Authorize(Policy = "CoffeeClubWorker")]
     [Route("{coffeeBeanId:guid}")]
-    public async Task PatchBean([FromBody] JsonPatchDocument<CoffeeBean> patch, Guid coffeeBeanId)
+    public async Task<ActionResult> PatchBean([FromBody] JsonPatchDocument<CoffeeBean> patch, Guid coffeeBeanId)
     {
         var bean = await _coffeeBeanRepository.GetAsync(coffeeBeanId);
+        if (bean is null)
+        {
+            return NotFound();
+        }
         patch.ApplyToWithRestrictions(bean, "Description", "Roast", "InStock", "Name");
         await _coffeeBeanRepository.UpdateAsync(bean);
+        return Ok();
     }
 
 
     [HttpPut]
     [Route("out-of-stock/{coffeeBeanId:guid}")]
     [Authorize(Policy = "CoffeeClubWorker")]
-    public async Task<ActionResult<IEnumerable<CoffeeBean>>> OutOfStock(Guid coffeeBeanId)
+    public async Task<ActionResult> OutOfStock(Guid coffeeBeanId)
     {
         var coffeeBean = await _coffeeBeanRepository.GetAsync(coffeeBeanId);
         if (coffeeBean is null)

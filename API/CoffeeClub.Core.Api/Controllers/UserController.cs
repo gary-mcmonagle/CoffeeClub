@@ -11,21 +11,7 @@ namespace CoffeeClub.Core.Api.Controllers;
 [Route("[controller]")]
 public class UserController : ControllerBase
 {
-    private IUserRepository _userRepository;
-    private IMapper _mapper;
-
-    public UserController(IMapper mapper, IUserRepository userRepository)
-    {
-        _mapper = mapper;
-        _userRepository = userRepository;
-    }
-
-    [HttpPost(Name = "Create")]
-    public async Task Post(AuthProvider authProvider)
-    {
-        await _userRepository.CreateAsync(_mapper.Map<User>(authProvider));
-    }
-
     [HttpGet]
-    public UserProfileDto GetUser() => new() { IsWorker = User.IsInRole("CoffeeClubWorker") };
+    public ActionResult<UserProfileDto> GetUser() =>
+        Ok(new UserProfileDto() { IsWorker = User.IsInRole("CoffeeClubWorker") });
 }
