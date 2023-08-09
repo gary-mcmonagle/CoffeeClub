@@ -1,17 +1,21 @@
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   CircularProgress,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Stack,
+  Step,
+  StepLabel,
+  Stepper,
+  Typography,
 } from "@mui/material";
-import CircleIcon from "@mui/icons-material/Circle";
-import { useApi } from "../api/useApi";
 import { useEffect } from "react";
 import { OrderDto, OrderStatus } from "../api/api/generated";
 import { OrderUpdateDto, useMessaging } from "../messaging/useMessaging";
+import { DrinkOrderCard } from "../orderDispatch/OrderDispatch";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
 const orderStatuses = [
   OrderStatus.Pending,
   OrderStatus.Received,
@@ -19,35 +23,36 @@ const orderStatuses = [
   OrderStatus.InProgress,
   OrderStatus.Ready,
 ];
-const OrderStatusCard = ({ order: { status } }: { order: OrderDto }) => {
+
+const OrderStatusCard = ({
+  order: { status, drinks },
+}: {
+  order: OrderDto;
+}) => {
   const statusIndex = orderStatuses.indexOf(status);
-  type Color = "disabled" | "action" | "success";
   return (
-    <List>
-      {orderStatuses.map((s, idx) => {
-        let color: Color = "action";
-        const isBold = idx === statusIndex;
-        if (idx > statusIndex) {
-          color = "disabled";
-        }
-        if (idx < statusIndex) {
-          color = "success";
-        }
-        return (
-          <ListItem>
-            <ListItemIcon>
-              <CircleIcon color={color}></CircleIcon>
-            </ListItemIcon>
-            <ListItemText
-              primaryTypographyProps={{
-                typography: { fontWeight: isBold ? "bold" : "unset" },
-              }}
-              primary={s}
-            />
-          </ListItem>
-        );
-      })}
-    </List>
+    <Box m={1}>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Stepper activeStep={statusIndex}>
+            {orderStatuses.map((s) => (
+              <Step key={s}>
+                <StepLabel>{s}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </AccordionSummary>
+        <AccordionDetails>
+          {drinks.map((d) => (
+            <DrinkOrderCard drink={d} />
+          ))}
+        </AccordionDetails>
+      </Accordion>
+    </Box>
   );
 };
 
@@ -58,11 +63,8 @@ export const Orders = ({
   orders: OrderDto[];
   setOrders: React.Dispatch<React.SetStateAction<OrderDto[] | undefined>>;
 }) => {
-  const { ready } = useApi();
-  // const [orders, setOrders] = useState<OrderDto[] | null>();
   const { connection } = useMessaging();
 
-  console.log({ ready });
   useEffect(() => {
     if (!connection || !orders) return;
     connection?.on("OrderUpdated", (message: OrderUpdateDto) => {
@@ -72,20 +74,20 @@ export const Orders = ({
       setOrders(newOrders);
     });
   }, [connection, orders, setOrders]);
-  // useEffect(() => {
-  //   getAll().then((orders) => setOrders(orders));
-  // }, []);
 
   return (
     <Box margin={2}>
       {!orders ? (
         <CircularProgress></CircularProgress>
       ) : (
-        <Stack>
-          {orders!.map((o) => (
-            <OrderStatusCard order={o}></OrderStatusCard>
-          ))}
-        </Stack>
+        <Box>
+          <Typography variant="h4">Orders</Typography>
+          <Stack>
+            {orders!.map((o) => (
+              <OrderStatusCard order={o}></OrderStatusCard>
+            ))}
+          </Stack>
+        </Box>
       )}
     </Box>
   );

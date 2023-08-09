@@ -46,6 +46,7 @@ builder.Services.Configure<JsonOptions>(options =>
     options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     options.SerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
 });
+// Required for SignalR
 builder.Services.AddCors(c =>
         {
             c.AddPolicy("AllowCCORSOrigin", options => options

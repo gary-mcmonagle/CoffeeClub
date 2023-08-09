@@ -26,19 +26,25 @@ const orderStatuses = [
   OrderStatus.Ready,
 ];
 
-const DrinkOrderCard = ({ drink }: { drink: DrinkOrderDto }) => {
+export const DrinkOrderCard = ({ drink }: { drink: DrinkOrderDto }) => {
   return (
     <Card>
       <CardContent>
         <Stack spacing={1}>
-          <Chip icon={<Coffee style={{ height: 24 }} />} label={drink.drink} />
+          <Chip
+            icon={<Coffee style={{ height: 24 }} />}
+            label={drink.drink}
+            size="medium"
+          />
           <Chip
             icon={<MilkIcon style={{ height: 24, width: 24 }} />}
             label={drink.milkType}
+            size="medium"
           />
           <Chip
             icon={<CoffeeBeanIcon style={{ height: 24, width: 24 }} />}
             label={drink.coffeeBean?.name}
+            size="medium"
           />
         </Stack>
       </CardContent>{" "}
@@ -59,13 +65,6 @@ const OrderCard = ({
       {order.drinks?.map((drink) => (
         <DrinkOrderCard drink={drink} />
       ))}
-      {/* <Button
-        onClick={() => {
-          return assign(order.id!);
-        }}
-      >
-        Start
-      </Button> */}
       <Box mt={1}>
         <FormControl>
           <InputLabel id="demo-simple-select-label">Status</InputLabel>
@@ -76,20 +75,11 @@ const OrderCard = ({
             label="Update Status"
             onChange={(val) => {
               updateStatus(order.id!, val.target.value as OrderStatus);
-              // const status = val.target.value as OrderStatus;
-              // const message: OrderUpdateDto = {
-              //   orderId: order.id,
-              //   orderStatus: status as unknown as OrderStatus,
-              // };
-              // connection!.invoke("UpdateOrder", message);
             }}
           >
             {orderStatuses.map((s) => (
               <MenuItem value={s}>{s}</MenuItem>
             ))}
-            {/* <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem> */}
           </Select>
         </FormControl>
       </Box>
