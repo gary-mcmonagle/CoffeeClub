@@ -49,7 +49,6 @@ public class OrderDispatchService : IOrderDispatchService
         await _hubContext.Clients.Clients(userConnections.Concat(workerConnections)).SendAsync("OrderUpdated",
             new OrderUpdateDto { OrderId = orderId, OrderStatus = orderStatus });
 
-
         await _orderRepository.UpdateAsync(order);
     }
 }

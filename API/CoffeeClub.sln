@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoffeeClub.Core.Api", "Coff
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoffeeClub.Core", "CoffeeClub.Core\CoffeeClub.Core.csproj", "{3A0E602D-1021-422A-B935-6E59FF0B21F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoffeeClub.Test.Unit", "CoffeeClub.Test.Unit\CoffeeClub.Test.Unit.csproj", "{7ED6692B-4BCF-491A-A6DB-65F80721A9D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{3A0E602D-1021-422A-B935-6E59FF0B21F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A0E602D-1021-422A-B935-6E59FF0B21F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A0E602D-1021-422A-B935-6E59FF0B21F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ED6692B-4BCF-491A-A6DB-65F80721A9D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ED6692B-4BCF-491A-A6DB-65F80721A9D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ED6692B-4BCF-491A-A6DB-65F80721A9D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ED6692B-4BCF-491A-A6DB-65F80721A9D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
