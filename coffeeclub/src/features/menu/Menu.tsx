@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
-import { CreateDrinkOrderDto, MenuDto } from "../api/api/generated";
+import { CreateDrinkOrderDto, MenuDto, OrderDto } from "../api/api/generated";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { CoffeeSelectionNew } from "./CoffeeSelection";
 import { OrderedDrinks } from "./OrderedDrinks";
 import { useApi } from "../api/useApi";
+import { set } from "react-hook-form";
 
-export const Menu = () => {
+export const Menu = ({
+  setOrders,
+}: {
+  setOrders: React.Dispatch<React.SetStateAction<OrderDto[] | undefined>>;
+}) => {
   const {
     menuApi: { getMenu },
     orderApi: { createOrder },
@@ -40,8 +45,9 @@ export const Menu = () => {
       />
       <Button
         onClick={() => {
-          createOrder({ drinks: drinkOrders }).then(() => {
+          createOrder({ drinks: drinkOrders }).then((order) => {
             setDrinkOrders([]);
+            setOrders((prev) => [...(prev || []), order]);
           });
         }}
         disabled={drinkOrders.length === 0}

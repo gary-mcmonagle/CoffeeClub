@@ -42,7 +42,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<OrderCreatedDto> Create([FromBody] CreateOrderDto createOrderDto)
+    public async Task<OrderDto> Create([FromBody] CreateOrderDto createOrderDto)
     {
         var userId = User.GetUserId();
         var user = await _userRepository.GetAsync(userId);
@@ -50,7 +50,7 @@ public class OrderController : ControllerBase
         var drinks = createOrderDto.Drinks.Select(d => GetDrinkOrder(d, allBeans)).ToList();
         var order = new Order { User = user!, DrinkOrders = drinks, Status = OrderStatus.Pending };
         var orderCreated = await _orderRepository.CreateAsync(order);
-        return new OrderCreatedDto { Id = orderCreated.Id, Status = orderCreated.Status };
+        return _mapper.Map<OrderDto>(orderCreated);
     }
 
     [HttpGet]

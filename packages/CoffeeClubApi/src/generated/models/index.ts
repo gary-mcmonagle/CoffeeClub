@@ -12,7 +12,6 @@ export * from './DrinkOrderDto';
 export * from './MenuDrinkDto';
 export * from './MenuDto';
 export * from './MilkType';
-export * from './OrderCreatedDto';
 export * from './OrderDto';
 export * from './OrderStatus';
 export * from './Roast';

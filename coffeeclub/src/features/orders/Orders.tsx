@@ -59,30 +59,33 @@ const OrderStatusCard = ({
   );
 };
 
-export const Orders = () => {
+export const Orders = ({
+  orders,
+  setOrders,
+}: {
+  orders: OrderDto[];
+  setOrders: React.Dispatch<React.SetStateAction<OrderDto[] | undefined>>;
+}) => {
   const {
     orderApi: { getAll },
     ready,
   } = useApi();
-  const [orders, setOrders] = useState<OrderDto[] | null>();
+  // const [orders, setOrders] = useState<OrderDto[] | null>();
   const { connection } = useMessaging();
 
   console.log({ ready });
   useEffect(() => {
     if (!connection || !orders) return;
     connection?.on("OrderUpdated", (message: OrderUpdateDto) => {
-      console.log({ message });
-      console.log({ orders });
       const currentIndex = orders!.findIndex((x) => x.id === message.orderId);
       const newOrders = [...orders!];
       newOrders[currentIndex].status = message.orderStatus;
       setOrders(newOrders);
     });
   }, [connection, orders]);
-  useEffect(() => {
-    getAll().then((orders) => setOrders(orders));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   getAll().then((orders) => setOrders(orders));
+  // }, []);
 
   return (
     <Box margin={2}>

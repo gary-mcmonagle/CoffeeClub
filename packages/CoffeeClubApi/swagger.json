@@ -77,6 +77,68 @@
         }
       }
     },
+    "/Bean/out-of-stock/{coffeeBeanId}": {
+      "put": {
+        "tags": [
+          "Bean"
+        ],
+        "parameters": [
+          {
+            "name": "coffeeBeanId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CoffeeBean"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CoffeeBean"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CoffeeBean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dev": {
+      "get": {
+        "tags": [
+          "Dev"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/DevTest": {
       "get": {
         "tags": [
@@ -206,17 +268,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/OrderCreatedDto"
+                  "$ref": "#/components/schemas/OrderDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OrderCreatedDto"
+                  "$ref": "#/components/schemas/OrderDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OrderCreatedDto"
+                  "$ref": "#/components/schemas/OrderDto"
                 }
               }
             }
@@ -537,23 +599,6 @@
           "Oat"
         ],
         "type": "string"
-      },
-      "OrderCreatedDto": {
-        "required": [
-          "id",
-          "status"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "status": {
-            "$ref": "#/components/schemas/OrderStatus"
-          }
-        },
-        "additionalProperties": false
       },
       "OrderDto": {
         "required": [

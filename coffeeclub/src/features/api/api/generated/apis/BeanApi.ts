@@ -25,6 +25,10 @@ import {
     CreateCoffeeBeanDtoToJSON,
 } from '../models';
 
+export interface BeanOutOfStockCoffeeBeanIdPutRequest {
+    coffeeBeanId: string;
+}
+
 export interface BeanPostRequest {
     createCoffeeBeanDto?: CreateCoffeeBeanDto;
 }
@@ -55,6 +59,34 @@ export class BeanApi extends runtime.BaseAPI {
      */
     async beanGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CoffeeBean>> {
         const response = await this.beanGetRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async beanOutOfStockCoffeeBeanIdPutRaw(requestParameters: BeanOutOfStockCoffeeBeanIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<CoffeeBean>>> {
+        if (requestParameters.coffeeBeanId === null || requestParameters.coffeeBeanId === undefined) {
+            throw new runtime.RequiredError('coffeeBeanId','Required parameter requestParameters.coffeeBeanId was null or undefined when calling beanOutOfStockCoffeeBeanIdPut.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/Bean/out-of-stock/{coffeeBeanId}`.replace(`{${"coffeeBeanId"}}`, encodeURIComponent(String(requestParameters.coffeeBeanId))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(CoffeeBeanFromJSON));
+    }
+
+    /**
+     */
+    async beanOutOfStockCoffeeBeanIdPut(requestParameters: BeanOutOfStockCoffeeBeanIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CoffeeBean>> {
+        const response = await this.beanOutOfStockCoffeeBeanIdPutRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

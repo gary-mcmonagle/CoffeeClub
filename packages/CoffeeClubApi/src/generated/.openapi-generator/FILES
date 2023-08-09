@@ -1,4 +1,5 @@
 apis/BeanApi.ts
+apis/DevApi.ts
 apis/DevTestApi.ts
 apis/MenuApi.ts
 apis/OrderApi.ts
@@ -17,7 +18,6 @@ models/DrinkOrderDto.ts
 models/MenuDrinkDto.ts
 models/MenuDto.ts
 models/MilkType.ts
-models/OrderCreatedDto.ts
 models/OrderDto.ts
 models/OrderStatus.ts
 models/Roast.ts

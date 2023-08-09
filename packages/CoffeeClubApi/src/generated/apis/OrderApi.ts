@@ -16,14 +16,11 @@
 import * as runtime from '../runtime';
 import type {
   CreateOrderDto,
-  OrderCreatedDto,
   OrderDto,
 } from '../models';
 import {
     CreateOrderDtoFromJSON,
     CreateOrderDtoToJSON,
-    OrderCreatedDtoFromJSON,
-    OrderCreatedDtoToJSON,
     OrderDtoFromJSON,
     OrderDtoToJSON,
 } from '../models';
@@ -118,7 +115,7 @@ export class OrderApi extends runtime.BaseAPI {
 
     /**
      */
-    async orderPostRaw(requestParameters: OrderPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrderCreatedDto>> {
+    async orderPostRaw(requestParameters: OrderPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrderDto>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -133,12 +130,12 @@ export class OrderApi extends runtime.BaseAPI {
             body: CreateOrderDtoToJSON(requestParameters.createOrderDto),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OrderCreatedDtoFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => OrderDtoFromJSON(jsonValue));
     }
 
     /**
      */
-    async orderPost(requestParameters: OrderPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrderCreatedDto> {
+    async orderPost(requestParameters: OrderPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrderDto> {
         const response = await this.orderPostRaw(requestParameters, initOverrides);
         return await response.value();
     }

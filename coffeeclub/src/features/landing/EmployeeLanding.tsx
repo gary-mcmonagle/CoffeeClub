@@ -5,12 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { useApi } from "../api/useApi";
 import { BaseLanding } from "./BaseLanding";
 import { Orders } from "../orders/Orders";
-import { UserProfileDto } from "../api/api/generated";
+import { OrderDto, UserProfileDto } from "../api/api/generated";
 export const EmployeeLanding = () => {
   const {
     userApi: { getUser },
   } = useApi();
   const [user, setUser] = useState<UserProfileDto | null>(null);
+  const [orders, setOrders] = useState<OrderDto[]>();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,7 +34,7 @@ export const EmployeeLanding = () => {
   return (
     <BaseLanding>
       <OrderDispatch></OrderDispatch>
-      <Orders />
+      {orders ? <Orders orders={orders} setOrders={setOrders} /> : <> </>}
     </BaseLanding>
   );
 };
