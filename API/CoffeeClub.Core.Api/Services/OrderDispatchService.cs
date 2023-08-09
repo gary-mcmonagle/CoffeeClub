@@ -21,7 +21,7 @@ public class OrderDispatchService : IOrderDispatchService
         _hubContext = hubContext;
     }
 
-    public async Task UpdateOrder(Guid orderId, OrderStatus orderStatus)
+    public async Task UpdateOrder(Guid orderId, OrderStatus orderStatus, Guid senderId)
     {
         var order = await _orderRepository.GetAsync(orderId);
         if (order == null)
@@ -30,7 +30,9 @@ public class OrderDispatchService : IOrderDispatchService
         }
         order!.Status = orderStatus;
         var userConnections = _hubUserConnectionProviderService.GetConnectionsForUserAsync(order.User.Id);
-        await _hubContext.Clients.Clients(userConnections).SendAsync("OrderUpdated",
+        var senderConnections = _hubUserConnectionProviderService.GetConnectionsForUserAsync(senderId);
+
+        await _hubContext.Clients.Clients(userConnections.Concat(senderConnections)).SendAsync("OrderUpdated",
             new OrderUpdateDto { OrderId = orderId, OrderStatus = orderStatus });
 
         await _orderRepository.UpdateAsync(order);

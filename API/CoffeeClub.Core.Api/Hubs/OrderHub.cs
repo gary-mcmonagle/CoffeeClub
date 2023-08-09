@@ -32,6 +32,8 @@ public class OrderHub : Hub
 
     public async Task UpdateOrder(OrderUpdateDto message)
     {
-        await _orderDispatchService.UpdateOrder(message.OrderId, message.OrderStatus);
+        var user = Context.User;
+        var userId = user.Claims.Where(x => x.Type == "id").FirstOrDefault()?.Value;
+        await _orderDispatchService.UpdateOrder(message.OrderId, message.OrderStatus, Guid.Parse(userId));
     }
 }

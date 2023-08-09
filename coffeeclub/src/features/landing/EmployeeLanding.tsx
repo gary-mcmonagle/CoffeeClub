@@ -9,6 +9,7 @@ import { OrderDto, UserProfileDto } from "../api/api/generated";
 export const EmployeeLanding = () => {
   const {
     userApi: { getUser },
+    orderApi: { getAssignable },
   } = useApi();
   const [user, setUser] = useState<UserProfileDto | null>(null);
   const [orders, setOrders] = useState<OrderDto[]>();
@@ -25,7 +26,13 @@ export const EmployeeLanding = () => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  if (!user)
+  useEffect(() => {
+    getAssignable().then((orders) => {
+      setOrders(orders);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  if (!user || !orders)
     return (
       <BaseLanding>
         <CircularProgress />
@@ -33,8 +40,8 @@ export const EmployeeLanding = () => {
     );
   return (
     <BaseLanding>
-      <OrderDispatch></OrderDispatch>
-      {orders ? <Orders orders={orders} setOrders={setOrders} /> : <> </>}
+      {/* <OrderDispatch></OrderDispatch> */}
+      {!!orders ? <Orders orders={orders} setOrders={setOrders} /> : <> </>}
     </BaseLanding>
   );
 };

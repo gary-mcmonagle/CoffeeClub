@@ -8,7 +8,6 @@ export const MessagingProvider: FC<PropsWithChildren> = ({ children }) => {
   const { accessToken } = useAuth();
   const [connection, setConnection] = useState<undefined | HubConnection>();
 
-  
   useEffect(() => {
     if (!accessToken || !!connection) return;
     const connect = new HubConnectionBuilder()
