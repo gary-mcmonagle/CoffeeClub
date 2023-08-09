@@ -9,9 +9,9 @@ namespace CoffeeClub.Core.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UserController : ControllerBase
+public class UserController : BaseController
 {
     [HttpGet]
     public ActionResult<UserProfileDto> GetUser() =>
-        Ok(new UserProfileDto() { IsWorker = User.IsInRole("CoffeeClubWorker") });
+        Ok(new UserProfileDto() { IsWorker = IsWorker });
 }

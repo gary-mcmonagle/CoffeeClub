@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CoffeeClub.Core.Api.Controllers;
 
-public class DevController : ControllerBase
+public class DevController : BaseController
 {
     [HttpGet]
     [Route("dev")]

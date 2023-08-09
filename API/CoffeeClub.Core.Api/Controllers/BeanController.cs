@@ -14,7 +14,7 @@ namespace CoffeeClub.Core.Api.Controllers;
 [Authorize]
 [ApiController]
 [Route("[controller]")]
-public class BeanController : ControllerBase
+public class BeanController : BaseController
 {
     private ICoffeeBeanRepository _coffeeBeanRepository;
     private IUserRepository _userRepository;
@@ -69,8 +69,7 @@ public class BeanController : ControllerBase
     [Authorize(Policy = "CoffeeClubWorker")]
     public async Task<ActionResult> Create(CreateCoffeeBeanDto createCoffeeBeanDto)
     {
-        var userId = User.GetUserId();
-        var user = await _userRepository.GetAsync(userId);
+        var user = await _userRepository.GetAsync(UserId);
         var coffeeBean = new CoffeeBean
         {
             Name = createCoffeeBeanDto.Name,

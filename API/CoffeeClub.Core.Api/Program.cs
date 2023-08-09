@@ -22,6 +22,7 @@ builder.Services.AddScoped<IClaimsTransformation, ClaimsTransformer>();
 builder.Services.AddScoped<IOrderDispatchService, OrderDispatchService>();
 builder.Services.AddSwagger();
 
+
 builder.Services.AddControllers()
         .AddNewtonsoftJson(options =>
         options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter()));

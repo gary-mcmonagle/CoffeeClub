@@ -9,7 +9,7 @@ namespace CoffeeClub.Core.Api.Controllers;
 [Authorize]
 [ApiController]
 [Route("[controller]")]
-public class MenuController : ControllerBase
+public class MenuController : BaseController
 {
     private ICoffeeBeanRepository _coffeeBeanRepository;
 

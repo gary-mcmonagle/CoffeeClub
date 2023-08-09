@@ -17,7 +17,7 @@ namespace CoffeeClub.Core.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class OrderController : ControllerBase
+public class OrderController : BaseController
 {
     private readonly IOrderRepository _orderRepository;
     private readonly IUserRepository _userRepository;
@@ -38,22 +38,20 @@ public class OrderController : ControllerBase
     [HttpGet]
     public async Task<IEnumerable<OrderDto>> Get()
     {
-        var userId = User.GetUserId();
-        var orders = await _orderRepository.GetForUser(userId);
+        var orders = await _orderRepository.GetForUser(UserId);
         return _mapper.Map<IEnumerable<OrderDto>>(orders.Where(o => o.Status != OrderStatus.Ready));
     }
 
     [HttpPost]
     public async Task<OrderDto> Create([FromBody] CreateOrderDto createOrderDto)
     {
-        var userId = User.GetUserId();
-        var user = await _userRepository.GetAsync(userId);
+        var user = await _userRepository.GetAsync(UserId);
         var allBeans = await _coffeeBeanRepository.GetAllAsync();
         var drinks = createOrderDto.Drinks.Select(d => GetDrinkOrder(d, allBeans)).ToList();
         var order = new Order { User = user!, DrinkOrders = drinks, Status = OrderStatus.Pending };
         var orderCreated = await _orderRepository.CreateAsync(order);
         var dto = _mapper.Map<OrderDto>(orderCreated);
-        await _orderDispatchService.OrderCreated(dto, userId);
+        await _orderDispatchService.OrderCreated(dto, UserId);
         return dto;
     }
 
@@ -62,9 +60,8 @@ public class OrderController : ControllerBase
     [Route("assignable")]
     public async Task<IEnumerable<OrderDto>> GetAll()
     {
-        var userId = User.GetUserId();
         var orders = await _orderRepository.GetAllAsync();
-        Func<Order, bool> filter = o => o.Status == OrderStatus.Pending || (o.AssignedTo?.Id == userId && o.Status != OrderStatus.Ready);
+        Func<Order, bool> filter = o => o.Status == OrderStatus.Pending || (o.AssignedTo?.Id == UserId && o.Status != OrderStatus.Ready);
         return _mapper.Map<IEnumerable<OrderDto>>(orders.Where(filter));
     }
 
@@ -74,8 +71,7 @@ public class OrderController : ControllerBase
     [Route("{orderId}/assign")]
     public async Task<ActionResult> Assign(Guid orderId)
     {
-        var userId = User.GetUserId();
-        var user = await _userRepository.GetAsync(userId);
+        var user = await _userRepository.GetAsync(UserId);
         var order = await _orderRepository.GetAsync(orderId);
         if (order is null)
         {
