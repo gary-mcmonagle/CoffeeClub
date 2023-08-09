@@ -17,6 +17,6 @@ public class CoffeeClubContext : DbContext
 
     public DbSet<CoffeeBean> CoffeeBeans { get; set; } = default!;
 
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlServer("Server=localhost;User Id=SA;Password=your_password1234;Database=CoffeeClub;TrustServerCertificate=true");
+    // protected override void OnConfiguring(DbContextOptionsBuilder options)
+    //     => options.UseSqlServer("Server=localhost;User Id=SA;Password=your_password1234;Database=CoffeeClub;TrustServerCertificate=true");
 }

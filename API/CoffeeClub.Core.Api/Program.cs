@@ -19,6 +19,8 @@ var connectionStringConfig = builder.Configuration.GetSection("ConnectionStrings
 builder.Services.AddSingleton<IHubUserConnectionProviderService<OrderHub>, HubUserConnectionProviderService<OrderHub>>();
 builder.Services.AddScoped<IOrderDispatchService, OrderDispatchService>();
 
+
+Console.WriteLine($"GAAAARY");
 builder.Services.AddControllers()
         .AddNewtonsoftJson(options =>
         options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter()));
@@ -51,10 +53,11 @@ builder.Services.AddScoped<IClaimsTransformation, ClaimsTransformer>();
 builder.Services.AddCors(c =>
         {
             c.AddPolicy("AllowCCORSOrigin", options => options
-                .WithOrigins("http://localhost:3000")
+                .WithOrigins("https://gentle-water-001fc1f10.3.azurestaticapps.net")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials()
+                .SetIsOriginAllowed((host) => true)
                 );
         });
 
@@ -114,7 +117,7 @@ app.MapHub<OrderHub>("/hub");
 
 // Enable Cors
 app.UseCors(builder => builder
-.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+.WithOrigins("https://gentle-water-001fc1f10.3.azurestaticapps.net").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
 
 app.Run();
 

@@ -8,6 +8,6 @@ public class DevController : ControllerBase
     [Route("dev")]
     public IActionResult Health()
     {
-        return Ok(new { Hello = "World" });
+        return Ok(new { Hello = "World6" });
     }
 }
