@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   CircularProgress,
   List,
   ListItem,
@@ -10,7 +9,7 @@ import {
 } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import { useApi } from "../api/useApi";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { OrderDto, OrderStatus } from "../api/api/generated";
 import { OrderUpdateDto, useMessaging } from "../messaging/useMessaging";
 const orderStatuses = [
@@ -59,10 +58,7 @@ export const Orders = ({
   orders: OrderDto[];
   setOrders: React.Dispatch<React.SetStateAction<OrderDto[] | undefined>>;
 }) => {
-  const {
-    orderApi: { getAll },
-    ready,
-  } = useApi();
+  const { ready } = useApi();
   // const [orders, setOrders] = useState<OrderDto[] | null>();
   const { connection } = useMessaging();
 
@@ -75,7 +71,7 @@ export const Orders = ({
       newOrders[currentIndex].status = message.orderStatus;
       setOrders(newOrders);
     });
-  }, [connection, orders]);
+  }, [connection, orders, setOrders]);
   // useEffect(() => {
   //   getAll().then((orders) => setOrders(orders));
   // }, []);

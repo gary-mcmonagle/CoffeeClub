@@ -4,7 +4,6 @@ import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { CoffeeSelectionNew } from "./CoffeeSelection";
 import { OrderedDrinks } from "./OrderedDrinks";
 import { useApi } from "../api/useApi";
-import { set } from "react-hook-form";
 
 export const Menu = ({
   setOrders,

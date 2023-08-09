@@ -4,7 +4,6 @@ import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../api/useApi";
 import { BaseLanding } from "./BaseLanding";
-import { Orders } from "../orders/Orders";
 import { OrderDto, UserProfileDto } from "../api/api/generated";
 export const EmployeeLanding = () => {
   const {

@@ -1,7 +1,6 @@
 import { DrinkOrderDto, OrderDto, OrderStatus } from "../api/api/generated";
 import {
   Box,
-  Button,
   Card,
   CardContent,
   Chip,
@@ -17,8 +16,7 @@ import { useApi } from "../api/useApi";
 import { ReactComponent as MilkIcon } from "../../icons/milk.svg";
 import { ReactComponent as CoffeeBeanIcon } from "../../icons/coffee-bean.svg";
 import { Coffee } from "@mui/icons-material";
-import { OrderUpdateDto, useMessaging } from "../messaging/useMessaging";
-import { HubConnection } from "@microsoft/signalr";
+import { useMessaging } from "../messaging/useMessaging";
 
 const orderStatuses = [
   OrderStatus.Pending,
@@ -101,13 +99,14 @@ const OrderCard = ({
 
 export const OrderDispatch = () => {
   const {
-    orderApi: { getAssignable, assign },
+    orderApi: { getAssignable },
   } = useApi();
   const { connection } = useMessaging();
 
   const [orders, setOrders] = useState<OrderDto[] | null>();
   useEffect(() => {
     getAssignable().then(setOrders);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     if (!connection || !orders) return;
