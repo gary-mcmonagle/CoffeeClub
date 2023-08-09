@@ -40,8 +40,6 @@ public class MenuController : ControllerBase
         {
             return null;
         }
-        var canBeIced = IcedCoffeeHelper.IcedCoffeeMap.ContainsKey(drink);
-
         return new MenuDrinkDto
         {
             Name = drink,

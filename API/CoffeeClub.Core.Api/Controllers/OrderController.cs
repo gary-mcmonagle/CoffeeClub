@@ -3,6 +3,7 @@ using AutoMapper;
 using CoffeeBeanClub.Domain.Models;
 using CoffeeClub.Core.Api.Extensions;
 using CoffeeClub.Core.Api.Hubs;
+using CoffeeClub.Core.Api.Services;
 using CoffeeClub.Domain.Dtos.Request;
 using CoffeeClub.Domain.Dtos.Response;
 using CoffeeClub.Domain.Enumerations;
@@ -18,19 +19,22 @@ namespace CoffeeClub.Core.Api.Controllers;
 [Route("[controller]")]
 public class OrderController : ControllerBase
 {
-    private IOrderRepository _orderRepository;
-    private IUserRepository _userRepository;
-    private ICoffeeBeanRepository _coffeeBeanRepository;
-    private IMapper _mapper;
-    private IHubContext<OrderHub> _hubContext;
+    private readonly IOrderRepository _orderRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly ICoffeeBeanRepository _coffeeBeanRepository;
+    private readonly IMapper _mapper;
+    private readonly IHubContext<OrderHub> _hubContext;
+    private readonly IOrderDispatchService _orderDispatchService;
 
-    public OrderController(IOrderRepository orderRepository, IMapper mapper, IUserRepository userRepository, ICoffeeBeanRepository coffeeBeanRepository, IHubContext<OrderHub> hubContext)
+
+    public OrderController(IOrderRepository orderRepository, IMapper mapper, IUserRepository userRepository, ICoffeeBeanRepository coffeeBeanRepository, IHubContext<OrderHub> hubContext, IOrderDispatchService orderDispatchService)
     {
         _orderRepository = orderRepository;
         _mapper = mapper;
         _userRepository = userRepository;
         _coffeeBeanRepository = coffeeBeanRepository;
         _hubContext = hubContext;
+        _orderDispatchService = orderDispatchService;
     }
 
     [HttpGet]
@@ -38,7 +42,7 @@ public class OrderController : ControllerBase
     {
         var userId = User.GetUserId();
         var orders = await _orderRepository.GetForUser(userId);
-        return _mapper.Map<IEnumerable<OrderDto>>(orders);
+        return _mapper.Map<IEnumerable<OrderDto>>(orders.Where(o => o.Status != OrderStatus.Ready));
     }
 
     [HttpPost]
@@ -50,17 +54,21 @@ public class OrderController : ControllerBase
         var drinks = createOrderDto.Drinks.Select(d => GetDrinkOrder(d, allBeans)).ToList();
         var order = new Order { User = user!, DrinkOrders = drinks, Status = OrderStatus.Pending };
         var orderCreated = await _orderRepository.CreateAsync(order);
-        return _mapper.Map<OrderDto>(orderCreated);
+        var dto = _mapper.Map<OrderDto>(orderCreated);
+        await _hubContext.Clients.All.SendAsync("ReceiveMessage", orderCreated.Id);
+        await _orderDispatchService.OrderCreated(dto, userId);
+        return dto;
     }
 
     [HttpGet]
     [Authorize(Policy = "CoffeeClubWorker")]
     [Route("assignable")]
-
     public async Task<IEnumerable<OrderDto>> GetAll()
     {
+        var userId = User.GetUserId();
         var orders = await _orderRepository.GetAllAsync();
-        return _mapper.Map<IEnumerable<OrderDto>>(orders.Where(o => o.Status == OrderStatus.Pending));
+        Func<Order, bool> filter = o => o.Status == OrderStatus.Pending || (o.AssignedTo?.Id == userId && o.Status != OrderStatus.Ready);
+        return _mapper.Map<IEnumerable<OrderDto>>(orders.Where(filter));
     }
 
 
@@ -79,8 +87,6 @@ public class OrderController : ControllerBase
         order.AssignedTo = user;
         order.Status = OrderStatus.Assigned;
         await _orderRepository.UpdateAsync(order);
-        _hubContext.Clients.All.SendAsync("ReceiveMessage", order.Id);
-
         return Ok();
     }
 

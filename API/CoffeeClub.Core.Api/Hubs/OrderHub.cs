@@ -19,7 +19,8 @@ public class OrderHub : Hub
     {
         var user = Context.User;
         var userId = user.Claims.Where(x => x.Type == "id").FirstOrDefault()?.Value;
-        _hubUserConnectionProviderService.AddConnectionForUser(Guid.Parse(userId), Context.ConnectionId);
+        var isWorker = Context.User.IsInRole("CoffeeClubWorker");
+        _hubUserConnectionProviderService.AddConnectionForUser(Guid.Parse(userId), Context.ConnectionId, isWorker);
         return base.OnConnectedAsync();
     }
 

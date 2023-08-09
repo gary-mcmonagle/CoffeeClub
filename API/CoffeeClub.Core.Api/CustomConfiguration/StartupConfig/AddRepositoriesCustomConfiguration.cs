@@ -1,7 +1,7 @@
 using CoffeeClub.Domain.Repositories;
 using CoffeeClub.Infrastructure.Repositories;
 
-namespace CoffeeClub.Core.Api.CustomConfiguration;
+namespace CoffeeClub.Core.Api.CustomConfiguration.StartupConfig;
 
 public static class AddRepositoriesCustomConfiguration
 {

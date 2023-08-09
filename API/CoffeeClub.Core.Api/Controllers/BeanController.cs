@@ -4,7 +4,9 @@ using CoffeeClub.Core.Api.CustomConfiguration;
 using CoffeeClub.Core.Api.Extensions;
 using CoffeeClub.Domain.Dtos.Request;
 using CoffeeClub.Domain.Repositories;
+using JsonPatch.Restrict;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoffeeClub.Core.Api.Controllers;
@@ -31,6 +33,17 @@ public class BeanController : ControllerBase
     {
         return await _coffeeBeanRepository.GetAllAsync();
     }
+
+    [HttpPatch]
+    [Authorize(Policy = "CoffeeClubWorker")]
+    [Route("{coffeeBeanId:guid}")]
+    public async Task PatchBean([FromBody] JsonPatchDocument<CoffeeBean> patch, Guid coffeeBeanId)
+    {
+        var bean = await _coffeeBeanRepository.GetAsync(coffeeBeanId);
+        patch.ApplyToWithRestrictions(bean, "Description", "Roast", "InStock", "Name");
+        await _coffeeBeanRepository.UpdateAsync(bean);
+    }
+
 
     [HttpPut]
     [Route("out-of-stock/{coffeeBeanId:guid}")]

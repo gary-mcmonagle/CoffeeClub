@@ -27,5 +27,5 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public UserProfileDto GetUser() => new UserProfileDto { IsWorker = User.IsInRole("CoffeeClubWorker") };
+    public UserProfileDto GetUser() => new() { IsWorker = User.IsInRole("CoffeeClubWorker") };
 }

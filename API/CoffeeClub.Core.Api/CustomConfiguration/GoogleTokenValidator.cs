@@ -51,9 +51,11 @@ public class GoogleTokenValidator : ISecurityTokenValidator
             principle.AddIdentity(new ClaimsIdentity(claims, JwtBearerDefaults.AuthenticationScheme));
             return principle;
         }
-        catch (Exception e)
+        catch
         {
-            Console.WriteLine(e);
+            var principle = new ClaimsPrincipal();
+            return principle;
+
             throw;
         }
     }

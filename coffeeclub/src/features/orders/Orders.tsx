@@ -20,13 +20,7 @@ const orderStatuses = [
   OrderStatus.InProgress,
   OrderStatus.Ready,
 ];
-const OrderStatusCard = ({
-  order: { status },
-  sendMessage,
-}: {
-  order: OrderDto;
-  sendMessage: () => void;
-}) => {
+const OrderStatusCard = ({ order: { status } }: { order: OrderDto }) => {
   const statusIndex = orderStatuses.indexOf(status);
   type Color = "disabled" | "action" | "success";
   return (
@@ -51,7 +45,6 @@ const OrderStatusCard = ({
               }}
               primary={s}
             />
-            <Button onClick={sendMessage}>GARY</Button>
           </ListItem>
         );
       })}
@@ -94,18 +87,7 @@ export const Orders = ({
       ) : (
         <Stack>
           {orders!.map((o) => (
-            <OrderStatusCard
-              order={o}
-              sendMessage={() => {
-                var currentIndex = orderStatuses.indexOf(o.status);
-                const message: OrderUpdateDto = {
-                  orderId: o.id,
-                  orderStatus: orderStatuses[currentIndex + 1],
-                };
-                console.log({ messageSent: message });
-                connection!.invoke("UpdateOrder", message);
-              }}
-            ></OrderStatusCard>
+            <OrderStatusCard order={o}></OrderStatusCard>
           ))}
         </Stack>
       )}

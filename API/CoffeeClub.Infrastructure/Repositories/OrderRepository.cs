@@ -17,6 +17,7 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
     {
         var all = _context.Set<Order>()
             .Include(x => x.User)
+            .Include(x => x.AssignedTo)
             .Include(x => x.DrinkOrders)
             .ThenInclude(x => x.CoffeeBean).AsEnumerable();
         return Task.FromResult(all);

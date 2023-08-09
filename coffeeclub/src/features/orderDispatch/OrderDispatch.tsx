@@ -1,10 +1,32 @@
-import { DrinkOrderDto, OrderDto } from "../api/api/generated";
-import { Button, Card, CardContent, Chip, Stack } from "@mui/material";
+import { DrinkOrderDto, OrderDto, OrderStatus } from "../api/api/generated";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useApi } from "../api/useApi";
 import { ReactComponent as MilkIcon } from "../../icons/milk.svg";
 import { ReactComponent as CoffeeBeanIcon } from "../../icons/coffee-bean.svg";
 import { Coffee } from "@mui/icons-material";
+import { OrderUpdateDto, useMessaging } from "../messaging/useMessaging";
+import { HubConnection } from "@microsoft/signalr";
+
+const orderStatuses = [
+  OrderStatus.Pending,
+  OrderStatus.Received,
+  OrderStatus.Assigned,
+  OrderStatus.InProgress,
+  OrderStatus.Ready,
+];
 
 const DrinkOrderCard = ({ drink }: { drink: DrinkOrderDto }) => {
   return (
@@ -28,24 +50,51 @@ const DrinkOrderCard = ({ drink }: { drink: DrinkOrderDto }) => {
 
 const OrderCard = ({
   order,
-  assign,
+  updateStatus,
 }: {
   order: OrderDto;
-  assign: (orderId: string) => Promise<void>;
+  updateStatus: (orderId: string, orderStatus: OrderStatus) => void;
 }) => (
   <Card>
     <CardContent>
+      <Typography>Status: {order.status}</Typography>
       {order.drinks?.map((drink) => (
         <DrinkOrderCard drink={drink} />
       ))}
-      {/* {(order.drinks || []).map((drink) => DrinkCard({ drink }))} */}
-      <Button
+      {/* <Button
         onClick={() => {
           return assign(order.id!);
         }}
       >
         Start
-      </Button>
+      </Button> */}
+      <Box mt={1}>
+        <FormControl>
+          <InputLabel id="demo-simple-select-label">Status</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={order.status}
+            label="Update Status"
+            onChange={(val) => {
+              updateStatus(order.id!, val.target.value as OrderStatus);
+              // const status = val.target.value as OrderStatus;
+              // const message: OrderUpdateDto = {
+              //   orderId: order.id,
+              //   orderStatus: status as unknown as OrderStatus,
+              // };
+              // connection!.invoke("UpdateOrder", message);
+            }}
+          >
+            {orderStatuses.map((s) => (
+              <MenuItem value={s}>{s}</MenuItem>
+            ))}
+            {/* <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem> */}
+          </Select>
+        </FormControl>
+      </Box>
     </CardContent>
   </Card>
 );
@@ -54,11 +103,18 @@ export const OrderDispatch = () => {
   const {
     orderApi: { getAssignable, assign },
   } = useApi();
+  const { connection } = useMessaging();
+
   const [orders, setOrders] = useState<OrderDto[] | null>();
   useEffect(() => {
     getAssignable().then(setOrders);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    if (!connection || !orders) return;
+    connection?.on("OrderCreated", (message: OrderDto) => {
+      setOrders([...orders!, message]);
+    });
+  }, [connection, orders]);
 
   if (!orders) {
     return <div>Loading...</div>;
@@ -68,9 +124,15 @@ export const OrderDispatch = () => {
       {orders.map((order) => (
         <OrderCard
           order={order}
-          assign={async () => {
-            await assign(order.id!);
-            setOrders(orders.filter((x) => x.id !== order.id));
+          updateStatus={(orderId, orderStatus) => {
+            const orderToUpdate = orders.find((o) => o.id === orderId);
+            var updated = { ...orderToUpdate!, status: orderStatus };
+            connection!.invoke("UpdateOrder", { orderId, orderStatus });
+
+            setOrders((prev) =>
+              prev?.map((o) => (o.id === orderId ? updated : o))
+            );
+            // connection!.invoke("UpdateOrder", { orderId, orderStatus });
           }}
         />
       ))}

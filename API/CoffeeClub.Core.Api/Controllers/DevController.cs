@@ -6,8 +6,8 @@ public class DevController : ControllerBase
 {
     [HttpGet]
     [Route("dev")]
-    public IActionResult Health()
+    public IActionResult Dev()
     {
-        return Ok(new { Hello = "World9" });
+        return Ok(new { Hello = "World" });
     }
 }

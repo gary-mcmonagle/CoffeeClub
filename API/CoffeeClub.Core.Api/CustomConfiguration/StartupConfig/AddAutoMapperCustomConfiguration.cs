@@ -1,7 +1,7 @@
 using AutoMapper;
 using CoffeeClub.Domain.MappingProfiles;
 
-namespace CoffeeClub.Core.Api.CustomConfiguration;
+namespace CoffeeClub.Core.Api.CustomConfiguration.StartupConfig;
 
 public static class AddAutoMapperCustomConfiguration
 {
