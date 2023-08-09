@@ -28,7 +28,7 @@ const StyledToggleButton = styled(ToggleButton)({
   width: "80%",
 });
 
-export const CoffeeSelectionNew = ({
+export const CoffeeSelection = ({
   drinks,
   coffeeBeans,
   milks,

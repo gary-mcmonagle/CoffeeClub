@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { CreateDrinkOrderDto, MenuDto, OrderDto } from "../api/api/generated";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
-import { CoffeeSelectionNew } from "./CoffeeSelection";
+import { CoffeeSelection } from "./CoffeeSelection";
 import { OrderedDrinks } from "./OrderedDrinks";
 import { useApi } from "../api/useApi";
 
@@ -36,7 +36,7 @@ export const Menu = ({
         }}
         coffeeBeans={menu.coffeeBeans}
       ></OrderedDrinks>
-      <CoffeeSelectionNew
+      <CoffeeSelection
         coffeeBeans={menu.coffeeBeans}
         drinks={menu.drinks}
         milks={menu.milks}
