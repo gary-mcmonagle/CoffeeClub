@@ -15,4 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CoffeeClub.Domain\CoffeeClub.Domain.csproj" />
   </ItemGroup>
+    <PropertyGroup>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+  </PropertyGroup>
 </Project>

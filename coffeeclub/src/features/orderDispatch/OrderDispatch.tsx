@@ -73,6 +73,7 @@ const OrderCard = ({
             id="demo-simple-select"
             value={order.status}
             label="Update Status"
+            disabled={order.status === OrderStatus.Ready}
             onChange={(val) => {
               updateStatus(order.id!, val.target.value as OrderStatus);
             }}
@@ -125,6 +126,7 @@ export const OrderDispatch = () => {
           }}
         />
       ))}
+      {orders.length === 0 && <Typography>No orders, have a rest</Typography>}
     </>
   );
 };

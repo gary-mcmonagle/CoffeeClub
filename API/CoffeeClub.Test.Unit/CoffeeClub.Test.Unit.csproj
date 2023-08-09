@@ -24,4 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CoffeeClub.Core.Api\CoffeeClub.Core.Api.csproj" />
   </ItemGroup>
+      <PropertyGroup>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+  </PropertyGroup>
 </Project>
