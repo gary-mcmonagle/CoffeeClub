@@ -4,8 +4,6 @@ using CoffeeClub.Core.Api.Services;
 using CoffeeClub.Domain.Dtos.Response;
 using CoffeeClub.Domain.Models;
 using CoffeeClub.Domain.Repositories;
-using FluentAssertions;
-using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Moq;
 
