@@ -2,7 +2,6 @@ import { GoogleLogin } from "@react-oauth/google";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
 import React from "react";
-import env from "../../env.json";
 
 function useQuery() {
   const { search } = useLocation();
