@@ -15,13 +15,12 @@ export const Login = () => {
   let query = useQuery();
 
   const { setAccessToken } = useAuth();
-  console.log({ env });
   return (
     <GoogleLogin
       onSuccess={(suc) => {
         const redirect = query.get("redirect");
         setAccessToken(suc.credential!);
-        navigate(`/${redirect}`);
+        navigate(`/${redirect ?? ""}`);
       }}
       onError={() => {
         console.log("err");

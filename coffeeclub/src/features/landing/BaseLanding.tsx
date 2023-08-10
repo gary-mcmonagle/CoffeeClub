@@ -1,8 +1,18 @@
-import { AppBar, Grid, Paper, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Button,
+  Grid,
+  Paper,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { PropsWithChildren, useEffect, useState } from "react";
 import { useAuth } from "../auth/useAuth";
 import { parseJwt } from "../../utils/jwtUtil";
+import { googleLogout } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
 
+googleLogout();
 export const BaseLanding: React.FC<PropsWithChildren> = ({ children }) => {
   const { accessToken } = useAuth();
   const [userName, setUserName] = useState<string>();
@@ -14,6 +24,8 @@ export const BaseLanding: React.FC<PropsWithChildren> = ({ children }) => {
       }
     }
   }, [accessToken]);
+  const navigate = useNavigate();
+
   return (
     <Paper style={{ margin: 0 }}>
       <AppBar position="static" color="primary" enableColorOnDark>
@@ -36,15 +48,24 @@ export const BaseLanding: React.FC<PropsWithChildren> = ({ children }) => {
               </Typography>
             </Grid>
             <Grid item>
-              <Typography
-                m={1}
-                variant="subtitle2"
-                noWrap
-                component="div"
-                sx={{ flexGrow: 1 }}
+              <Button
+                color="inherit"
+                onClick={() => {
+                  console.log("logout");
+                  sessionStorage.removeItem("accessTokenConfig");
+                  googleLogout();
+                  navigate("/login");
+                }}
               >
-                {userName}
-              </Typography>
+                <Typography
+                  m={1}
+                  variant="subtitle2"
+                  noWrap
+                  sx={{ flexGrow: 1 }}
+                >
+                  {userName}
+                </Typography>
+              </Button>
             </Grid>
           </Grid>
         </Toolbar>
