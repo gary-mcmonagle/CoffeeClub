@@ -1,12 +1,4 @@
-import {
-  AppBar,
-  Box,
-  Grid,
-  IconButton,
-  Paper,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { AppBar, Grid, Paper, Toolbar, Typography } from "@mui/material";
 import { PropsWithChildren, useEffect, useState } from "react";
 import { useAuth } from "../auth/useAuth";
 import { parseJwt } from "../../utils/jwtUtil";
