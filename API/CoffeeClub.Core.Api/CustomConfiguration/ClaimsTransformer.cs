@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using CoffeeClub.Core.Api.Extensions;
 using CoffeeClub.Domain.Enumerations;
 using CoffeeClub.Domain.Repositories;
 using Microsoft.AspNetCore.Authentication;
@@ -18,13 +19,13 @@ public class ClaimsTransformer : IClaimsTransformation
     public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
     {
         var identity = (ClaimsIdentity)principal.Identity;
-        var sub = identity?.Claims.First(x => x.Type == "sub").Value;
-        var authProviderString = identity?.Claims.First(x => x.Type == "authProvider").Value;
+        var sub = identity?.Claims.GetClaim(CustomClaimTypes.ExternalIdentityId);
+        var authProviderString = identity?.Claims.GetClaim(CustomClaimTypes.AuthProvider);
         AuthProvider authProvider = (AuthProvider)Enum.Parse(typeof(AuthProvider), authProviderString);
         var user = await _userRepository.GetOrCreateAsync(sub, authProvider);
         ClaimsIdentity claimsIdentity = new ClaimsIdentity();
 
-        claimsIdentity.AddClaim(new Claim("id", user?.Id.ToString()));
+        claimsIdentity.AddClaim(new Claim(CustomClaimTypes.UserId, user?.Id.ToString()));
         principal.AddIdentity(claimsIdentity);
         return principal;
     }

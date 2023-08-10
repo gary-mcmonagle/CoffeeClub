@@ -1,3 +1,5 @@
+using CoffeeClub.Core.Api.CustomConfiguration;
+using CoffeeClub.Core.Api.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoffeeClub.Core.Api.Controllers;
@@ -5,8 +7,8 @@ namespace CoffeeClub.Core.Api.Controllers;
 public class BaseController : ControllerBase
 {
     protected Guid UserId =>
-        User.Claims.FirstOrDefault(c => c.Type == "id")?.Value is null ?
+        User.Claims.GetClaim(CustomClaimTypes.UserId) is null ?
          Guid.Empty :
-         Guid.Parse(User.Claims.FirstOrDefault(c => c.Type == "id")?.Value);
+         Guid.Parse(User.Claims.GetClaim(CustomClaimTypes.UserId));
     protected bool IsWorker => User.IsInRole("CoffeeClubWorker");
 }

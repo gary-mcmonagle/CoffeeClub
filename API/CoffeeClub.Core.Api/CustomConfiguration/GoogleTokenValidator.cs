@@ -41,8 +41,8 @@ public class GoogleTokenValidator : ISecurityTokenValidator
         var claims = new List<Claim>
                 {
                     // new Claim("id", user.Id.ToString()),
-                    new Claim("sub", payload.Subject),
-                    new Claim("authProvider", ((int)AuthProvider.Google).ToString()),
+                    new Claim(CustomClaimTypes.ExternalIdentityId, payload.Subject),
+                    new Claim(CustomClaimTypes.AuthProvider, ((int)AuthProvider.Google).ToString()),
                     new Claim(ClaimTypes.Role, _workerEmails.Contains(payload.Email) ? "CoffeeClubWorker" : "CoffeeClubCustomer")
                 };
         try

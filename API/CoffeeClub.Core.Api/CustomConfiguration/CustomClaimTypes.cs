@@ -1,6 +1,10 @@
+using System.Security.Claims;
 namespace CoffeeClub.Core.Api.CustomConfiguration;
 
 public static class CustomClaimTypes
 {
-    public static string CoffeeClubWorker => "coffee_club_worker";
+    public const string ExternalIdentityId = "sub";
+    public const string UserId = "id";
+    public const string AuthProvider = "authProvider";
+
 }
