@@ -6,6 +6,7 @@ using CoffeeClub_Core_Functions.Extensions;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using CoffeeClub_Core_Functions.CustomConfiguration.Authorization;
 
 namespace CoffeeClub.Core.Functions
 {
@@ -21,6 +22,7 @@ namespace CoffeeClub.Core.Functions
         }
 
         [Function("BeanApi")]
+        [WorkerAuthorize]
         public async Task<HttpResponseData> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")]
             HttpRequestData req)

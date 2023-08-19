@@ -11,6 +11,7 @@ var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults((context, builder) =>
     {
         builder.UseMiddleware<AuthenticationMiddleware>();
+        builder.UseMiddleware<AuthorizationMiddleware>();
         builder.UseMiddleware<UserProviderMiddleware>();
     })
     .ConfigureServices(services =>

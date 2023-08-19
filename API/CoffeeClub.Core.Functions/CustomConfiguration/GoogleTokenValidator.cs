@@ -10,6 +10,7 @@ namespace CoffeeClub_Core_Functions.CustomConfiguration;
 public class GoogleTokenValidator : ISecurityTokenValidator
 {
     private readonly JwtSecurityTokenHandler _tokenHandler;
+    private readonly string[] _workerEmails = new[] { "garybmcmonagle@gmail.com" };
 
     public GoogleTokenValidator()
     {
@@ -31,7 +32,7 @@ public class GoogleTokenValidator : ISecurityTokenValidator
                     // new Claim("id", user.Id.ToString()),
                     new Claim(CustomClaimTypes.ExternalIdentityId, payload.Subject),
                     new Claim(CustomClaimTypes.AuthProvider, ((int)AuthProvider.Google).ToString()),
-                    // new Claim(ClaimTypes.Role, _workerEmails.Contains(payload.Email) ? "CoffeeClubWorker" : "CoffeeClubCustomer")
+                    new Claim(ClaimTypes.Role, _workerEmails.Contains(payload.Email) ? "CoffeeClubWorker" : "CoffeeClubCustomer")
                 };
         try
         {
