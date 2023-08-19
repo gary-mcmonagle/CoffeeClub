@@ -31,5 +31,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CoffeeClub.Domain\CoffeeClub.Domain.csproj" />
+    <ProjectReference Include="..\CoffeeClub.Infrastructure\CoffeeClub.Infrastructure.csproj" />
   </ItemGroup>
 </Project>
