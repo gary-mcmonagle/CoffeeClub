@@ -1,5 +1,6 @@
 using System.Net;
 using CoffeeClub_Core_Functions.CustomConfiguration;
+using CoffeeClub_Core_Functions.Extensions;
 using Google.Apis.Auth;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;

@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Text.Json;
 using Microsoft.Azure.Functions.Worker;
 
-namespace CoffeeClub_Core_Functions.Middleware;
+namespace CoffeeClub_Core_Functions.Extensions;
 
 public static class FunctionContextExtensions
 {
