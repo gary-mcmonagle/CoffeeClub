@@ -1,6 +1,7 @@
 using System.Net;
 using System.Reflection;
 using System.Text.Json;
+using CoffeeClub.Domain.Models;
 using Microsoft.Azure.Functions.Worker;
 
 namespace CoffeeClub_Core_Functions.Extensions;
@@ -58,4 +59,7 @@ public static class FunctionContextExtensions
         token = authHeaderValue.Substring("Bearer ".Length).Trim();
         return true;
     }
+
+
+    public static User GetAuthenticatedUser(this FunctionContext context) => context.Features.Get<User>()!;
 }
