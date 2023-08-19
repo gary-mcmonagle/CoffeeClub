@@ -2,7 +2,7 @@ using System.Security.Claims;
 
 namespace CoffeeClub_Core_Functions.Middleware;
 
-public class JwtPrincipalFeature
+public record JwtPrincipalFeature
 {
     public JwtPrincipalFeature(ClaimsPrincipal principal, string accessToken)
     {
