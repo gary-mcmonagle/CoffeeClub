@@ -8,6 +8,9 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using CoffeeClub_Core_Functions.CustomConfiguration.Authorization;
 using CoffeeBeanClub.Domain.Models;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.OpenApi.Models;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 
 namespace CoffeeClub.Core.Functions
 {
@@ -27,6 +30,12 @@ namespace CoffeeClub.Core.Functions
 
         [Function(nameof(GetBean))]
         [WorkerAuthorize]
+        // Add these three attribute classes below
+        [OpenApiOperation(operationId: "GetBean")]
+        [OpenApiResponseWithBody(
+            statusCode: HttpStatusCode.OK,
+            contentType: "application/json",
+            bodyType: typeof(IEnumerable<CoffeeBean>))]
         public async Task<HttpResponseData> GetBean(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "bean")]
             HttpRequestData req)
