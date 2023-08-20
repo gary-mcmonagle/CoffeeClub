@@ -21,10 +21,10 @@ namespace CoffeeClub.Core.Functions
             _userRepository = userRepository;
         }
 
-        [Function("BeanApi")]
+        [Function(nameof(GetBean))]
         [WorkerAuthorize]
-        public async Task<HttpResponseData> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")]
+        public async Task<HttpResponseData> GetBean(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "bean")]
             HttpRequestData req)
         {
             var user = req.FunctionContext.GetAuthenticatedUser();
@@ -34,6 +34,23 @@ namespace CoffeeClub.Core.Functions
             response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
 
             response.WriteString($"Welcome to Azure Functions Gary!, id = {user?.Id}");
+
+            return response;
+        }
+
+        [Function(nameof(CreateBean))]
+        [WorkerAuthorize]
+        public async Task<HttpResponseData> CreateBean(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "bean")]
+            HttpRequestData req)
+        {
+            var user = req.FunctionContext.GetAuthenticatedUser();
+            _logger.LogInformation("C# HTTP trigger function processed a request.");
+
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+
+            response.WriteString($"Welcome to Azure Functions Gary Create!, id = {user?.Id}");
 
             return response;
         }
