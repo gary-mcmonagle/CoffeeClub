@@ -30,7 +30,6 @@ namespace CoffeeClub.Core.Functions
 
         [Function(nameof(GetBean))]
         [WorkerAuthorize]
-        // Add these three attribute classes below
         [OpenApiOperation(operationId: "GetBean")]
         [OpenApiResponseWithBody(
             statusCode: HttpStatusCode.OK,

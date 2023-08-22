@@ -34,5 +34,6 @@
   <ItemGroup>
     <ProjectReference Include="..\CoffeeClub.Domain\CoffeeClub.Domain.csproj" />
     <ProjectReference Include="..\CoffeeClub.Infrastructure\CoffeeClub.Infrastructure.csproj" />
+    <ProjectReference Include="..\CoffeeClub.Core\CoffeeClub.Core.csproj" />
   </ItemGroup>
 </Project>
