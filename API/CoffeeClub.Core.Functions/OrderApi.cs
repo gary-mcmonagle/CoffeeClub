@@ -24,7 +24,7 @@ public class OrderApi
     }
 
     [Function(nameof(GetOrder))]
-    [OpenApiOperation(operationId: nameof(GetOrder))]
+    [OpenApiOperation(operationId: nameof(GetOrder), tags: new[] { "order" })]
     [OpenApiResponseWithBody(
     statusCode: HttpStatusCode.OK,
     contentType: "application/json",
@@ -42,7 +42,7 @@ public class OrderApi
     }
 
     [Function(nameof(GetAssignable))]
-    [OpenApiOperation(operationId: nameof(GetAssignable))]
+    [OpenApiOperation(operationId: nameof(GetAssignable), tags: new[] { "order" })]
     [OpenApiResponseWithBody(
         statusCode: HttpStatusCode.OK,
         contentType: "application/json",
@@ -61,7 +61,7 @@ public class OrderApi
     }
 
     [Function(nameof(CreateOrder))]
-    [OpenApiOperation(operationId: nameof(CreateOrder))]
+    [OpenApiOperation(operationId: nameof(CreateOrder), tags: new[] { "order" })]
     [OpenApiRequestBody("application/json", typeof(CreateOrderDto))]
     [OpenApiResponseWithBody(
 
@@ -86,7 +86,7 @@ public class OrderApi
     }
 
     [Function(nameof(AssignOrder))]
-    [OpenApiOperation(operationId: nameof(AssignOrder))]
+    [OpenApiOperation(operationId: nameof(AssignOrder), tags: new[] { "order" })]
     [OpenApiParameter(
         name: "orderId",
         In = ParameterLocation.Path,

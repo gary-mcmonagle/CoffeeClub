@@ -20,7 +20,7 @@ public class MenuApi
     }
 
     [Function(nameof(GetMenu))]
-    [OpenApiOperation(operationId: "GetMenu")]
+    [OpenApiOperation(operationId: "GetMenu", tags: new[] { "menu" })]
     [OpenApiResponseWithBody(
         statusCode: HttpStatusCode.OK,
         contentType: "application/json",

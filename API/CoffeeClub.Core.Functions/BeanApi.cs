@@ -30,7 +30,7 @@ namespace CoffeeClub.Core.Functions
 
         [Function(nameof(GetBean))]
         [WorkerAuthorize]
-        [OpenApiOperation(operationId: "GetBean")]
+        [OpenApiOperation(operationId: "GetBean", tags: new[] { "bean" })]
         [OpenApiResponseWithBody(
             statusCode: HttpStatusCode.OK,
             contentType: "application/json",
