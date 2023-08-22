@@ -2,6 +2,7 @@ using AutoMapper;
 using CoffeeClub.Domain.Enumerations;
 using CoffeeClub_Core_Functions.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
 using FromBodyAttribute = Microsoft.Azure.Functions.Worker.Http.FromBodyAttribute;
 
 
@@ -40,6 +41,25 @@ public class OrderApi
         return response;
     }
 
+    [Function(nameof(GetAssignable))]
+    [OpenApiOperation(operationId: nameof(GetAssignable))]
+    [OpenApiResponseWithBody(
+        statusCode: HttpStatusCode.OK,
+        contentType: "application/json",
+        bodyType: typeof(IEnumerable<OrderDto>))]
+    public async Task<HttpResponseData> GetAssignable(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "order/assignable")]
+            HttpRequestData req)
+    {
+        var userId = req.FunctionContext.GetAuthenticatedUser().Id;
+        var orders = await _orderRepository.GetAllAsync();
+        Func<Order, bool> filter = o => o.Status == OrderStatus.Pending || (o.AssignedTo?.Id == userId && o.Status != OrderStatus.Ready);
+        var dtos = _mapper.Map<IEnumerable<OrderDto>>(orders.Where(filter));
+        var response = req.CreateResponse(HttpStatusCode.OK);
+        await response.WriteAsJsonAsync(dtos);
+        return response;
+    }
+
     [Function(nameof(CreateOrder))]
     [OpenApiOperation(operationId: nameof(CreateOrder))]
     [OpenApiRequestBody("application/json", typeof(CreateOrderDto))]
@@ -49,7 +69,7 @@ public class OrderApi
     contentType: "application/json",
     bodyType: typeof(IEnumerable<OrderDto>))]
     public async Task<HttpResponseData> CreateOrder(
-[HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "order")]
+    [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "order")]
             HttpRequestData req, [FromBody] CreateOrderDto createOrderDto)
     {
         var userId = req.FunctionContext.GetAuthenticatedUser().Id;
@@ -62,6 +82,34 @@ public class OrderApi
         // await _orderDispatchService.OrderCreated(dto, UserId);
         var response = req.CreateResponse(HttpStatusCode.OK);
         await response.WriteAsJsonAsync(dto);
+        return response;
+    }
+
+    [Function(nameof(AssignOrder))]
+    [OpenApiOperation(operationId: nameof(AssignOrder))]
+    [OpenApiParameter(
+        name: "orderId",
+        In = ParameterLocation.Path,
+        Required = true,
+        Type = typeof(Guid),
+        Description = "The order id")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.OK)]
+    public async Task<HttpResponseData> AssignOrder(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "order/assign/{orderId:guid}")]
+            HttpRequestData req, Guid orderId)
+    {
+        var userId = req.FunctionContext.GetAuthenticatedUser().Id;
+        var user = await _userRepository.GetAsync(userId);
+        var order = await _orderRepository.GetAsync(orderId);
+        if (order is null)
+        {
+            var notFoundResponse = req.CreateResponse(HttpStatusCode.NotFound);
+            return notFoundResponse;
+        }
+        order.AssignedTo = user;
+        order.Status = OrderStatus.Assigned;
+        await _orderRepository.UpdateAsync(order);
+        var response = req.CreateResponse(HttpStatusCode.OK);
         return response;
     }
 
