@@ -29,7 +29,7 @@ public class AuthenticationMiddleware : IFunctionsWorkerMiddleware
                 context.Features.Set(new JwtPrincipalFeature(principle, token));
                 await next(context);
             }
-            catch (Exception ex)
+            catch (SecurityTokenException)
             {
                 await SetAsUnauth(context);
             }

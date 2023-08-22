@@ -1,6 +1,9 @@
 using AutoMapper;
 using CoffeeClub.Domain.Enumerations;
 using CoffeeClub_Core_Functions.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using FromBodyAttribute = Microsoft.Azure.Functions.Worker.Http.FromBodyAttribute;
+
 
 namespace CoffeeClub_Core_Functions;
 
@@ -34,6 +37,31 @@ public class OrderApi
         var orders = await _orderRepository.GetForUser(user.Id);
         var dtos = _mapper.Map<IEnumerable<OrderDto>>(orders.Where(o => o.Status != OrderStatus.Ready));
         await response.WriteAsJsonAsync(dtos);
+        return response;
+    }
+
+    [Function(nameof(CreateOrder))]
+    [OpenApiOperation(operationId: nameof(CreateOrder))]
+    [OpenApiRequestBody("application/json", typeof(CreateOrderDto))]
+    [OpenApiResponseWithBody(
+
+    statusCode: HttpStatusCode.OK,
+    contentType: "application/json",
+    bodyType: typeof(IEnumerable<OrderDto>))]
+    public async Task<HttpResponseData> CreateOrder(
+[HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "order")]
+            HttpRequestData req, [FromBody] CreateOrderDto createOrderDto)
+    {
+        var userId = req.FunctionContext.GetAuthenticatedUser().Id;
+        var user = await _userRepository.GetAsync(userId);
+        var allBeans = await _coffeeBeanRepository.GetAllAsync();
+        var drinks = createOrderDto.Drinks.Select(d => GetDrinkOrder(d, allBeans)).ToList();
+        var order = new Order { User = user!, DrinkOrders = drinks, Status = OrderStatus.Pending };
+        var orderCreated = await _orderRepository.CreateAsync(order);
+        var dto = _mapper.Map<OrderDto>(orderCreated);
+        // await _orderDispatchService.OrderCreated(dto, UserId);
+        var response = req.CreateResponse(HttpStatusCode.OK);
+        await response.WriteAsJsonAsync(dto);
         return response;
     }
 
