@@ -1,673 +1,417 @@
 {
-  "openapi": "3.0.1",
+  "swagger": "2.0",
   "info": {
-    "title": "CoffeeClub.Core.Api",
-    "version": "v1"
+      "title": "OpenAPI Document on Azure Functions",
+      "description": "This is the OpenAPI Document on Azure Functions",
+      "version": "1.0.0"
   },
+  "host": "localhost:7071",
+  "basePath": "/api",
+  "schemes": [
+      "http"
+  ],
   "paths": {
-    "/Bean": {
-      "get": {
-        "tags": [
-          "Bean"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CoffeeBean"
+      "/order": {
+          "get": {
+              "tags": [
+                  "order"
+              ],
+              "operationId": "GetOrder",
+              "produces": [
+                  "application/json"
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Payload of Array of OrderDto",
+                      "schema": {
+                          "type": "array",
+                          "items": {
+                              "$ref": "#/definitions/orderDto"
+                          }
+                      }
                   }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CoffeeBean"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CoffeeBean"
-                  }
-                }
               }
-            }
+          },
+          "post": {
+              "tags": [
+                  "order"
+              ],
+              "operationId": "CreateOrder",
+              "consumes": [
+                  "application/json"
+              ],
+              "produces": [
+                  "application/json"
+              ],
+              "parameters": [
+                  {
+                      "in": "body",
+                      "name": "body",
+                      "schema": {
+                          "$ref": "#/definitions/createOrderDto"
+                      }
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Payload of Array of OrderDto",
+                      "schema": {
+                          "type": "array",
+                          "items": {
+                              "$ref": "#/definitions/orderDto"
+                          }
+                      }
+                  }
+              }
           }
-        }
       },
-      "post": {
-        "tags": [
-          "Bean"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateCoffeeBeanDto"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateCoffeeBeanDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateCoffeeBeanDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateCoffeeBeanDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/Bean/out-of-stock/{coffeeBeanId}": {
-      "put": {
-        "tags": [
-          "Bean"
-        ],
-        "parameters": [
-          {
-            "name": "coffeeBeanId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CoffeeBean"
+      "/order/assignable": {
+          "get": {
+              "tags": [
+                  "order"
+              ],
+              "operationId": "GetAssignable",
+              "produces": [
+                  "application/json"
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Payload of Array of OrderDto",
+                      "schema": {
+                          "type": "array",
+                          "items": {
+                              "$ref": "#/definitions/orderDto"
+                          }
+                      }
                   }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CoffeeBean"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CoffeeBean"
-                  }
-                }
               }
-            }
           }
-        }
-      }
-    },
-    "/dev": {
-      "get": {
-        "tags": [
-          "Dev"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/DevTest": {
-      "get": {
-        "tags": [
-          "DevTest"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/DevTestDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DevTestDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DevTestDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Menu": {
-      "get": {
-        "tags": [
-          "Menu"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/MenuDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MenuDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MenuDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Order": {
-      "get": {
-        "tags": [
-          "Order"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/OrderDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/OrderDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/OrderDto"
-                  }
-                }
-              }
-            }
-          }
-        }
       },
-      "post": {
-        "tags": [
-          "Order"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrderDto"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrderDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrderDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrderDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrderDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrderDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrderDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Order/assignable": {
-      "get": {
-        "tags": [
-          "Order"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/OrderDto"
+      "/order/assign/{orderId}": {
+          "post": {
+              "tags": [
+                  "order"
+              ],
+              "operationId": "AssignOrder",
+              "parameters": [
+                  {
+                      "in": "path",
+                      "name": "orderId",
+                      "description": "The order id",
+                      "required": true,
+                      "type": "string",
+                      "format": "uuid"
                   }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/OrderDto"
+              ],
+              "responses": {
+                  "200": {
+                      "description": "No description"
                   }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/OrderDto"
-                  }
-                }
               }
-            }
           }
-        }
-      }
-    },
-    "/Order/{orderId}/assign": {
-      "post": {
-        "tags": [
-          "Order"
-        ],
-        "parameters": [
-          {
-            "name": "orderId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/User": {
-      "post": {
-        "tags": [
-          "User"
-        ],
-        "operationId": "Create",
-        "parameters": [
-          {
-            "name": "authProvider",
-            "in": "query",
-            "style": "form",
-            "schema": {
-              "$ref": "#/components/schemas/AuthProvider"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
       },
-      "get": {
-        "tags": [
-          "User"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserProfileDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserProfileDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserProfileDto"
-                }
+      "/user": {
+          "get": {
+              "tags": [
+                  "user"
+              ],
+              "operationId": "GetUser",
+              "produces": [
+                  "application/json"
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Payload of UserProfileDto",
+                      "schema": {
+                          "$ref": "#/definitions/userProfileDto"
+                      }
+                  }
               }
-            }
           }
-        }
+      },
+      "/bean": {
+          "get": {
+              "tags": [
+                  "bean"
+              ],
+              "operationId": "GetBean",
+              "produces": [
+                  "application/json"
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Payload of Array of CoffeeBean",
+                      "schema": {
+                          "type": "array",
+                          "items": {
+                              "$ref": "#/definitions/coffeeBean"
+                          }
+                      }
+                  }
+              }
+          }
+      },
+      "/menu": {
+          "get": {
+              "tags": [
+                  "menu"
+              ],
+              "operationId": "GetMenu",
+              "produces": [
+                  "application/json"
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Payload of MenuDto",
+                      "schema": {
+                          "$ref": "#/definitions/menuDto"
+                      }
+                  }
+              }
+          }
       }
-    }
   },
-  "components": {
-    "schemas": {
-      "AuthProvider": {
-        "enum": [
-          "AzureActiveDirectory",
-          "Google"
-        ],
-        "type": "string"
-      },
-      "CoffeeBean": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "roast": {
-            "$ref": "#/components/schemas/Roast"
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "inStock": {
-            "type": "boolean"
-          },
-          "createdBy": {
-            "$ref": "#/components/schemas/User"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
+  "definitions": {
+      "coffeeBean": {
+          "type": "object",
+          "properties": {
+              "name": {
+                  "type": "string"
+              },
+              "roast": {
+                  "default": "Light",
+                  "enum": [
+                      "Light",
+                      "Medium",
+                      "Dark"
+                  ],
+                  "type": "string"
+              },
+              "description": {
+                  "type": "string"
+              },
+              "inStock": {
+                  "type": "boolean"
+              },
+              "createdBy": {
+                  "$ref": "#/definitions/user"
+              },
+              "id": {
+                  "format": "uuid",
+                  "type": "string"
+              }
           }
-        },
-        "additionalProperties": false
       },
-      "CoffeeBeanMenuDto": {
-        "required": [
-          "id",
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
+      "coffeeBeanMenuDto": {
+          "required": [
+              "name",
+              "id"
+          ],
+          "type": "object",
+          "properties": {
+              "name": {
+                  "type": "string"
+              },
+              "id": {
+                  "format": "uuid",
+                  "type": "string"
+              }
           }
-        },
-        "additionalProperties": false
       },
-      "CreateCoffeeBeanDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "roast": {
-            "$ref": "#/components/schemas/Roast"
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "inStock": {
-            "type": "boolean"
+      "createDrinkOrderDto": {
+          "type": "object",
+          "properties": {
+              "coffeeBeanId": {
+                  "format": "uuid",
+                  "type": "string"
+              },
+              "drink": {
+                  "default": "Filter",
+                  "enum": [
+                      "Filter",
+                      "Espresso",
+                      "Cappuccino",
+                      "Latte",
+                      "IcedLatte",
+                      "IcedCappuccino"
+                  ],
+                  "type": "string"
+              },
+              "milkType": {
+                  "default": "Dairy",
+                  "enum": [
+                      "Dairy",
+                      "Oat"
+                  ],
+                  "type": "string"
+              },
+              "isIced": {
+                  "type": "boolean"
+              }
           }
-        },
-        "additionalProperties": false
       },
-      "CreateDrinkOrderDto": {
-        "type": "object",
-        "properties": {
-          "coffeeBeanId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "drink": {
-            "$ref": "#/components/schemas/Drink"
-          },
-          "milkType": {
-            "$ref": "#/components/schemas/MilkType"
-          },
-          "isIced": {
-            "type": "boolean"
+      "createOrderDto": {
+          "type": "object",
+          "properties": {
+              "drinks": {
+                  "type": "array",
+                  "items": {
+                      "$ref": "#/definitions/createDrinkOrderDto"
+                  }
+              }
           }
-        },
-        "additionalProperties": false
       },
-      "CreateOrderDto": {
-        "type": "object",
-        "properties": {
-          "drinks": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CreateDrinkOrderDto"
-            },
-            "nullable": true
+      "drinkOrderDto": {
+          "required": [
+              "coffeeBean",
+              "drink"
+          ],
+          "type": "object",
+          "properties": {
+              "coffeeBean": {
+                  "$ref": "#/definitions/coffeeBean"
+              },
+              "drink": {
+                  "default": "Filter",
+                  "enum": [
+                      "Filter",
+                      "Espresso",
+                      "Cappuccino",
+                      "Latte",
+                      "IcedLatte",
+                      "IcedCappuccino"
+                  ],
+                  "type": "string"
+              },
+              "milkType": {
+                  "default": "Dairy",
+                  "enum": [
+                      "Dairy",
+                      "Oat"
+                  ],
+                  "type": "string"
+              }
           }
-        },
-        "additionalProperties": false
       },
-      "DevTestDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
+      "menuDrinkDto": {
+          "required": [
+              "name",
+              "canBeIced",
+              "requiresMilk"
+          ],
+          "type": "object",
+          "properties": {
+              "name": {
+                  "default": "Filter",
+                  "enum": [
+                      "Filter",
+                      "Espresso",
+                      "Cappuccino",
+                      "Latte",
+                      "IcedLatte",
+                      "IcedCappuccino"
+                  ],
+                  "type": "string"
+              },
+              "canBeIced": {
+                  "type": "boolean"
+              },
+              "requiresMilk": {
+                  "type": "boolean"
+              }
           }
-        },
-        "additionalProperties": false
       },
-      "Drink": {
-        "enum": [
-          "Filter",
-          "Espresso",
-          "Cappuccino",
-          "Latte",
-          "IcedLatte",
-          "IcedCappuccino"
-        ],
-        "type": "string"
-      },
-      "DrinkOrderDto": {
-        "required": [
-          "coffeeBean",
-          "drink"
-        ],
-        "type": "object",
-        "properties": {
-          "coffeeBean": {
-            "$ref": "#/components/schemas/CoffeeBean"
-          },
-          "drink": {
-            "$ref": "#/components/schemas/Drink"
-          },
-          "milkType": {
-            "$ref": "#/components/schemas/MilkType"
+      "menuDto": {
+          "required": [
+              "drinks",
+              "coffeeBeans",
+              "milks"
+          ],
+          "type": "object",
+          "properties": {
+              "drinks": {
+                  "type": "array",
+                  "items": {
+                      "$ref": "#/definitions/menuDrinkDto"
+                  }
+              },
+              "coffeeBeans": {
+                  "type": "array",
+                  "items": {
+                      "$ref": "#/definitions/coffeeBeanMenuDto"
+                  }
+              },
+              "milks": {
+                  "type": "array",
+                  "items": {
+                      "default": "Dairy",
+                      "enum": [
+                          "Dairy",
+                          "Oat"
+                      ],
+                      "type": "string"
+                  }
+              }
           }
-        },
-        "additionalProperties": false
       },
-      "MenuDrinkDto": {
-        "required": [
-          "canBeIced",
-          "name",
-          "requiresMilk"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "$ref": "#/components/schemas/Drink"
-          },
-          "canBeIced": {
-            "type": "boolean"
-          },
-          "requiresMilk": {
-            "type": "boolean"
+      "orderDto": {
+          "required": [
+              "drinks",
+              "id",
+              "status"
+          ],
+          "type": "object",
+          "properties": {
+              "drinks": {
+                  "type": "array",
+                  "items": {
+                      "$ref": "#/definitions/drinkOrderDto"
+                  }
+              },
+              "id": {
+                  "format": "uuid",
+                  "type": "string"
+              },
+              "status": {
+                  "default": "Pending",
+                  "enum": [
+                      "Pending",
+                      "Received",
+                      "Assigned",
+                      "InProgress",
+                      "Ready"
+                  ],
+                  "type": "string"
+              }
           }
-        },
-        "additionalProperties": false
       },
-      "MenuDto": {
-        "required": [
-          "coffeeBeans",
-          "drinks",
-          "milks"
-        ],
-        "type": "object",
-        "properties": {
-          "drinks": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MenuDrinkDto"
-            }
-          },
-          "coffeeBeans": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CoffeeBeanMenuDto"
-            }
-          },
-          "milks": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MilkType"
-            }
+      "user": {
+          "type": "object",
+          "properties": {
+              "authProvider": {
+                  "default": "AzureActiveDirectory",
+                  "enum": [
+                      "AzureActiveDirectory",
+                      "Google"
+                  ],
+                  "type": "string"
+              },
+              "authId": {
+                  "type": "string"
+              },
+              "id": {
+                  "format": "uuid",
+                  "type": "string"
+              }
           }
-        },
-        "additionalProperties": false
       },
-      "MilkType": {
-        "enum": [
-          "Dairy",
-          "Oat"
-        ],
-        "type": "string"
-      },
-      "OrderDto": {
-        "required": [
-          "drinks",
-          "id",
-          "status"
-        ],
-        "type": "object",
-        "properties": {
-          "drinks": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DrinkOrderDto"
-            }
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "status": {
-            "$ref": "#/components/schemas/OrderStatus"
+      "userProfileDto": {
+          "type": "object",
+          "properties": {
+              "isWorker": {
+                  "type": "boolean"
+              }
           }
-        },
-        "additionalProperties": false
-      },
-      "OrderStatus": {
-        "enum": [
-          "Pending",
-          "Received",
-          "Assigned",
-          "InProgress",
-          "Ready"
-        ],
-        "type": "string"
-      },
-      "Roast": {
-        "enum": [
-          "Light",
-          "Medium",
-          "Dark"
-        ],
-        "type": "string"
-      },
-      "User": {
-        "type": "object",
-        "properties": {
-          "authProvider": {
-            "$ref": "#/components/schemas/AuthProvider"
-          },
-          "authId": {
-            "type": "string",
-            "nullable": true
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserProfileDto": {
-        "type": "object",
-        "properties": {
-          "isWorker": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
       }
-    }
   }
 }

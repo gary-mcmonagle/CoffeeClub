@@ -13,7 +13,7 @@ public class UserApi
         contentType: "application/json",
         bodyType: typeof(UserProfileDto))]
     public async Task<HttpResponseData> GetUser(
-    [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "order")]
+    [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "user")]
             HttpRequestData req)
     {
         var claims = req.FunctionContext.Features.Get<JwtPrincipalFeature>()?.Principal.Claims;

@@ -1,33 +1,26 @@
-import {Configuration, DevTestApi, BeanApi as Bapi, MenuApi as mapi, OrderApi as oapi, CreateOrderDto, UserApi as uapi} from './generated';
-
-const DevTest = (basePath: string) => {
-    const api = new DevTestApi(new Configuration({basePath}));
-    return {
-        getDt: async () => api.devTestGet()
-    }
-}
+import {Configuration, BeanApi as Bapi, MenuApi as mapi, OrderApi as oapi, CreateOrderDto, UserApi as uapi} from './generated';
 
 const BeanApi = (basePath: string, accessToken: string) => {
     const api = new Bapi(new Configuration({basePath, headers: {Authorization: `Bearer ${accessToken}`}}));
     return {
-        getBean: async () => api.beanGet()
+        getBean: async () => api.getBean()
     }
 };
 
 const MenuApi = (basePath: string, accessToken: string) => {
     const api = new mapi(new Configuration({basePath, headers: {Authorization: `Bearer ${accessToken}`}}));
     return {
-        getMenu: async () => api.menuGet()
+        getMenu: async () => api.getMenu()
     }
 };
 
 const OrderApi = (basePath: string, accessToken: string) => {
     const api = new oapi(new Configuration({basePath, headers: {Authorization: `Bearer ${accessToken}`}}));
     return {
-        createOrder: async (createOrderDto: CreateOrderDto) => api.orderPost({createOrderDto}),
-        getAssignable: async () => api.orderAssignableGet(),
-        getAll: async () => api.orderGet(),
-        assign: async (orderId: string) => api.orderOrderIdAssignPost({orderId}),
+        createOrder: async (createOrderDto: CreateOrderDto) => api.createOrder({body: createOrderDto}),
+        getAssignable: async () => api.getAssignable(),
+        getAll: async () => api.getOrder(),
+        assign: async (orderId: string) => api.assignOrder({orderId}),
     }
 };
 
