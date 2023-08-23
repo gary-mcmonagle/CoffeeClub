@@ -1,5 +1,6 @@
 using AutoMapper;
 using CoffeeClub.Domain.Enumerations;
+using CoffeeClub_Core_Functions.CustomConfiguration.Authorization;
 using CoffeeClub_Core_Functions.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
@@ -42,6 +43,7 @@ public class OrderApi
     }
 
     [Function(nameof(GetAssignable))]
+    [WorkerAuthorize]
     [OpenApiOperation(operationId: nameof(GetAssignable), tags: new[] { "order" })]
     [OpenApiResponseWithBody(
         statusCode: HttpStatusCode.OK,
@@ -86,6 +88,7 @@ public class OrderApi
     }
 
     [Function(nameof(AssignOrder))]
+    [WorkerAuthorize]
     [OpenApiOperation(operationId: nameof(AssignOrder), tags: new[] { "order" })]
     [OpenApiParameter(
         name: "orderId",
