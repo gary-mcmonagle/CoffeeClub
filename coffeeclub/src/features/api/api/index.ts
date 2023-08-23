@@ -15,7 +15,7 @@ const BeanApi = (basePath: string, accessToken: string) => {
     })
   );
   return {
-    getBean: async () => api.beanGet(),
+    getBean: async () => api.getBean(),
   };
 };
 
@@ -27,7 +27,7 @@ const MenuApi = (basePath: string, accessToken: string) => {
     })
   );
   return {
-    getMenu: async () => api.menuGet(),
+    getMenu: async () => api.getMenu(),
   };
 };
 
@@ -40,10 +40,10 @@ const OrderApi = (basePath: string, accessToken: string) => {
   );
   return {
     createOrder: async (createOrderDto: CreateOrderDto) =>
-      api.orderPost({ createOrderDto }),
-    getAssignable: async () => api.orderAssignableGet(),
-    getAll: async () => api.orderGet(),
-    assign: async (orderId: string) => api.orderOrderIdAssignPost({ orderId }),
+      api.createOrder({ body: createOrderDto }),
+    getAssignable: async () => api.getAssignable(),
+    getAll: async () => api.getOrder(),
+    assign: async (orderId: string) => api.assignOrder({ orderId }),
   };
 };
 
@@ -55,15 +55,13 @@ const UserApi = (basePath: string, accessToken: string) => {
     })
   );
   return {
-    getUser: async () => api.userGet(),
+    getUser: async () => api.getUser(),
   };
 };
 
-const api = (basePath: string, accessToken: string) => ({
+export default (basePath: string, accessToken: string) => ({
   beanApi: BeanApi(basePath, accessToken),
   menuApi: MenuApi(basePath, accessToken),
   orderApi: OrderApi(basePath, accessToken),
   userApi: UserApi(basePath, accessToken),
 });
-
-export default api;
