@@ -1,16 +1,8 @@
-using System.Collections.Generic;
-using System.Net;
-using CoffeeClub.Domain.Repositories;
-using CoffeeClub_Core_Functions.Middleware;
 using CoffeeClub_Core_Functions.Extensions;
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using CoffeeClub_Core_Functions.CustomConfiguration.Authorization;
-using CoffeeBeanClub.Domain.Models;
-using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.OpenApi.Models;
-using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
+using FromBodyAttribute = Microsoft.Azure.Functions.Worker.Http.FromBodyAttribute;
 
 namespace CoffeeClub.Core.Functions
 {
@@ -42,6 +34,30 @@ namespace CoffeeClub.Core.Functions
             var response = req.CreateResponse(HttpStatusCode.OK);
             var beans = await _beanRepository.GetAllAsync();
             await response.WriteAsJsonAsync(beans);
+            return response;
+        }
+
+        [Function(nameof(CreateBean))]
+        [WorkerAuthorize]
+        [OpenApiRequestBody("application/json", typeof(CreateCoffeeBeanDto))]
+        [OpenApiOperation(operationId: "CreateBean", tags: new[] { "bean" })]
+        [OpenApiResponseWithoutBody(
+            statusCode: HttpStatusCode.OK)]
+        public async Task<HttpResponseData> CreateBean(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "bean")]
+            HttpRequestData req, [FromBody] CreateCoffeeBeanDto createCoffeeBeanDto)
+        {
+            var user = await req.FunctionContext.GetUser(_userRepository);
+            var coffeeBean = new CoffeeBean
+            {
+                Name = createCoffeeBeanDto.Name,
+                CreatedBy = user!,
+                Roast = createCoffeeBeanDto.Roast,
+                Description = createCoffeeBeanDto.Description,
+                InStock = createCoffeeBeanDto.InStock
+            };
+            await _beanRepository.CreateAsync(coffeeBean);
+            var response = req.CreateResponse(HttpStatusCode.OK);
             return response;
         }
     }
