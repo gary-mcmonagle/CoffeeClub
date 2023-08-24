@@ -18,8 +18,6 @@ public class UserProviderMiddleware : IFunctionsWorkerMiddleware
     {
         var claims = context.Features.Get<JwtPrincipalFeature>()?.Principal.Claims;
         var subClaim = claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-        var user = await _userRepository.GetAsync(subClaim!, AuthProvider.Google);
-        context.Features.Set(user);
         await next(context);
     }
 }

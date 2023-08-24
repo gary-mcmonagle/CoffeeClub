@@ -26,7 +26,7 @@ var host = new HostBuilder()
     .ConfigureServices(services =>
     {
         services.AddDbContext<CoffeeClubContext>(
-            options => options.UseSqlServer("Server=localhost;User Id=SA;Password=your_password1234;Database=CoffeeClub;TrustServerCertificate=true"));
+            options => options.UseSqlServer("Server=localhost;User Id=SA;Password=your_password1234;Database=CoffeeClub;TrustServerCertificate=true"), ServiceLifetime.Scoped);
         services.AddRepositories();
         services.AddAutoMapper();
     })

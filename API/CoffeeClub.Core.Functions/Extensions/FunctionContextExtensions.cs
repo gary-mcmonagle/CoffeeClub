@@ -1,7 +1,9 @@
 using System.Net;
 using System.Reflection;
 using System.Text.Json;
+using CoffeeClub.Domain.Enumerations;
 using CoffeeClub.Domain.Models;
+using CoffeeClub_Core_Functions.Middleware;
 using Microsoft.Azure.Functions.Worker;
 
 namespace CoffeeClub_Core_Functions.Extensions;
@@ -79,5 +81,13 @@ public static class FunctionContextExtensions
         var methodName = entryPoint.Substring(entryPoint.LastIndexOf('.') + 1);
         var method = type.GetMethod(methodName);
         return method;
+    }
+
+    public static async Task<User> GetUser(this FunctionContext context, IUserRepository userRepository)
+    {
+        var claims = context.Features.Get<JwtPrincipalFeature>()?.Principal.Claims;
+        var subClaim = claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+        var user = await userRepository.GetOrCreateAsync(subClaim!, AuthProvider.Google);
+        return user;
     }
 }

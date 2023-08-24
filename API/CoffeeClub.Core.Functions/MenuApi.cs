@@ -1,13 +1,5 @@
-using System.Net;
-using CoffeeClub.Domain.Dtos.Response;
 using CoffeeClub.Domain.Enumerations;
-using CoffeeClub.Domain.Repositories;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 
 namespace CoffeeClub.Core.Functions;
 public class MenuApi
@@ -26,7 +18,7 @@ public class MenuApi
         contentType: "application/json",
         bodyType: typeof(MenuDto))]
     public async Task<HttpResponseData> GetMenu(
-        [Microsoft.Azure.Functions.Worker.HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "menu")]
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "menu")]
             HttpRequestData req)
     {
 

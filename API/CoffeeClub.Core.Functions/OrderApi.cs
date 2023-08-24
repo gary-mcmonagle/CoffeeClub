@@ -34,7 +34,7 @@ public class OrderApi
     [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "order")]
             HttpRequestData req)
     {
-        var user = req.FunctionContext.GetAuthenticatedUser();
+        var user = await req.FunctionContext.GetUser(_userRepository);
         var response = req.CreateResponse(HttpStatusCode.OK);
         var orders = await _orderRepository.GetForUser(user.Id);
         var dtos = _mapper.Map<IEnumerable<OrderDto>>(orders.Where(o => o.Status != OrderStatus.Ready));
@@ -53,9 +53,9 @@ public class OrderApi
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "order/assignable")]
             HttpRequestData req)
     {
-        var userId = req.FunctionContext.GetAuthenticatedUser().Id;
+        var user = await req.FunctionContext.GetUser(_userRepository);
         var orders = await _orderRepository.GetAllAsync();
-        Func<Order, bool> filter = o => o.Status == OrderStatus.Pending || (o.AssignedTo?.Id == userId && o.Status != OrderStatus.Ready);
+        Func<Order, bool> filter = o => o.Status == OrderStatus.Pending || (o.AssignedTo?.Id == user.Id && o.Status != OrderStatus.Ready);
         var dtos = _mapper.Map<IEnumerable<OrderDto>>(orders.Where(filter));
         var response = req.CreateResponse(HttpStatusCode.OK);
         await response.WriteAsJsonAsync(dtos);
@@ -74,8 +74,7 @@ public class OrderApi
     [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "order")]
             HttpRequestData req, [FromBody] CreateOrderDto createOrderDto)
     {
-        var userId = req.FunctionContext.GetAuthenticatedUser().Id;
-        var user = await _userRepository.GetAsync(userId);
+        var user = await req.FunctionContext.GetUser(_userRepository);
         var allBeans = await _coffeeBeanRepository.GetAllAsync();
         var drinks = createOrderDto.Drinks.Select(d => GetDrinkOrder(d, allBeans)).ToList();
         var order = new Order { User = user!, DrinkOrders = drinks, Status = OrderStatus.Pending };
@@ -101,8 +100,7 @@ public class OrderApi
     [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "order/assign/{orderId:guid}")]
             HttpRequestData req, Guid orderId)
     {
-        var userId = req.FunctionContext.GetAuthenticatedUser().Id;
-        var user = await _userRepository.GetAsync(userId);
+        var user = await req.FunctionContext.GetUser(_userRepository);
         var order = await _orderRepository.GetAsync(orderId);
         if (order is null)
         {
