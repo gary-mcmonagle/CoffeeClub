@@ -11,7 +11,10 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect } from "react";
-import { OrderDto, OrderStatus } from "../api/api/generated";
+import {
+  OrderDto,
+  OrderDtoStatusEnum as OrderStatus,
+} from "../api/api/generated";
 import { OrderUpdateDto, useMessaging } from "../messaging/useMessaging";
 import { DrinkOrderCard } from "../orderDispatch/OrderDispatch";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";

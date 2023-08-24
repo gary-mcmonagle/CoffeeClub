@@ -54,12 +54,9 @@
               ],
               "responses": {
                   "200": {
-                      "description": "Payload of Array of OrderDto",
+                      "description": "Payload of OrderDto",
                       "schema": {
-                          "type": "array",
-                          "items": {
-                              "$ref": "#/definitions/orderDto"
-                          }
+                          "$ref": "#/definitions/orderDto"
                       }
                   }
               }

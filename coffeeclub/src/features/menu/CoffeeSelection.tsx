@@ -1,9 +1,9 @@
 import {
   CoffeeBeanMenuDto,
   CreateDrinkOrderDto,
-  Drink,
+  DrinkOrderDtoDrinkEnum as Drink,
   MenuDrinkDto,
-  MilkType,
+  MenuDtoMilksEnum as MilkType,
 } from "../api/api/generated";
 import {
   Box,

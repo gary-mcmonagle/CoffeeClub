@@ -69,7 +69,7 @@ public class OrderApi
 
     statusCode: HttpStatusCode.OK,
     contentType: "application/json",
-    bodyType: typeof(IEnumerable<OrderDto>))]
+    bodyType: typeof(OrderDto))]
     public async Task<HttpResponseData> CreateOrder(
     [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "order")]
             HttpRequestData req, [FromBody] CreateOrderDto createOrderDto)

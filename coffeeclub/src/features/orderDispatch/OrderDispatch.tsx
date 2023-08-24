@@ -1,4 +1,8 @@
-import { DrinkOrderDto, OrderDto, OrderStatus } from "../api/api/generated";
+import {
+  DrinkOrderDto,
+  OrderDto,
+  OrderDtoStatusEnum as OrderStatus,
+} from "../api/api/generated";
 import {
   Box,
   Card,
