@@ -10,16 +10,16 @@ export const MessagingProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     if (!accessToken || !!connection) return;
-    // const connect = new HubConnectionBuilder()
-    //   .withUrl(`${env.apiBasePath}/hub`, {
-    //     accessTokenFactory: () => accessToken,
-    //   })
-    //   .withAutomaticReconnect()
-    //   .build();
+    const connect = new HubConnectionBuilder()
+      .withUrl(`${env.apiBasePath}`, {
+        accessTokenFactory: () => accessToken,
+      })
+      .withAutomaticReconnect()
+      .build();
 
-    // connect.start().then(() => {
-    //   setConnection(connect);
-    // });
+    connect.start().then(() => {
+      setConnection(connect);
+    });
   }, [accessToken, connection]);
   return (
     <MessagingContext.Provider

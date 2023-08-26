@@ -13,6 +13,11 @@ public class AuthorizationMiddleware : IFunctionsWorkerMiddleware
     public async Task Invoke(FunctionContext context, FunctionExecutionDelegate next)
     {
         var targetMethod = context.GetTargetFunctionMethod();
+        if (HasAllowAnonymousAttribute(targetMethod))
+        {
+            await next(context);
+            return;
+        }
         if (HasWorkerAuthorizeAttribute(targetMethod))
         {
             var claims = context.Features.Get<JwtPrincipalFeature>()?.Principal.Claims;
@@ -33,6 +38,12 @@ public class AuthorizationMiddleware : IFunctionsWorkerMiddleware
     private bool HasWorkerAuthorizeAttribute(MethodInfo targetMethod)
     {
         var attributes = GetCustomAttributesOnClassAndMethod<WorkerAuthorizeAttribute>(targetMethod);
+        return attributes.Any();
+    }
+
+    private bool HasAllowAnonymousAttribute(MethodInfo targetMethod)
+    {
+        var attributes = GetCustomAttributesOnClassAndMethod<AllowAnonymousAttribute>(targetMethod);
         return attributes.Any();
     }
 

@@ -16,8 +16,8 @@ public class UserProviderMiddleware : IFunctionsWorkerMiddleware
 
     public async Task Invoke(FunctionContext context, FunctionExecutionDelegate next)
     {
-        var claims = context.Features.Get<JwtPrincipalFeature>()?.Principal.Claims;
-        var subClaim = claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+        // var claims = context.Features.Get<JwtPrincipalFeature>()?.Principal.Claims;
+        // var subClaim = claims.FirstOrDefault(c => c.Type == "sub")?.Value;
         await next(context);
     }
 }

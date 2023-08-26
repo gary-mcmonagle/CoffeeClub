@@ -1,5 +1,7 @@
 using System.Net;
+using System.Reflection;
 using CoffeeClub_Core_Functions.CustomConfiguration;
+using CoffeeClub_Core_Functions.CustomConfiguration.Authorization;
 using CoffeeClub_Core_Functions.Extensions;
 using Google.Apis.Auth;
 using Microsoft.Azure.Functions.Worker;
@@ -20,6 +22,12 @@ public class AuthenticationMiddleware : IFunctionsWorkerMiddleware
 
     public async Task Invoke(FunctionContext context, FunctionExecutionDelegate next)
     {
+        if (HasAllowAnonymousAttribute(context.GetTargetFunctionMethod()))
+        {
+            await next(context);
+            return;
+        }
+
         var tokenGot = context.TryGetTokenFromHeaders(out var token);
         if (tokenGot)
         {
@@ -39,6 +47,12 @@ public class AuthenticationMiddleware : IFunctionsWorkerMiddleware
             await SetAsUnauth(context);
         }
     }
+    private bool HasAllowAnonymousAttribute(MethodInfo targetMethod)
+    {
+        var attributes = GetCustomAttributesOnClassAndMethod<AllowAnonymousAttribute>(targetMethod);
+        return attributes.Any();
+    }
+
 
     private async Task SetAsUnauth(FunctionContext context)
     {
@@ -46,5 +60,13 @@ public class AuthenticationMiddleware : IFunctionsWorkerMiddleware
         var res = req.CreateResponse();
         res.StatusCode = HttpStatusCode.Unauthorized;
         context.GetInvocationResult().Value = res;
+    }
+
+    private static List<T> GetCustomAttributesOnClassAndMethod<T>(MethodInfo targetMethod)
+where T : Attribute
+    {
+        var methodAttributes = targetMethod.GetCustomAttributes<T>();
+        var classAttributes = targetMethod.DeclaringType.GetCustomAttributes<T>();
+        return methodAttributes.Concat(classAttributes).ToList();
     }
 }
