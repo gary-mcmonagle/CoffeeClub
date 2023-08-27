@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using CoffeeClub.Domain.Enumerations;
 using CoffeeClub_Core_Functions.CustomConfiguration.Authorization;
@@ -70,9 +71,10 @@ public class OrderApi
     statusCode: HttpStatusCode.OK,
     contentType: "application/json",
     bodyType: typeof(OrderDto))]
-    public async Task<HttpResponseData> CreateOrder(
+    public async Task<MyOutputType> CreateOrder(
     [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "order")]
-            HttpRequestData req, [FromBody] CreateOrderDto createOrderDto)
+
+    HttpRequestData req, [FromBody] CreateOrderDto createOrderDto)
     {
         var user = await req.FunctionContext.GetUser(_userRepository);
         var allBeans = await _coffeeBeanRepository.GetAllAsync();
@@ -83,7 +85,11 @@ public class OrderApi
         // await _orderDispatchService.OrderCreated(dto, UserId);
         var response = req.CreateResponse(HttpStatusCode.OK);
         await response.WriteAsJsonAsync(dto);
-        return response;
+        return new MyOutputType()
+        {
+            Message = new OrderUpdateMessage() { OrderId = orderCreated.Id, Status = OrderStatus.Pending },
+            HttpResponse = response
+        };
     }
 
     [Function(nameof(AssignOrder))]
@@ -129,4 +135,19 @@ public class OrderApi
         }
         return new DrinkOrder { CoffeeBean = bean!, Drink = drink, MilkType = drinkOrder.MilkType };
     }
+}
+
+
+public class MyOutputType
+{
+    [QueueOutput("myQueue")]
+    public OrderUpdateMessage Message { get; set; }
+
+    public HttpResponseData HttpResponse { get; set; }
+}
+
+public record TestOrderCreatedMessage
+{
+    public Guid OrderId { get; set; }
+    public Guid UserId { get; set; }
 }

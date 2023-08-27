@@ -1,0 +1,43 @@
+{
+  "masterKey": {
+    "name": "master",
+    "value": "UjeEqfNcMzCndNVbZH4hRt215y9E8RLrMMfq7nuDU1hnAzFuqeshPg==",
+    "encrypted": false
+  },
+  "functionKeys": [
+    {
+      "name": "default",
+      "value": "OeH7EjBWG8V0nFW32n2t9aLZHerjB3SERZkGGKorhV5pAzFuZdvvmw==",
+      "encrypted": false
+    }
+  ],
+  "systemKeys": [],
+  "hostName": "localhost:7071",
+  "instanceId": "000000000000000000000000EF75CF46",
+  "source": "runtime",
+  "decryptionKeyId": ""
+}{
+  "masterKey": {
+    "name": "master",
+    "value": "UjeEqfNcMzCndNVbZH4hRt215y9E8RLrMMfq7nuDU1hnAzFuqeshPg==",
+    "encrypted": false
+  },
+  "functionKeys": [
+    {
+      "name": "default",
+      "value": "OeH7EjBWG8V0nFW32n2t9aLZHerjB3SERZkGGKorhV5pAzFuZdvvmw==",
+      "encrypted": false
+    }
+  ],
+  "systemKeys": [
+    {
+      "name": "signalr_extension",
+      "value": "GbbXnnL_IrV1BnrP_sTM8AOIhWCVpKOZbrD5J_RGdR3fAzFu_8BqZA==",
+      "encrypted": false
+    }
+  ],
+  "hostName": "localhost:7071",
+  "instanceId": "000000000000000000000000EF75CF46",
+  "source": "runtime",
+  "decryptionKeyId": ""
+}
