@@ -1,5 +1,9 @@
+using System.Reflection;
 using CoffeeClub.Domain.Enumerations;
 using CoffeeClub.Domain.Repositories;
+using CoffeeClub.Infrastructure.Dapper;
+using CoffeeClub_Core_Functions.Extensions;
+using Dapper;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Middleware;
 
@@ -7,17 +11,28 @@ namespace CoffeeClub_Core_Functions.Middleware;
 
 public class UserProviderMiddleware : IFunctionsWorkerMiddleware
 {
-    private readonly IUserRepository _userRepository;
-
-    public UserProviderMiddleware(IUserRepository userRepository)
+    private readonly DapperContext _dapperContext;
+    public UserProviderMiddleware(DapperContext dapperContext)
     {
-        _userRepository = userRepository;
+        _dapperContext = dapperContext;
     }
 
     public async Task Invoke(FunctionContext context, FunctionExecutionDelegate next)
     {
-        // var claims = context.Features.Get<JwtPrincipalFeature>()?.Principal.Claims;
-        // var subClaim = claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+        var claims = context.Features.Get<JwtPrincipalFeature>()?.Principal.Claims;
+        var subClaim = claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+        var userId = GetUserId(subClaim);
         await next(context);
+    }
+
+    private string? GetUserId(string subClaim)
+    {
+        var authId = subClaim;
+        var query = "SELECT Id FROM Users where authId = @authId";
+        using (var connection = _dapperContext.CreateConnection())
+        {
+            var id = connection?.QueryFirstOrDefault<Guid?>(query, new { authId });
+            return id?.ToString();
+        }
     }
 }

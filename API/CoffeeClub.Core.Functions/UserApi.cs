@@ -21,6 +21,7 @@ public class UserApi
         var isWorker = roleClaim == "CoffeeClubWorker";
         var dto = new UserProfileDto { IsWorker = isWorker };
         var response = req.CreateResponse(HttpStatusCode.OK);
+        await response.WriteAsJsonAsync(dto);
         return response;
     }
 }
