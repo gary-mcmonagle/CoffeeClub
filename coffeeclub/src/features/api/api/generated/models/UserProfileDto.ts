@@ -25,6 +25,12 @@ export interface UserProfileDto {
      * @memberof UserProfileDto
      */
     isWorker?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserProfileDto
+     */
+    id?: string;
 }
 
 /**
@@ -47,6 +53,7 @@ export function UserProfileDtoFromJSONTyped(json: any, ignoreDiscriminator: bool
     return {
         
         'isWorker': !exists(json, 'isWorker') ? undefined : json['isWorker'],
+        'id': !exists(json, 'id') ? undefined : json['id'],
     };
 }
 
@@ -60,6 +67,7 @@ export function UserProfileDtoToJSON(value?: UserProfileDto | null): any {
     return {
         
         'isWorker': value.isWorker,
+        'id': value.id,
     };
 }
 

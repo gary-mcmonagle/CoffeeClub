@@ -17,13 +17,13 @@ import * as runtime from '../runtime';
 import type {
   CreateOrderDto,
   OrderDto,
-} from '../models';
+} from '../models/index';
 import {
     CreateOrderDtoFromJSON,
     CreateOrderDtoToJSON,
     OrderDtoFromJSON,
     OrderDtoToJSON,
-} from '../models';
+} from '../models/index';
 
 export interface AssignOrderRequest {
     orderId: string;

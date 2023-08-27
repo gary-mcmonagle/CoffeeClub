@@ -16,16 +16,49 @@
 import * as runtime from '../runtime';
 import type {
   CoffeeBean,
-} from '../models';
+  CreateCoffeeBeanDto,
+} from '../models/index';
 import {
     CoffeeBeanFromJSON,
     CoffeeBeanToJSON,
-} from '../models';
+    CreateCoffeeBeanDtoFromJSON,
+    CreateCoffeeBeanDtoToJSON,
+} from '../models/index';
+
+export interface CreateBeanRequest {
+    body?: CreateCoffeeBeanDto;
+}
 
 /**
  * 
  */
 export class BeanApi extends runtime.BaseAPI {
+
+    /**
+     */
+    async createBeanRaw(requestParameters: CreateBeanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/bean`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateCoffeeBeanDtoToJSON(requestParameters.body),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async createBean(requestParameters: CreateBeanRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.createBeanRaw(requestParameters, initOverrides);
+    }
 
     /**
      */

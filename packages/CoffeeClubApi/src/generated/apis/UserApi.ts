@@ -16,11 +16,11 @@
 import * as runtime from '../runtime';
 import type {
   UserProfileDto,
-} from '../models';
+} from '../models/index';
 import {
     UserProfileDtoFromJSON,
     UserProfileDtoToJSON,
-} from '../models';
+} from '../models/index';
 
 /**
  * 

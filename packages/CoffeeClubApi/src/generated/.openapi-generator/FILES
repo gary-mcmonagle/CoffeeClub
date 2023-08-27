@@ -6,6 +6,7 @@ apis/index.ts
 index.ts
 models/CoffeeBean.ts
 models/CoffeeBeanMenuDto.ts
+models/CreateCoffeeBeanDto.ts
 models/CreateDrinkOrderDto.ts
 models/CreateOrderDto.ts
 models/DrinkOrderDto.ts

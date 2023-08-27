@@ -2,6 +2,7 @@
 /* eslint-disable */
 export * from './CoffeeBean';
 export * from './CoffeeBeanMenuDto';
+export * from './CreateCoffeeBeanDto';
 export * from './CreateDrinkOrderDto';
 export * from './CreateOrderDto';
 export * from './DrinkOrderDto';

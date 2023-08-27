@@ -16,11 +16,11 @@
 import * as runtime from '../runtime';
 import type {
   MenuDto,
-} from '../models';
+} from '../models/index';
 import {
     MenuDtoFromJSON,
     MenuDtoToJSON,
-} from '../models';
+} from '../models/index';
 
 /**
  * 
