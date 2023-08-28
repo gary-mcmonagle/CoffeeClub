@@ -16,8 +16,9 @@ export const MessagingProvider: FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<undefined | UserProfileDto>();
 
   useEffect(() => {
+    if (!accessToken) return;
     getUser().then(setUser);
-  }, []);
+  }, [accessToken]);
 
   useEffect(() => {
     if (!user || !accessToken || !!connection) return;

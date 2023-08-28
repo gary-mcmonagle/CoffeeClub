@@ -2,6 +2,7 @@ using System.Reflection;
 using CoffeeClub.Domain.Enumerations;
 using CoffeeClub.Domain.Repositories;
 using CoffeeClub.Infrastructure.Dapper;
+using CoffeeClub_Core_Functions.CustomConfiguration.Authorization;
 using CoffeeClub_Core_Functions.Extensions;
 using Dapper;
 using Microsoft.Azure.Functions.Worker;
@@ -19,6 +20,11 @@ public class UserProviderMiddleware : IFunctionsWorkerMiddleware
 
     public async Task Invoke(FunctionContext context, FunctionExecutionDelegate next)
     {
+        if(HasAllowAnonymousAttribute(context.GetTargetFunctionMethod()))
+        {
+            await next(context);
+            return;
+        }
         var claims = context.Features.Get<JwtPrincipalFeature>()?.Principal.Claims;
         var subClaim = claims.FirstOrDefault(c => c.Type == "sub")?.Value;
         var userId = GetUserId(subClaim);
@@ -34,5 +40,19 @@ public class UserProviderMiddleware : IFunctionsWorkerMiddleware
             var id = connection?.QueryFirstOrDefault<Guid?>(query, new { authId });
             return id?.ToString();
         }
+    }
+
+        private bool HasAllowAnonymousAttribute(MethodInfo targetMethod)
+    {
+        var attributes = GetCustomAttributesOnClassAndMethod<AllowAnonymousAttribute>(targetMethod);
+        return attributes.Any();
+    }
+
+    private static List<T> GetCustomAttributesOnClassAndMethod<T>(MethodInfo targetMethod)
+    where T : Attribute
+    {
+        var methodAttributes = targetMethod.GetCustomAttributes<T>();
+        var classAttributes = targetMethod.DeclaringType.GetCustomAttributes<T>();
+        return methodAttributes.Concat(classAttributes).ToList();
     }
 }
