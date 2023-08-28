@@ -1,14 +1,4 @@
-using System;
-using AutoMapper;
-using CoffeeClub.Domain.Enumerations;
-using CoffeeClub_Core_Functions.CustomConfiguration.Authorization;
-using CoffeeClub_Core_Functions.Extensions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Models;
-using FromBodyAttribute = Microsoft.Azure.Functions.Worker.Http.FromBodyAttribute;
-
-
-namespace CoffeeClub_Core_Functions;
+namespace CoffeeClub_Core_Functions.Functions.Api;
 
 public class OrderApi
 {
@@ -71,7 +61,7 @@ public class OrderApi
     statusCode: HttpStatusCode.OK,
     contentType: "application/json",
     bodyType: typeof(OrderDto))]
-    public async Task<MyOutputType> CreateOrder(
+    public async Task<OrderCreatedOutputBinding> CreateOrder(
     [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "order")]
 
     HttpRequestData req, [FromBody] CreateOrderDto createOrderDto)
@@ -85,7 +75,7 @@ public class OrderApi
         // await _orderDispatchService.OrderCreated(dto, UserId);
         var response = req.CreateResponse(HttpStatusCode.OK);
         await response.WriteAsJsonAsync(dto);
-        return new MyOutputType()
+        return new OrderCreatedOutputBinding()
         {
             Message = new OrderUpdateMessage() { OrderId = orderCreated.Id, Status = OrderStatus.Pending },
             HttpResponse = response
@@ -137,17 +127,3 @@ public class OrderApi
     }
 }
 
-
-public class MyOutputType
-{
-    [QueueOutput("myQueue")]
-    public OrderUpdateMessage Message { get; set; }
-
-    public HttpResponseData HttpResponse { get; set; }
-}
-
-public record TestOrderCreatedMessage
-{
-    public Guid OrderId { get; set; }
-    public Guid UserId { get; set; }
-}

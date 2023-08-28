@@ -1,8 +1,7 @@
 using System.Security.Claims;
-using CoffeeClub_Core_Functions.Extensions;
 using CoffeeClub_Core_Functions.Middleware;
 
-namespace CoffeeClub_Core_Functions;
+namespace CoffeeClub_Core_Functions.Functions.Api;
 
 public class UserApi
 {

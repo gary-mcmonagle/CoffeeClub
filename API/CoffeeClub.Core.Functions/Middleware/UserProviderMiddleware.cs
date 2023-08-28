@@ -20,6 +20,7 @@ public class UserProviderMiddleware : IFunctionsWorkerMiddleware
 
     public async Task Invoke(FunctionContext context, FunctionExecutionDelegate next)
     {
+        /*
         if(HasAllowAnonymousAttribute(context.GetTargetFunctionMethod()))
         {
             await next(context);
@@ -28,6 +29,7 @@ public class UserProviderMiddleware : IFunctionsWorkerMiddleware
         var claims = context.Features.Get<JwtPrincipalFeature>()?.Principal.Claims;
         var subClaim = claims.FirstOrDefault(c => c.Type == "sub")?.Value;
         var userId = GetUserId(subClaim);
+        */
         await next(context);
     }
 

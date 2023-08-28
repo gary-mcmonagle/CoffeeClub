@@ -1,7 +1,5 @@
-using CoffeeClub.Domain.Enumerations;
-using Microsoft.AspNetCore.Http;
+namespace CoffeeClub_Core_Functions.Functions.Api;
 
-namespace CoffeeClub.Core.Functions;
 public class MenuApi
 {
     private ICoffeeBeanRepository _coffeeBeanRepository;

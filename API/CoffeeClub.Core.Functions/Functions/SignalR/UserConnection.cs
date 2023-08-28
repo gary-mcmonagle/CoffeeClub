@@ -1,12 +1,10 @@
-using CoffeeClub_Core_Functions.CustomConfiguration.Authorization;
+namespace CoffeeClub_Core_Functions.Functions.SignalR;
 
-namespace CoffeeClub_Core_Functions;
-
-public class OnUserConnections
+public class UserConnection
 {
     private IUserRepository _userRepository;
 
-    public OnUserConnections(IUserRepository userRepository)
+    public UserConnection(IUserRepository userRepository)
     {
         _userRepository = userRepository;
     }
@@ -14,7 +12,7 @@ public class OnUserConnections
     [Function(nameof(OnUserConnected))]
     [SignalROutput(HubName = "serverless")]
     [AllowAnonymous]
-    public async Task <SignalRGroupAction> OnUserConnected(
+    public async Task<SignalRGroupAction> OnUserConnected(
     [SignalRTrigger("serverless", "connections", "connected")]
         SignalRInvocationContext invocationContext, FunctionContext functionContext)
     {
