@@ -21,8 +21,10 @@ public class ClaimsTransformer : IClaimsTransformation
         var identity = (ClaimsIdentity)principal.Identity;
         var sub = identity?.Claims.GetClaim(CustomClaimTypes.ExternalIdentityId);
         var authProviderString = identity?.Claims.GetClaim(CustomClaimTypes.AuthProvider);
+        var roleClaim = identity?.Claims.GetClaim(ClaimTypes.Role);
+
         AuthProvider authProvider = (AuthProvider)Enum.Parse(typeof(AuthProvider), authProviderString);
-        var user = await _userRepository.GetOrCreateAsync(sub, authProvider);
+        var user = await _userRepository.GetOrCreateAsync(sub, authProvider, roleClaim == "CoffeeClubWorker");
         ClaimsIdentity claimsIdentity = new ClaimsIdentity();
 
         claimsIdentity.AddClaim(new Claim(CustomClaimTypes.UserId, user?.Id.ToString()));

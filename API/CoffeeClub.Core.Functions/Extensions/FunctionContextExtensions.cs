@@ -1,5 +1,6 @@
 using System.Net;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text.Json;
 using CoffeeClub.Domain.Enumerations;
 using CoffeeClub.Domain.Models;
@@ -87,7 +88,8 @@ public static class FunctionContextExtensions
     {
         var claims = context.Features.Get<JwtPrincipalFeature>()?.Principal.Claims;
         var subClaim = claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-        var user = await userRepository.GetOrCreateAsync(subClaim!, AuthProvider.Google);
+        var roleClaim = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+        var user = await userRepository.GetOrCreateAsync(subClaim!, AuthProvider.Google, roleClaim == "CoffeeClubWorker");
         return user;
     }
 }
