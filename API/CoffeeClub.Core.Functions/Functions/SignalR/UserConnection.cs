@@ -11,7 +11,6 @@ public class UserConnection
 
     [Function(nameof(OnUserConnected))]
     [SignalROutput(HubName = "serverless")]
-    [AllowAnonymous]
     public async Task<SignalRGroupAction> OnUserConnected(
     [SignalRTrigger("serverless", "connections", "connected")]
         SignalRInvocationContext invocationContext, FunctionContext functionContext)
@@ -26,8 +25,7 @@ public class UserConnection
 
 
     [Function(nameof(OnUserDisconnected))]
-    [SignalROutput(HubName = "serverless")]
-    [AllowAnonymous]
+    [SignalROutput(HubName = Constants.HubName)]
     public async Task<SignalRGroupAction> OnUserDisconnected(
     [SignalRTrigger("serverless", "connections", "disconnected")]
         SignalRInvocationContext invocationContext, FunctionContext functionContext)

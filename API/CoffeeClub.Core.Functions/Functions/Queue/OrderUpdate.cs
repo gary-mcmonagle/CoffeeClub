@@ -2,10 +2,9 @@ namespace CoffeeClub_Core_Functions.Functions.Queue;
 
 public class OrderUpdate
 {
-    [AllowAnonymous]
     [Function(nameof(OnOrderUpdate))]
 
-    [SignalROutput(HubName = "serverless")]
+    [SignalROutput(HubName = Constants.HubName)]
     public async Task<SignalRMessageAction> OnOrderUpdate(
             [QueueTrigger("myQueue")] OrderUpdateMessage message)
     {

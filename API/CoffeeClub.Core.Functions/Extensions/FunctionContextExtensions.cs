@@ -92,4 +92,7 @@ public static class FunctionContextExtensions
         var user = await userRepository.GetOrCreateAsync(subClaim!, AuthProvider.Google, roleClaim == "CoffeeClubWorker");
         return user;
     }
+
+    public static bool IsHttpTrigger(this FunctionContext context) => context.FunctionDefinition.InputBindings.Values
+                        .First(a => a.Type.EndsWith("Trigger")).Type == "httpTrigger";
 }

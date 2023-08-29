@@ -20,9 +20,12 @@ var host = new HostBuilder()
         settings.Converters.Add(new StringEnumConverter());
         builder.UseNewtonsoftJson(settings);
 
-        builder.UseMiddleware<AuthenticationMiddleware>();
-        builder.UseMiddleware<AuthorizationMiddleware>();
-        builder.UseMiddleware<UserProviderMiddleware>();
+        // builder.UseMiddleware<AuthenticationMiddleware>();
+        // builder.UseMiddleware<AuthorizationMiddleware>();
+        // builder.UseMiddleware<UserProviderMiddleware>();
+        builder.UseWhen<AuthenticationMiddleware>((context) => context.IsHttpTrigger());
+        builder.UseWhen<AuthorizationMiddleware>((context) => context.IsHttpTrigger());
+
     })
     .ConfigureServices(services =>
     {
