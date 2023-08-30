@@ -121,12 +121,12 @@ export const OrderDispatch = () => {
           updateStatus={(orderId, orderStatus) => {
             const orderToUpdate = orders.find((o) => o.id === orderId);
             var updated = { ...orderToUpdate!, status: orderStatus };
-            connection!.invoke("UpdateOrder", { orderId, orderStatus });
+            connection!.invoke("OrderUpdate", { orderId, orderStatus });
 
             setOrders((prev) =>
               prev?.map((o) => (o.id === orderId ? updated : o))
             );
-            // connection!.invoke("UpdateOrder", { orderId, orderStatus });
+            //  connection!.invoke("UpdateOrder", { orderId, orderStatus });
           }}
         />
       ))}

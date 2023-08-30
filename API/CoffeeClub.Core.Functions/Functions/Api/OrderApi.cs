@@ -77,7 +77,7 @@ public class OrderApi
         await response.WriteAsJsonAsync(dto);
         return new OrderCreatedOutputBinding()
         {
-            Message = new OrderUpdateMessage() { OrderId = orderCreated.Id, Status = OrderStatus.Pending },
+            Message = dto,
             HttpResponse = response
         };
     }
@@ -92,7 +92,7 @@ public class OrderApi
         Type = typeof(Guid),
         Description = "The order id")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.OK)]
-    public async Task<HttpResponseData> AssignOrder(
+    public async Task<OrderAssignedOutputBinding> AssignOrder(
     [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "order/assign/{orderId:guid}")]
             HttpRequestData req, Guid orderId)
     {
@@ -101,13 +101,24 @@ public class OrderApi
         if (order is null)
         {
             var notFoundResponse = req.CreateResponse(HttpStatusCode.NotFound);
-            return notFoundResponse;
+            return new OrderAssignedOutputBinding()
+            {
+                HttpResponse = notFoundResponse
+            };
         }
         order.AssignedTo = user;
         order.Status = OrderStatus.Assigned;
         await _orderRepository.UpdateAsync(order);
         var response = req.CreateResponse(HttpStatusCode.OK);
-        return response;
+        return new OrderAssignedOutputBinding()
+        {
+            HttpResponse = response,
+            Message = new OrderUpdateMessage()
+            {
+                OrderId = order.Id,
+                Status = OrderStatus.Assigned
+            }
+        };
     }
 
     private DrinkOrder GetDrinkOrder(CreateDrinkOrderDto drinkOrder, IEnumerable<CoffeeBean> beans)

@@ -11,6 +11,9 @@ using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Azure.Core.Serialization;
 using Newtonsoft.Json.Serialization;
 using CoffeeClub.Infrastructure.Dapper;
+using Microsoft.AspNetCore.Http.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults((context, builder) =>
@@ -29,6 +32,12 @@ var host = new HostBuilder()
     })
     .ConfigureServices(services =>
     {
+        services.Configure<JsonOptions>(options =>
+        {
+            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            options.SerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+        });
         services.AddDbContext<CoffeeClubContext>(
             options => options.UseSqlServer("Server=localhost;User Id=SA;Password=your_password1234;Database=CoffeeClub;TrustServerCertificate=true"), ServiceLifetime.Scoped);
         services.AddRepositories();

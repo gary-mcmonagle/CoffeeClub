@@ -70,7 +70,8 @@ export const Orders = ({
 
   useEffect(() => {
     if (!connection || !orders) return;
-    connection?.on("OrderUpdated", (message: OrderUpdateDto) => {
+    connection?.on("ClientOrderUpdate", (message: OrderUpdateDto) => {
+      console.log({ message });
       const currentIndex = orders!.findIndex((x) => x.id === message.orderId);
       const newOrders = [...orders!];
       newOrders[currentIndex].status = message.orderStatus;
