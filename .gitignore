@@ -43,3 +43,6 @@ msbuild.err
 msbuild.wrn
 .npmrc.write
 coffeeclub/src/env.json
+Setup/__blobstorage__
+Setup/__queuestorage__
+Setup/__azurite*
