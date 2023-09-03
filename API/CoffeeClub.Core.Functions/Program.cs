@@ -25,7 +25,7 @@ var host = new HostBuilder()
 
         builder.UseWhen<AuthenticationMiddleware>((context) => context.IsHttpTrigger());
         builder.UseWhen<AuthorizationMiddleware>((context) => context.IsHttpTrigger());
-                builder.UseWhen<IdentityMiddleware>((context) => context.IsHttpTrigger());
+        builder.UseWhen<IdentityMiddleware>((context) => context.IsHttpTrigger());
 
 
     })
@@ -38,10 +38,10 @@ var host = new HostBuilder()
             options.SerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
         });
         services.AddDbContext<CoffeeClubContext>(
-            options => options.UseSqlServer("Server=localhost;User Id=SA;Password=your_password1234;Database=CoffeeClub;TrustServerCertificate=true"), ServiceLifetime.Scoped);
+            options => options.UseSqlServer(Environment.GetEnvironmentVariable("DbConnectionString")), ServiceLifetime.Scoped);
         services.AddRepositories();
         services.AddAutoMapper();
-        services.AddSingleton(new DapperContext("Server=localhost;User Id=SA;Password=your_password1234;Database=CoffeeClub;TrustServerCertificate=true"));
+        services.AddSingleton(new DapperContext(Environment.GetEnvironmentVariable("DbConnectionString")));
     })
     .Build();
 
