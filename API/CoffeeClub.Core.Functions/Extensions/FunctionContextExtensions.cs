@@ -84,13 +84,15 @@ public static class FunctionContextExtensions
         return method;
     }
 
-    public static async Task<User> GetUser(this FunctionContext context, IUserRepository userRepository)
+    public async static Task<User?> GetUser(this FunctionContext context, IUserRepository userRepository)
     {
-        var claims = context.Features.Get<JwtPrincipalFeature>()?.Principal.Claims;
-        var subClaim = claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-        var roleClaim = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-        var user = await userRepository.GetOrCreateAsync(subClaim!, AuthProvider.Google, roleClaim == "CoffeeClubWorker");
-        return user;
+        var user = context.Features.Get<Guid?>();
+        if(user is not null) {
+                    var userGot = await userRepository.GetAsync(user.Value);
+        return userGot;
+
+        }
+        return null;
     }
 
     public static bool IsHttpTrigger(this FunctionContext context) => context.FunctionDefinition.InputBindings.Values

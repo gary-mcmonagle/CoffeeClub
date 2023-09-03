@@ -7,6 +7,8 @@ public class BeanApi
     private readonly ICoffeeBeanRepository _beanRepository;
 
 
+
+
     public BeanApi(ILoggerFactory loggerFactory, IUserRepository userRepository, ICoffeeBeanRepository beanRepository)
     {
         _logger = loggerFactory.CreateLogger<BeanApi>();

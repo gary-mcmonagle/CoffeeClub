@@ -2,14 +2,18 @@ using CoffeClub.Infrastructure;
 using CoffeeClub.Domain.Enumerations;
 using CoffeeClub.Domain.Models;
 using CoffeeClub.Domain.Repositories;
+using CoffeeClub.Infrastructure.Dapper;
 using Microsoft.EntityFrameworkCore;
+using Dapper;
 
 namespace CoffeeClub.Infrastructure.Repositories;
 
 public class UserRepository : BaseRepository<User>, IUserRepository
 {
-    public UserRepository(CoffeeClubContext context) : base(context)
+    private readonly DapperContext _dapperContext;
+    public UserRepository(CoffeeClubContext context, DapperContext dapperContext) : base(context)
     {
+        _dapperContext = dapperContext;
     }
 
     public async Task<User?> GetAsync(string id, AuthProvider authProvider) =>
@@ -17,12 +21,27 @@ public class UserRepository : BaseRepository<User>, IUserRepository
 
     public async Task<User?> GetOrCreateAsync(string id, AuthProvider authProvider, bool isWorker)
     {
-        var user = await GetAsync(id, authProvider);
-        if (user is null)
+        using (var connection = _dapperContext.CreateConnection())
         {
-            user = new User { AuthId = id, AuthProvider = authProvider, IsWorker = isWorker };
-            await CreateAsync(user);
+            var duser = await connection.QueryFirstOrDefaultAsync<User>(
+                "SELECT * FROM Users WHERE AuthId = @AuthId AND AuthProvider = @AuthProvider",
+                 new { AuthId = id, AuthProvider = authProvider });
+            if (duser is not null)
+            {
+                return duser;
+            }
+            else
+            {
+                await connection.ExecuteAsync(
+                    "INSERT INTO Users (AuthId, AuthProvider, IsWorker) VALUES (@AuthId, @AuthProvider, @IsWorker)",
+                    new { AuthId = id, AuthProvider = authProvider, IsWorker = isWorker });
+                return await connection.QueryFirstOrDefaultAsync<User>(
+                    "SELECT * FROM Users WHERE AuthId = @AuthId AND AuthProvider = @AuthProvider",
+                    new { AuthId = id, AuthProvider = authProvider });
+            }
         }
-        return user;
     }
+
+    public async Task<Guid?> GetUserId(string authId, AuthProvider authProvider, bool isWorker) =>
+        (await GetOrCreateAsync(authId, authProvider, isWorker))?.Id;
 }

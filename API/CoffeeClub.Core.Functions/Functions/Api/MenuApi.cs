@@ -1,10 +1,11 @@
 namespace CoffeeClub_Core_Functions.Functions.Api;
 
-public class MenuApi
+public class MenuApi : FunctionBase<MenuApi>
 {
     private ICoffeeBeanRepository _coffeeBeanRepository;
 
-    public MenuApi(ICoffeeBeanRepository coffeeBeanRepository)
+    public MenuApi(ICoffeeBeanRepository coffeeBeanRepository, ILoggerFactory loggerFactory) :
+     base(loggerFactory)
     {
         _coffeeBeanRepository = coffeeBeanRepository;
     }
@@ -19,7 +20,6 @@ public class MenuApi
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "menu")]
             HttpRequestData req)
     {
-
         var drinks = Enum.GetValues<Drink>().Select(GetMenuItemForDrink).Where(x => x != null).ToList();
         var beans = await _coffeeBeanRepository.GetAllAsync();
         var milks = Enum.GetValues<MilkType>().ToList();
