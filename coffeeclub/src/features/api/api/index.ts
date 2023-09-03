@@ -59,9 +59,10 @@ const UserApi = (basePath: string, accessToken: string) => {
   };
 };
 
-export default (basePath: string, accessToken: string) => ({
+const api = (basePath: string, accessToken: string) => ({
   beanApi: BeanApi(basePath, accessToken),
   menuApi: MenuApi(basePath, accessToken),
   orderApi: OrderApi(basePath, accessToken),
   userApi: UserApi(basePath, accessToken),
 });
+export default api;

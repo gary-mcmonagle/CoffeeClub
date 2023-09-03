@@ -5,7 +5,6 @@ import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import env from "../../env.json";
 import { useApi } from "../api/useApi";
 import { UserProfileDto } from "../api/api/generated";
-import { get } from "http";
 
 export const MessagingProvider: FC<PropsWithChildren> = ({ children }) => {
   const { accessToken } = useAuth();
@@ -18,6 +17,7 @@ export const MessagingProvider: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     if (!accessToken) return;
     getUser().then(setUser);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken]);
 
   useEffect(() => {
