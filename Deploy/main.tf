@@ -37,6 +37,7 @@ resource "azurerm_windows_function_app" "function_app" {
   service_plan_id     = azurerm_app_service_plan.app_service_plan.id
   app_settings = {
     "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.application_insights.instrumentation_key,
+    "SIGNALR_SERVICE_CONNECTION_STRING" = azurerm_signalr_service.signalr_service.primary_connection_string,
   }
   site_config {
     application_stack {
@@ -46,6 +47,9 @@ resource "azurerm_windows_function_app" "function_app" {
   }
   storage_account_name       = azurerm_storage_account.storage_account.name
   storage_account_access_key = azurerm_storage_account.storage_account.primary_access_key
+  identity {
+    type = "SystemAssigned"
+  }
 }
 
 resource "azurerm_signalr_service" "signalr_service" {
@@ -85,8 +89,18 @@ resource "azurerm_mssql_database" "database" {
   zone_redundant              = false
 }
 
+# Create SQL Server firewall rule for Azure resouces access
+resource "azurerm_sql_firewall_rule" "azureservicefirewall" {
+  name                = "allow-azure-service"
+  resource_group_name = azurerm_resource_group.resource_group.name
+  server_name         = azurerm_mssql_server.sqlserver.name
+  start_ip_address    = "0.0.0.0"
+  end_ip_address      = "0.0.0.0"
+}
+
 resource "azurerm_static_site" "staticapp" {
   name                = "${var.project}-${var.environment}-db"
   resource_group_name = azurerm_resource_group.resource_group.name
   location            = var.location
 }
+
