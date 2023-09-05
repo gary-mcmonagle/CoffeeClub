@@ -14,7 +14,11 @@ terraform {
 }
 
 provider "azurerm" {
-    skip_provider_registration = true
+  skip_provider_registration = true
+  subscription_id            = var.subscription_id
+  tenant_id                  = var.tenant
+  client_id                  = var.appId
+  client_secret              = var.password
   features {
   }
 }
