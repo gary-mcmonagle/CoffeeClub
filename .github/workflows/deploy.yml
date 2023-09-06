@@ -19,5 +19,8 @@ jobs:
         
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Plan
+        run: terraform plan -out main.tfplan
         working-directory: ./Deploy
     
