@@ -37,7 +37,7 @@ resource "azurerm_windows_function_app" "function_app" {
   service_plan_id     = azurerm_app_service_plan.app_service_plan.id
   app_settings = {
     "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.application_insights.instrumentation_key,
-    # "SIGNALR_SERVICE_CONNECTION_STRING" = azurerm_signalr_service.signalr_service.primary_connection_string,
+    "SIGNALR_SERVICE_CONNECTION_STRING" = azurerm_signalr_service.signalr_service.primary_connection_string,
   }
   site_config {
     application_stack {
@@ -52,51 +52,51 @@ resource "azurerm_windows_function_app" "function_app" {
   }
 }
 
-# resource "azurerm_signalr_service" "signalr_service" {
-#   name                = "${var.project}-${var.environment}-signalr"
-#   resource_group_name = azurerm_resource_group.resource_group.name
-#   location            = var.location
-#   sku {
-#     name     = "Free_F1"
-#     capacity = 1
-#   }
-#   service_mode = "Serverless"
-# }
+resource "azurerm_signalr_service" "signalr_service" {
+  name                = "${var.project}-${var.environment}-signalr"
+  resource_group_name = azurerm_resource_group.resource_group.name
+  location            = var.location
+  sku {
+    name     = "Free_F1"
+    capacity = 1
+  }
+  service_mode = "Serverless"
+}
 
-# resource "azurerm_mssql_server" "sqlserver" {
-#   name                = "${var.project}-${var.environment}-sqlserver"
-#   resource_group_name = azurerm_resource_group.resource_group.name
-#   location            = var.location
-#   version             = "12.0"
+resource "azurerm_mssql_server" "sqlserver" {
+  name                = "${var.project}-${var.environment}-sqlserver"
+  resource_group_name = azurerm_resource_group.resource_group.name
+  location            = var.location
+  version             = "12.0"
 
-#   azuread_administrator {
-#     azuread_authentication_only = true
-#     login_username              = "AzureAD Admin"
-#     object_id                   = "caf87c93-9030-44e8-a25d-fed63261ea67"
-#   }
-# }
+  azuread_administrator {
+    azuread_authentication_only = true
+    login_username              = "AzureAD Admin"
+    object_id                   = "caf87c93-9030-44e8-a25d-fed63261ea67"
+  }
+}
 
-# resource "azurerm_mssql_database" "database" {
-#   name                        = "${var.project}-${var.environment}-db"
-#   server_id                   = azurerm_mssql_server.sqlserver.id
-#   collation                   = "SQL_Latin1_General_CP1_CI_AS"
-#   max_size_gb                 = 1
-#   auto_pause_delay_in_minutes = 60
-#   min_capacity                = 0.5
-#   read_replica_count          = 0
-#   read_scale                  = false
-#   sku_name                    = "GP_S_Gen5_1"
-#   zone_redundant              = false
-# }
+resource "azurerm_mssql_database" "database" {
+  name                        = "${var.project}-${var.environment}-db"
+  server_id                   = azurerm_mssql_server.sqlserver.id
+  collation                   = "SQL_Latin1_General_CP1_CI_AS"
+  max_size_gb                 = 1
+  auto_pause_delay_in_minutes = 60
+  min_capacity                = 0.5
+  read_replica_count          = 0
+  read_scale                  = false
+  sku_name                    = "GP_S_Gen5_1"
+  zone_redundant              = false
+}
 
-# # Create SQL Server firewall rule for Azure resouces access
-# resource "azurerm_sql_firewall_rule" "azureservicefirewall" {
-#   name                = "allow-azure-service"
-#   resource_group_name = azurerm_resource_group.resource_group.name
-#   server_name         = azurerm_mssql_server.sqlserver.name
-#   start_ip_address    = "0.0.0.0"
-#   end_ip_address      = "0.0.0.0"
-# }
+# Create SQL Server firewall rule for Azure resouces access
+resource "azurerm_sql_firewall_rule" "azureservicefirewall" {
+  name                = "allow-azure-service"
+  resource_group_name = azurerm_resource_group.resource_group.name
+  server_name         = azurerm_mssql_server.sqlserver.name
+  start_ip_address    = "0.0.0.0"
+  end_ip_address      = "0.0.0.0"
+}
 
 resource "azurerm_static_site" "staticapp" {
   name                = "${var.project}-${var.environment}-db"
