@@ -1,9 +1,9 @@
-name: Azure Static Web Apps CI/CD
+name: Deploy
 
 on:
   push:
     branches:
-      - main
+      - gh-actions
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
