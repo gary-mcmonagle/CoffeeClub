@@ -14,6 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Terraform
     steps:
+      - uses: Azure/login@v1
+        with:
+          creds: '{"clientId":"${{ secrets.ARM_APP_ID }}","clientSecret":"${{ secrets.ARM_APP_SECRET }}","subscriptionId":"${{ secrets.ARM_SUBSCRIPTION }}","tenantId":"${{ secrets.ARM_TENANT }}"}'
+        
       - name: Checkout
         uses: actions/checkout@v3
         
