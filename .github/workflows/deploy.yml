@@ -33,6 +33,15 @@ jobs:
           TF_VAR_tenant: ${{ secrets.ARM_TENANT }}
           TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION }}
 
+      - name: Terraform Apply
+        run: terraform apply main.tfplan
+        working-directory: ./Deploy
+        env:
+          TF_VAR_appId: ${{ secrets.ARM_APP_ID }}
+          TF_VAR_password: ${{ secrets.ARM_APP_SECRET }}
+          TF_VAR_tenant: ${{ secrets.ARM_TENANT }}
+          TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION }}
+
 
 
 
