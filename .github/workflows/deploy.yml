@@ -16,21 +16,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - uses: Azure/login@v1
-        with:
-          creds: '{"clientId":"${{ secrets.ARM_APP_ID }}","clientSecret":"${{ secrets.ARM_APP_SECRET }}","subscriptionId":"${{ secrets.ARM_SUBSCRIPTION }}","tenantId":"${{ secrets.ARM_TENANT }}"}'
-          enable-AzPSSession: true 
-
-      - name: Run Azure PowerShell Script File
-        uses: azure/powershell@v1
-        with:
-          inlineScript: ./Deploy/CreateTfStateStorageAccount.ps1
-          azPSVersion: "latest"
-
-      - name: Az logout
-        run: az logout
-        working-directory: ./Deploy
         
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -38,11 +23,14 @@ jobs:
       - name: Terraform Init
         run: terraform init
         working-directory: ./Deploy
+        env:
+          ARM_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
 
       - name: Terraform Plan
         run: terraform plan -out main.tfplan
         working-directory: ./Deploy
         env:
+          ARM_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
           TF_VAR_appId: ${{ secrets.ARM_APP_ID }}
           TF_VAR_password: ${{ secrets.ARM_APP_SECRET }}
           TF_VAR_tenant: ${{ secrets.ARM_TENANT }}
@@ -52,6 +40,7 @@ jobs:
         run: terraform apply main.tfplan
         working-directory: ./Deploy
         env:
+          ARM_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
           TF_VAR_appId: ${{ secrets.ARM_APP_ID }}
           TF_VAR_password: ${{ secrets.ARM_APP_SECRET }}
           TF_VAR_tenant: ${{ secrets.ARM_TENANT }}
