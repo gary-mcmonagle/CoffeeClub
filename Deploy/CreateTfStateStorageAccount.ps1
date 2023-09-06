@@ -10,8 +10,8 @@
 # $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $ApplicationId, $SecurePassword
 # Connect-AzAccount -ServicePrincipal -TenantId $TenantId -Credential $Credential -subscriptionId $subscriptionId
 
-# $RESOURCE_GROUP_NAME='tfstate'
-# $STORAGE_ACCOUNT_NAME="tfstate$(Get-Random)"
+$RESOURCE_GROUP_NAME='tfstate'
+$STORAGE_ACCOUNT_NAME="tfstate446022584"
 # $CONTAINER_NAME='tfstate'
 
 # # Create resource group
