@@ -27,6 +27,10 @@ jobs:
         with:
           inlineScript: ./Deploy/CreateTfStateStorageAccount.ps1
           azPSVersion: "latest"
+
+      - name: Az logout
+        run: az logout
+        working-directory: ./Deploy
         
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
