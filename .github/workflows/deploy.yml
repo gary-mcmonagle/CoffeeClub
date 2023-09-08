@@ -50,7 +50,7 @@ jobs:
         id: terraformOutput
         working-directory: ./Deploy
         run: |
-          tfout=$(terraform output -json)
+          tfout="$(terraform output -json)"
           echo "tfoutvar=$tfout" >> "$GITHUB_OUTPUT"
         env:
           ARM_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
