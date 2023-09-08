@@ -13,6 +13,8 @@ jobs:
   deploy_infrastructure:
     runs-on: ubuntu-latest
     name: Terraform
+    outputs:
+      outputjson: ${{ steps.toutput.outputs.output }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -45,6 +47,51 @@ jobs:
           TF_VAR_password: ${{ secrets.ARM_APP_SECRET }}
           TF_VAR_tenant: ${{ secrets.ARM_TENANT }}
           TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION }}
+
+      - name: Call terraform output
+        id: toutput
+        run: |
+          output=$(terraform output test)
+          echo $output
+        env:
+          ARM_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
+          TF_VAR_appId: ${{ secrets.ARM_APP_ID }}
+          TF_VAR_password: ${{ secrets.ARM_APP_SECRET }}
+          TF_VAR_tenant: ${{ secrets.ARM_TENANT }}
+          TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION }}
+
+  deploy_fe:
+    needs: deploy_infrastructure
+    name: Deploy Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - uses: Azure/login@v1
+        with:
+          creds: '{"clientId":"${{ secrets.ARM_APP_ID }}","clientSecret":"${{ secrets.ARM_APP_SECRET }}","subscriptionId":"${{ secrets.ARM_SUBSCRIPTION }}","tenantId":"${{ secrets.ARM_TENANT }}"}'
+          enable-AzPSSession: true 
+
+      - name: Parse Terraform Output
+        uses: azure/powershell@v1
+        with:
+          inlineScript: ./Deploy/scripts/ParseTerraformOutput.ps1 -terraformJsonOutput {{ steps.deploy_infrastructure.outputs.outputjson }}
+          azPSVersion: "latest"
+          
+      # - name: Build And Deploy
+      #   id: builddeploy
+      #   uses: Azure/static-web-apps-deploy@v1
+      #   with:
+      #     azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GENTLE_WATER_001FC1F10 }}
+      #     repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+      #     action: "upload"
+      #     ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
+      #     # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
+      #     app_location: "/coffeeclub" # App source code path
+      #     api_location: "" # Api source code path - optional
+      #     output_location: "build" # Built app content directory - optional
+      #     ###### End of Repository/Build Configurations ######
 
 
 
