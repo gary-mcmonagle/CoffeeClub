@@ -48,6 +48,7 @@ jobs:
 
       - name: Call terraform output
         id: terraformOutput
+        working-directory: ./Deploy
         run: |
           OUTPUT_VALUE=$(terraform output -json)
           echo "TF_OUTPUT_JSON=$OUTPUT_VALUE" >> "$GITHUB_OUTPUT"
