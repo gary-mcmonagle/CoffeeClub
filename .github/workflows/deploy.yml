@@ -75,7 +75,7 @@ jobs:
       - name: Parse Terraform Output
         uses: azure/powershell@v1
         with:
-          inlineScript: ./Deploy/scripts/ParseTerraformOutput.ps1 -terraformJsonOutput ${{ steps.deploy_infrastructure.outputs.outputjson }}
+          inlineScript: ./Deploy/scripts/ParseTerraformOutput.ps1 -terraformJsonOutput "${{ steps.deploy_infrastructure.outputs.outputjson }}"
           azPSVersion: "latest"
           
       # - name: Build And Deploy
