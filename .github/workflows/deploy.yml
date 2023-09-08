@@ -51,7 +51,7 @@ jobs:
       - name: Call terraform output
         id: toutput
         run: |
-          output=$(terraform output test)
+          output=$(terraform output -json)
           echo $output
         env:
           ARM_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
