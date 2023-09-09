@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Terraform
     outputs:
-      tfjson: ${{ steps.terraformOutput.outputs.tfoutvar }}
       resource_group_name: ${{ steps.terraformOutput.outputs.resource_group_name }}
     steps:
       - name: Checkout
