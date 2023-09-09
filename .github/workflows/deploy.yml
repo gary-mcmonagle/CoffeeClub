@@ -78,11 +78,11 @@ jobs:
       - name: Deploy to Azure Static Web Apps
         run: echo "${{ needs.deploy_infrastructure.outputs.resource_group_name }}"
 
-      # - name: Parse Terraform Output
-      #   uses: azure/powershell@v1
-      #   with:
-      #     inlineScript: ./Deploy/scripts/ParseTerraformOutput.ps1 -terraformJsonOutput "${{ needs.deploy_infrastructure.outputs.tfjson }}"
-      #     azPSVersion: "latest"
+      - name: Get Token
+        uses: azure/powershell@v1
+        with:
+          inlineScript: ./Deploy/scripts/GetStaticAppDeploymentToken.ps1 -resourceGroupName "${{ needs.deploy_infrastructure.outputs.resource_group_name }}"
+          azPSVersion: "latest"
           
       # - name: Build And Deploy
       #   id: builddeploy
