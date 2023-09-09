@@ -53,7 +53,7 @@ jobs:
         working-directory: ./Deploy
         run: |
           terraform output resource_group_name
-          rg="$(terraform output resource_group_name |  tr -d '"')"
+          rg="$(terraform output resource_group_name |  tr -d '"' | tr -d '\n')"
           echo $rg
           echo "resource_group_name=$rg" >> "$GITHUB_OUTPUT"
         env:
