@@ -54,6 +54,7 @@ jobs:
         run: |
           terraform output resource_group_name
           rg="$(terraform output resource_group_name |  tr -d '"')"
+          echo $rg
           echo "resource_group_name=$rg" >> "$GITHUB_OUTPUT"
         env:
           ARM_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
