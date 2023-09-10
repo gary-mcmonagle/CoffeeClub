@@ -21,6 +21,8 @@ jobs:
         
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_wrapper: false
 
       - name: Terraform Init
         run: terraform init
@@ -47,16 +49,6 @@ jobs:
           TF_VAR_password: ${{ secrets.ARM_APP_SECRET }}
           TF_VAR_tenant: ${{ secrets.ARM_TENANT }}
           TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION }}
-
-      - name: Get outputs
-        uses: dflook/terraform-output@v1
-        id: tf-outputs
-        with:
-          path: ./Deploy
-
-      - name: Print VPC
-        run: |
-          echo "The rg is ${{ fromJson(steps.tf-outputs.outputs.resource_group_name) }}"
 
       - name: Call terraform output
         id: terraformOutput
