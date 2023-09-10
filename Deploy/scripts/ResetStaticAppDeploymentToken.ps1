@@ -1,0 +1,1 @@
+Write-Host "Resetting static app deployment token"
