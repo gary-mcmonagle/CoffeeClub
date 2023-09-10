@@ -19,14 +19,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: create-json
-        id: create-json
-        uses: jsdaniell/create-json@v1.2.2
-        with:
-          name: "env.json"
-          dir: 'coffeeclub/src/'
-          json: '{"apiBasePath":"https://coffeeclubapi.azurewebsites.net/api"}'
-        
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -98,6 +90,15 @@ jobs:
             write-host '*****'
             Write-Output "apiKey=$($apiKey)" >> $Env:GITHUB_OUTPUT
           azPSVersion: "latest"
+
+      - name: create-json
+        id: create-json
+        uses: jsdaniell/create-json@v1.2.2
+        with:
+          name: "env.json"
+          dir: 'coffeeclub/src/'
+          json: '{"apiBasePath":"https://coffeeclubapi.azurewebsites.net/api"}'
+          
           
       - name: Build And Deploy
         id: builddeploy
