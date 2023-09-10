@@ -48,6 +48,16 @@ jobs:
           TF_VAR_tenant: ${{ secrets.ARM_TENANT }}
           TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION }}
 
+      - name: Get outputs
+        uses: dflook/terraform-output@v1
+        id: tf-outputs
+        with:
+          path: ./Deploy
+
+      - name: Print VPC
+        run: |
+          echo "The rg is ${{ fromJson(steps.tf-outputs.outputs.resource_group_name) }}"
+
       - name: Call terraform output
         id: terraformOutput
         working-directory: ./Deploy
