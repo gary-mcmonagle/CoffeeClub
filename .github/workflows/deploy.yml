@@ -85,7 +85,10 @@ jobs:
         with:
           inlineScript: |
             $apiKey = ./Deploy/scripts/GetStaticAppDeploymentToken.ps1 -resourceGroupName "${{ needs.deploy_infrastructure.outputs.resource_group_name }}"
-            echo "apiKey=$apiKey" >> "$GITHUB_OUTPUT"
+            write-host '*****'
+            write-host "apiKey=$apiKey"
+            write-host '*****'
+            Write-Output "apiKey=$($apiKey)" >> $Env:GITHUB_OUTPUT
           azPSVersion: "latest"
           
       - name: Build And Deploy
