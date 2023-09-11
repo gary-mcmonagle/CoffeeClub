@@ -85,9 +85,6 @@ jobs:
         with:
           inlineScript: |
             $apiKey = ./Deploy/scripts/GetStaticAppDeploymentToken.ps1 -resourceGroupName "${{ needs.deploy_infrastructure.outputs.resource_group_name }}"
-            write-host '*****'
-            write-host "apiKey=$apiKey"
-            write-host '*****'
             Write-Output "apiKey=$($apiKey)" >> $Env:GITHUB_OUTPUT
           azPSVersion: "latest"
 
@@ -113,6 +110,13 @@ jobs:
           api_location: "" # Api source code path - optional
           output_location: "build" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
+
+      - name: Reset Token
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            Reset-AzStaticWebAppApiKey -name coffeclub-dev-staticapp -resourceGroupName "${{ needs.deploy_infrastructure.outputs.resource_group_name }}"
+          azPSVersion: "latest"
 
 
           
