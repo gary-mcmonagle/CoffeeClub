@@ -1,8 +1,9 @@
 param (
-    $resourceGroupName
+    $resourceGroupName,
+    $name
 )
 Write-Host "RG NAME" + $resourceGroupName;
-$secrets = Get-AzStaticWebAppSecret -name coffeclub-dev-staticapp -ResourceGroupName $resourceGroupName
+$secrets = Get-AzStaticWebAppSecret -name $name -ResourceGroupName $resourceGroupName
 $dict = $secrets.ToJsonString() | ConvertFrom-Json
 $apiKey = $dict.properties.apiKey
 Write-Host "GARY1"

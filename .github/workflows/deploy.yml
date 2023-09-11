@@ -15,6 +15,8 @@ jobs:
     name: Terraform
     outputs:
       resource_group_name: ${{ steps.terraformOutput.outputs.resource_group_name }}
+      staticapp_name: ${{ steps.terraformOutputStaticapp.outputs.staticapp_name }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -64,6 +66,20 @@ jobs:
           TF_VAR_tenant: ${{ secrets.ARM_TENANT }}
           TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION }}
 
+      - name: Call terraform output
+        id: terraformOutputStaticApp
+        working-directory: ./Deploy
+        run: |
+          sn="$(terraform output staticapp_name |  tr -d '"' | tr -d '\n')"
+          echo "test" + $rg 
+          echo "staticapp_name=$sn" >> "$GITHUB_OUTPUT"
+        env:
+          ARM_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
+          TF_VAR_appId: ${{ secrets.ARM_APP_ID }}
+          TF_VAR_password: ${{ secrets.ARM_APP_SECRET }}
+          TF_VAR_tenant: ${{ secrets.ARM_TENANT }}
+          TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION }}
+
   deploy_fe:
     needs: deploy_infrastructure
     name: Deploy Frontend
@@ -84,7 +100,7 @@ jobs:
         uses: azure/powershell@v1
         with:
           inlineScript: |
-            $apiKey = ./Deploy/scripts/GetStaticAppDeploymentToken.ps1 -resourceGroupName "${{ needs.deploy_infrastructure.outputs.resource_group_name }}"
+            $apiKey = ./Deploy/scripts/GetStaticAppDeploymentToken.ps1 -resourceGroupName "${{ needs.deploy_infrastructure.outputs.resource_group_name }}" -name "${{needs.deploy_infrastructure.outputs.staticapp_name}}"
             Write-Output "apiKey=$($apiKey)" >> $Env:GITHUB_OUTPUT
           azPSVersion: "latest"
 
@@ -115,7 +131,7 @@ jobs:
         uses: azure/powershell@v1
         with:
           inlineScript: |
-            Reset-AzStaticWebAppApiKey -name coffeclub-dev-staticapp -resourceGroupName "${{ needs.deploy_infrastructure.outputs.resource_group_name }}"
+            Reset-AzStaticWebAppApiKey -name "${{needs.deploy_infrastructure.outputs.staticapp_name}}" -resourceGroupName "${{ needs.deploy_infrastructure.outputs.resource_group_name }}"
           azPSVersion: "latest"
 
 
