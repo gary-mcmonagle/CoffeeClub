@@ -9,6 +9,11 @@ on:
     branches:
       - main
 
+env:
+  AZURE_FUNCTIONAPP_NAME: 'coffeclub-dev-function-app'   # set this to your function app name on Azure
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: './API/CoffeeClub.Core.Functions'       # set this to the path to your function app project, defaults to the repository root
+  DOTNET_VERSION: '6.0.x'                   # set this to the dotnet version to use (e.g. '2.1.x', '3.1.x', '5.0.x')
+
 jobs:
   deploy_infrastructure:
     runs-on: ubuntu-latest
@@ -81,6 +86,7 @@ jobs:
           TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION }}
 
   deploy_fe:
+    if: false
     needs: deploy_infrastructure
     name: Deploy Frontend
     runs-on: ubuntu-latest
@@ -133,7 +139,30 @@ jobs:
           inlineScript: |
             Reset-AzStaticWebAppApiKey -name "${{needs.deploy_infrastructure.outputs.staticapp_name}}" -resourceGroupName "${{ needs.deploy_infrastructure.outputs.resource_group_name }}"
           azPSVersion: "latest"
-
-
           
-    
+  deploy-be:
+    runs-on: windows-latest
+    needs: deploy_infrastructure
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@v3
+
+    - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: 'Resolve Project Dependencies Using Dotnet'
+      shell: pwsh
+      run: |
+        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+        dotnet build --configuration Release --output ./output
+        popd
+
+    - name: 'Run Azure Functions Action'
+      uses: Azure/functions-action@v1
+      id: fa
+      with:
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
